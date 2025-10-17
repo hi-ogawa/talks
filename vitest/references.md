@@ -7,6 +7,8 @@
 ## reference talks
 
 - https://www.youtube.com/@Vuejs-bn2cg/videos
+- https://www.youtube.com/watch?v=5nmpokoRaZI
+- https://www.youtube.com/watch?v=ZKH3DLT4BKw
 
 ## Ryan Carniato
 **"Reactivity: There and Back Again" (2022)**
