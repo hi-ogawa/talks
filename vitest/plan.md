@@ -9,7 +9,7 @@
 - measure talk time
 - iterate
 
-## timeline
+## timeline (30 min)
 
 - intro
   - about me
