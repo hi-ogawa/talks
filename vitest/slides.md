@@ -69,6 +69,18 @@ layout: two-cols
 
 </v-clicks>
 
+<!-- 
+Default feature set is essentially same like Vite.
+- ESM
+- Typescript
+
+And like you do in your Vite app, it can be extended via Vite plugins.
+- React
+- Vue
+- Svelte
+- etc...
+-->
+
 ---
 
 # What is Vite?

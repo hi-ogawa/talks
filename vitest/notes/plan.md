@@ -27,8 +27,13 @@
 ### assertion feature
 
 - pure assertion
+  - `expect`, `assert`
 - assertion integrated with test runtime
-- diffing error
+  - snapshot
+  - `expect.soft`
+- error message
+  - diffing
+  - stack trace
 
 ### runtime feature
 
@@ -51,6 +56,8 @@
 
 ### vite specific techniques
 
+- configuration
+  - resuing vite.config.ts
 - transform pipeline
 - module graph
 - module runner
