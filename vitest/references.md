@@ -4,6 +4,11 @@
   - https://claude.ai/chat/06fad6ed-d90d-49e6-9aef-5c9221fd91b7
   - https://deepwiki.com/vitest-dev/vitest
 
+## slides examples
+
+- https://github.com/antfu/talks
+- https://github.com/TheAlexLichter/talk-rolldown-viteconf-25
+
 ## reference talks
 
 - https://www.youtube.com/@Vuejs-bn2cg/videos
