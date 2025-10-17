@@ -5,6 +5,7 @@
   - deep dive style
   - vite, vitest specific talks
 - draft in english
+- prepare visuals
 - translate to japanese
 - measure talk time
 - iterate
