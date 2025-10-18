@@ -87,7 +87,12 @@
 - module runner
 - browser mode
 
-### Tips to show
+### Notes
 
-- VITE_NODE_DEBUG_DUMP trick
+- VITE_NODE_DEBUG_DUMP
 - DEBUG=vite-node
+
+### Notable PRs
+
+- vite-node as module runner on Vite
+- migrate from vite-node to module runner on Vitest 

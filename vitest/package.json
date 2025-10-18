@@ -1,20 +1,13 @@
 {
   "name": "vitest-talk",
-  "version": "1.0.0",
-  "description": "Inside Vitest: Test Framework Architecture Deep Dive - Vue Fes Japan 2025",
+  "private": true,
+  "type": "module",
   "scripts": {
     "dev": "slidev",
     "build": "slidev build",
     "export": "slidev export"
   },
-  "keywords": [
-    "vitest",
-    "testing",
-    "vite",
-    "slides"
-  ],
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@slidev/cli": "^52.2.5",
     "@slidev/theme-default": "^0.25.0"
