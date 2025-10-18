@@ -67,6 +67,18 @@ layout: two-cols
 - 🌐 **Universal** - Node, Browser, Edge runtime support
 - 🔌 **Extensible** - Vite plugin ecosystem
 
+```ts
+// sum.test.ts
+import { describe, it, expect } from 'vitest'
+import { sum } from './sum'
+
+describe('sum', () => {
+  it('adds two numbers', () => {
+    expect(sum(1, 2)).toBe(3)
+  })
+})
+```
+
 </v-clicks>
 
 <!-- 
@@ -115,6 +127,17 @@ Three Core Categories
 - Expect API compatible with Jest/Chai
 - Rich matchers and custom matchers
 
+```ts
+import { expect, test } from 'vitest'
+
+test('assertion examples', () => {
+  expect(2 + 2).toBe(4)
+  expect({ name: 'Vitest' }).toEqual({ name: 'Vitest' })
+  expect([1, 2, 3]).toContain(2)
+  expect(() => { throw new Error('fail') }).toThrow('fail')
+})
+```
+
 ## Integrated with Test Runtime
 - Automatic test isolation
 - Built-in snapshot testing
@@ -133,6 +156,21 @@ Three Core Categories
 
 - 📊 **Coverage** - Built-in coverage with c8/istanbul
 - 🎭 **Mocking** - Module mocking and spies
+
+```ts
+import { vi, test, expect } from 'vitest'
+
+// Mock modules
+vi.mock('./api', () => ({
+  fetchUser: vi.fn(() => Promise.resolve({ name: 'Test User' }))
+}))
+
+// Spy on functions
+const mockFn = vi.fn()
+mockFn('hello')
+expect(mockFn).toHaveBeenCalledWith('hello')
+```
+
 - ⏱️ **Timeout & Retry** - Configurable timeouts and retries
 - 🔧 **Fixture** - Setup and teardown helpers
 - 📍 **Error Stack Trace** - Clean and helpful stack traces
@@ -149,6 +187,19 @@ Three Core Categories
 ## Orchestration
 - **Parallelization** - Run tests in parallel for speed
 - **Isolation** - Each test file runs in isolation
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    pool: 'threads', // or 'forks' for better isolation
+    poolOptions: {
+      threads: { singleThread: false },
+      forks: { singleFork: false }
+    }
+  }
+})
+```
 
 ## Reporter
 - Multiple built-in reporters
@@ -191,6 +242,19 @@ How Vitest leverages Vite's power
 - TypeScript, JSX, Vue, Svelte - all supported out of the box
 - Custom transformations via plugins
 
+```ts
+// vitest.config.ts
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()], // Vite plugins work seamlessly
+  test: {
+    environment: 'jsdom'
+  }
+})
+```
+
 </v-clicks>
 
 ---
@@ -231,6 +295,19 @@ How Vitest leverages Vite's power
 - Test browser-specific APIs
 - Integration with Playwright, WebdriverIO
 - True environment fidelity
+
+```ts
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    browser: {
+      enabled: true,
+      name: 'chromium',
+      provider: 'playwright'
+    }
+  }
+})
+```
 
 </v-clicks>
 
