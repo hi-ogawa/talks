@@ -78,6 +78,15 @@
 - (benchmark)
 - (typecheck mode)
 
+#### Isolation types
+
+- folks
+  - https://nodejs.org/docs/v22.20.0/api/child_process.html#child_processforkmodulepath-args-options
+- threads
+  - https://nodejs.org/docs/v22.20.0/api/worker_threads.html#worker_threadsworkerfilename-options
+- vm modules
+  - https://nodejs.org/docs/v22.20.0/api/vm.html#vmworkerthreads
+
 ### vite specific techniques
 
 - configuration
@@ -86,6 +95,12 @@
 - module graph
 - module runner
 - browser mode
+
+### Comparison
+
+- Jasmine, Mocha, Jest
+- Deno, Bun
+- Node `node:test`
 
 ### Notes
 
