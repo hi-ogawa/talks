@@ -130,7 +130,7 @@ And like you do in your Vite app, it can be extended via Vite plugins.
 - etc...
 -->
 
----
+<!-- ---
 
 # What is Vite?
 
@@ -143,7 +143,7 @@ And like you do in your Vite app, it can be extended via Vite plugins.
 - 📦 Optimized Production Builds with Rollup
 - 🌍 Framework Agnostic - React, Vue, Svelte, etc.
 
-</v-clicks>
+</v-clicks> -->
 
 ---
 layout: center
