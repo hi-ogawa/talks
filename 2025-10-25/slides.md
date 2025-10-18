@@ -48,23 +48,21 @@ transition: slide-left
 ## Test Framework Architecture Deep Dive
 
 ---
-layout: two-cols
----
 
 # About Me
 
-<!-- TODO: github avatar -->
-<!-- TODO: voidzero logo -->
-<!-- TODO: split to two slides -->
+TODO: github avatar, voidzero logo
 
 - <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
-- Open source developer at [VoidZero](https://voidzero.dev/)
+- Developer at [VoidZero](https://voidzero.dev/)
 - Vite and Vitest core team member
 - [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md)
 
-::right::
+---
 
 # Talk Overview
+
+TODO
 
 - Test Framework architecture
   - Assertion feature
@@ -78,7 +76,7 @@ layout: two-cols
 
 # Why Testing?
 
-- TODO: skip assuming obvious?
+TODO: skip assuming obvious?
 
 ---
 
