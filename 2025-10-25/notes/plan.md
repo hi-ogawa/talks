@@ -46,6 +46,7 @@
 - (ecosystem features)
 - (comparison to other test frameworks)
 - (vscode extension)
+- examples from https://github.com/vitest-dev/vitest-ecosystem-ci/
 
 ### assertion feature
 
@@ -74,6 +75,7 @@
   - isolation
   - worker pooling
   - rpc
+- workspace support
 - reporter
 - watch mode
 - (benchmark)

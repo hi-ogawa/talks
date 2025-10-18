@@ -32,6 +32,8 @@ colorSchema: dark
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 # background: https://cover.sli.dev
+# background: ./assets/cover.png
+# backgroundSize: cover
 # some information about your slides (markdown enabled)
 title: Inside Vitest - Test Framework Architecture Deep Dive
 class: text-center
@@ -46,6 +48,10 @@ transition: slide-left
 
 # Inside Vitest <logos-vitest />
 ## Test Framework Architecture Deep Dive
+
+---
+
+TODO: video or image of example test run, vite or vue?
 
 ---
 
@@ -82,33 +88,76 @@ TODO: skip assuming obvious?
 
 # Lifecycle of running tests
 
-- TODO
+<!--
+TODO: cli, config, sample test, output.
+TODO: layout, ascii snippet.
+-->
+
+<Transform :scale="0.95" origin="center">
+
+```ts 
+// [add.test.ts]
+import { test, expect, describe } from "vitest"
+import { add } from "./add"
+
+describe(add, () => {
+  test('one plus two', () => {
+    expect(add(1, 2)).toBe(3)
+  })
+})
+```
+
+```sh
+$ vitest
+ DEV  v4.0.0-beta.18 /home/hiroshi/code/personal/talks/2025-10-25/examples/basic
+
+ ✓ src/add.test.ts (1 test) 1ms
+   ✓ add (1)
+     ✓ one plus two 1ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  01:04:30
+   Duration  165ms (transform 27ms, setup 0ms, collect 37ms, tests 1ms, environment 0ms, prepare 6ms)
+
+ PASS  Waiting for file changes...
+       press h to show help, press q to quit
+```
+
+</Transform>
 
 ---
 
-# What is Vitest?
+# Lifecycle of running tests (2)
 
-<v-clicks>
+<!-- TODO: clicks, highlight -->
+<!-- TODO: map each step with incremental reporter output -->
+<!-- TODO: this is kinda "visible" part. it doesn't include worker etc. -->
+
+- Select test files to run (CLI arguments, Configuration, etc.)
+  - `vitest src/.test.ts src/another-dir/ --project xxx`
+  - `defineConfig({ test: { dir: ..., include: ..., exclude: ... } })`
+- Run test files to collect Test cases / hooks
+  - `test("foo", () => { ... })` 
+    <!-- (TODO: highlight which part is executed. it's not "...") -->
+  - `beforeAll(() => { ... })`
+  - `describe("foo", () => { ... })`
+  <!-- At this point, we know the tree structure of all suites, hooks, test cases -->
+- Running Test cases / hooks
+  - `beforeAll(() => { ... })`
+  - `test("foo", () => { ... })` ("..." is the part actually executed)
+  - verify `expect(...)`
+- Reporting (incremental and final summary)
+
+<!-- ---
+
+# What is Vitest?
 
 - ⚡️ **Fast** - Powered by Vite
 - 🧪 **Modern** - Native ESM, TypeScript support
 - 🔧 **Compatible** - Jest-compatible API
 - 🌐 **Universal** - Node, Browser, Edge runtime support
-- 🔌 **Extensible** - Vite plugin ecosystem
-
-```ts
-// sum.test.ts
-import { describe, it, expect } from 'vitest'
-import { sum } from './sum'
-
-describe('sum', () => {
-  it('adds two numbers', () => {
-    expect(sum(1, 2)).toBe(3)
-  })
-})
-```
-
-</v-clicks>
+- 🔌 **Extensible** - Vite plugin ecosystem -->
 
 <!-- 
 Default feature set is essentially same like Vite.
@@ -138,13 +187,14 @@ And like you do in your Vite app, it can be extended via Vite plugins.
 </v-clicks> -->
 
 ---
-layout: center
-class: text-center
----
 
 # Features Overview
 
 Three Core Categories
+
+- Assertion features
+- Test runtime features
+- Test framework features
 
 ---
 
