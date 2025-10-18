@@ -1,32 +1,50 @@
 ---
+# theme: default
+# # background: https://source.unsplash.com/collection/94734566/1920x1080
+# class: text-center
+# highlighter: shiki
+# lineNumbers: false
+# info: |
+#   ## Inside Vitest: Test Framework Architecture Deep Dive
+  
+#   This talk explores what makes Vitest architecturally unique, including how it leverages Vite's broad framework ecosystem and plugin capabilities, its runtime agnostic architecture that enables running the same tests across Node.js, browsers, and edge environments, and the implementation of core testing features like mocking, coverage, and parallel execution systems.
+  
+#   Vue Fes Japan 2025
+# drawings:
+#   persist: false
+# transition: slide-left
+# title: Inside Vitest - Test Framework Architecture Deep Dive
+# mdc: true
+
+# highlighter: shiki
+# css: unocss
+# colorSchema: dark
+# transition: fade-out
+# mdc: true
+# layout: center
+# glowSeed: 4
+# lang: en
+# title: Inside Vitest - Test Framework Architecture Deep Dive
+
+# theme: seriph
 theme: default
-background: https://source.unsplash.com/collection/94734566/1920x1080
-class: text-center
-highlighter: shiki
-lineNumbers: false
-info: |
-  ## Inside Vitest: Test Framework Architecture Deep Dive
-  
-  This talk explores what makes Vitest architecturally unique, including how it leverages Vite's broad framework ecosystem and plugin capabilities, its runtime agnostic architecture that enables running the same tests across Node.js, browsers, and edge environments, and the implementation of core testing features like mocking, coverage, and parallel execution systems.
-  
-  Vue Fes Japan 2025
-drawings:
-  persist: false
-transition: slide-left
+# random image from a curated Unsplash collection by Anthony
+# like them? see https://unsplash.com/collections/94734566/slidev
+# background: https://cover.sli.dev
+# some information about your slides (markdown enabled)
 title: Inside Vitest - Test Framework Architecture Deep Dive
-mdc: true
+class: text-center
+# https://sli.dev/features/drawing
+# drawings:
+#   persist: false
+# slide transition: https://sli.dev/guide/animations.html#slide-transitions
+transition: slide-left
+# enable MDC Syntax: https://sli.dev/features/mdc
+# mdc: true
 ---
 
 # Inside Vitest
 ## Test Framework Architecture Deep Dive
-
-Vue Fes Japan 2025
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
 
 ---
 layout: two-cols
@@ -34,11 +52,15 @@ layout: two-cols
 
 # About Me
 
+<!-- TODO: github avatar -->
+<!-- TODO: split to two slides -->
+
 <div class="pr-4">
 
-- Software Engineer
-- Contributing to Vite and Vitest ecosystems
-- Passionate about testing and developer tools
+- [@hi-ogawa](https://github.com/hi-ogawa)
+- Open source developer at [VoidZero](https://voidzero.dev/)
+- Vite and Vitest team member, SSR meta-framework fanatic
+- [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md)
 
 </div>
 
@@ -48,12 +70,27 @@ layout: two-cols
 
 <div class="pl-4">
 
-- Vitest Architecture
-- Vite Integration
-- Runtime Features
-- Ecosystem & Comparisons
+- Test Framework architecture
+  - Assertion feature
+  - Test runtime feature
+  - ...
+- Vite techniques
+<!-- - Runtime Features -->
+<!-- - Ecosystem & Comparisons -->
 
 </div>
+
+---
+
+# Why testing?
+
+- TODO: skip?
+
+---
+
+# Lifecycle of running tests
+
+- TODO
 
 ---
 
