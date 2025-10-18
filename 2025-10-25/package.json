@@ -9,6 +9,8 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@iconify-json/logos": "^1.2.9",
+    "@iconify-json/ri": "^1.2.6",
     "@slidev/cli": "^52.2.5",
     "@slidev/theme-default": "^0.25.0"
   },

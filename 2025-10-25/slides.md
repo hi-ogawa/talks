@@ -28,6 +28,7 @@
 
 # theme: seriph
 theme: default
+colorSchema: dark
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 # background: https://cover.sli.dev
@@ -43,7 +44,7 @@ transition: slide-left
 # mdc: true
 ---
 
-# Inside Vitest
+# Inside Vitest <logos-vitest />
 ## Test Framework Architecture Deep Dive
 
 ---
@@ -53,22 +54,17 @@ layout: two-cols
 # About Me
 
 <!-- TODO: github avatar -->
+<!-- TODO: voidzero logo -->
 <!-- TODO: split to two slides -->
 
-<div class="pr-4">
-
-- [@hi-ogawa](https://github.com/hi-ogawa)
+- <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - Open source developer at [VoidZero](https://voidzero.dev/)
-- Vite and Vitest team member, SSR meta-framework fanatic
+- Vite and Vitest core team member
 - [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md)
-
-</div>
 
 ::right::
 
 # Talk Overview
-
-<div class="pl-4">
 
 - Test Framework architecture
   - Assertion feature
@@ -78,13 +74,11 @@ layout: two-cols
 <!-- - Runtime Features -->
 <!-- - Ecosystem & Comparisons -->
 
-</div>
-
 ---
 
-# Why testing?
+# Why Testing?
 
-- TODO: skip?
+- TODO: skip assuming obvious?
 
 ---
 

@@ -45,6 +45,7 @@
   - https://vitest.dev/guide/improving-performance.html
 - (ecosystem features)
 - (comparison to other test frameworks)
+- (vscode extension)
 
 ### assertion feature
 
