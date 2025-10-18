@@ -6,23 +6,45 @@
   - vite, vitest specific talks
 - draft in english
 - prepare visuals
-- translate to japanese
+- (translate to japanese) (maybe slides can be english, but talk in Japanese)
 - measure talk time
 - iterate
 
-## timeline (30 min)
+## Draft
 
-- intro
+- (intro)
   - about me
   - about vite
   - about vitest
+- (vitest background story)
+  - reference documentary?
+  - jest
+- test framework overview
+  - lifecycle
+    - input (test files, configuration)
+    - test collection
+      - find files
+      - execute top level code
+    - test execution
+      - execute actual functions
+    - reporting (incremental, final)
+    - (cf. performance)
+  - if you think about this flow, there's no appearance of Vite in particular.
+    i.e. basic test framework can be considered "bundler" (vite) agnostic.
+    even works for non vite users (zero config.)
+  - (then emphasis on Vite.)
+    - good default of Vite (builtin typescript support, esm support)
+    - plugin system
+    - watch mode
 - features overview
   - assertion
   - runtime
   - framework
-- vite related techniques
-- ecosystem features
-- comparison to other test frameworks
+- vite specific techniques
+- performance tips
+  - https://vitest.dev/guide/improving-performance.html
+- (ecosystem features)
+- (comparison to other test frameworks)
 
 ### assertion feature
 
@@ -49,6 +71,8 @@
 - orchestration
   - parallelization
   - isolation
+  - worker pooling
+  - rpc
 - reporter
 - watch mode
 - (benchmark)
@@ -62,3 +86,8 @@
 - module graph
 - module runner
 - browser mode
+
+### Tips to show
+
+- VITE_NODE_DEBUG_DUMP trick
+- DEBUG=vite-node

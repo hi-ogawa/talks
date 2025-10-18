@@ -18,6 +18,8 @@
 
 - Vite Conf https://www.youtube.com/channel/UCXXpIonjN9ATkXjOJsOwvjg
 - Vue Fes Talks https://www.youtube.com/@Vuejs-bn2cg/videos
+  - https://www.youtube.com/watch?v=anb7mdLuaqg
+  - https://www.youtube.com/watch?v=Jo-Lx4_VCNk
 - JavaScript Engines: The Good Parts https://www.youtube.com/watch?v=5nmpokoRaZI
 - The Cost Of JavaScript https://www.youtube.com/watch?v=ZKH3DLT4BKw
 - Ryan Carniato
