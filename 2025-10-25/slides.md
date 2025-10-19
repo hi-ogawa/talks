@@ -282,6 +282,7 @@ $ vitest
   - verify assertions e.g. `expect(...).toEqual(...)`
 - Reporting (incremental and final summary)
   - Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
+  - Console log aggregation
   - Coverage reporting
 
 ---
@@ -410,14 +411,16 @@ TODO
 
 # What is isolation?
 
-Understanding the architecture decision. Benefits of Isolation
+- `child_process` vs `worker_threads` trade-offs
+  - stability
+  - startup performance
 
-## Unlocks Key Features
-- **Runtime Logs** - Capture console output per test
-- **Parallelization** - Safe concurrent execution
-- **Clean State** - No cross-test pollution
+---
 
-## Stability
-- Worker vs Fork trade-offs
-- Predictable test behavior
-- Better error handling
+# Client-Server Communication
+
+TODO: birpc (runtime agnostic)
+
+- child_process: IPC
+- worker_threads: MessageChannel
+- browser mode -> Websocket, BroadcastChannel
