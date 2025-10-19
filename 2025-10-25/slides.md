@@ -28,11 +28,13 @@
 
 # theme: seriph
 theme: default
-colorSchema: dark
+# colorSchema: light
+# colorSchema: dark
+favicon: /favicon.ico
 # random image from a curated Unsplash collection by Anthony
 # like them? see https://unsplash.com/collections/94734566/slidev
 # background: https://cover.sli.dev
-# background: ./assets/cover.png
+# background: /cover.png
 # backgroundSize: cover
 # some information about your slides (markdown enabled)
 title: Inside Vitest - Test Framework Architecture Deep Dive
@@ -51,7 +53,29 @@ transition: slide-left
 
 ---
 
+# What is Vitest?
+
 TODO: video or image of example test run, vite or vue?
+
+---
+
+# What is Vitest?
+
+<!-- TODO: code on the right -->
+
+- Jest-compatible API
+  - `describe`, `test`, `expect`, etc.
+- ESM and TypeScript support out of the box
+  - Vite builtin features
+- Extensible via Vite plugin ecosystem
+  - Vue, React, Svelte, etc.
+
+<!-- 
+
+The talk will more about general test framework feature implementation.
+Vite and Vitest unique feature is expalined additionally.
+
+ -->
 
 ---
 
@@ -60,9 +84,10 @@ TODO: video or image of example test run, vite or vue?
 TODO: github avatar, voidzero logo
 
 - <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
-- Developer at [VoidZero](https://voidzero.dev/)
-- Vite and Vitest core team member
-- [`@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md)
+- Open Source Developer at [VoidZero](https://voidzero.dev/)
+- [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
+- SSR meta-framework fanatic
+- [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
 ---
 
@@ -78,11 +103,11 @@ TODO
 <!-- - Runtime Features -->
 <!-- - Ecosystem & Comparisons -->
 
----
+<!-- ---
 
 # Why Testing?
 
-TODO: skip assuming obvious?
+TODO: skip assuming obvious? -->
 
 ---
 
