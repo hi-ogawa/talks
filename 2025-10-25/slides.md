@@ -21,12 +21,11 @@ My first Vitest PR on Oct 30, 2023
 https://github.com/vitest-dev/vitest/pull/4396
 -->
 
-- <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
-- Open Source Developer at [VoidZero](https://voidzero.dev/)
+- Hiroshi Ogawa <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
+- Open Source Developer at [VoidZero](https://voidzero.dev/)
 - SSR meta-framework fanatic
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
-
 
 ---
 layout: two-cols
@@ -34,7 +33,7 @@ layout: two-cols
 
 # What is Vitest?
 
-```tsx {3,6,9,14-15,19-20}
+```tsx {*|1,3,6,9,14-15,19-20}
 // packages/vite/src/node/__tests__/scan.spec.ts
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
@@ -59,11 +58,13 @@ describe('optimizer-scan:script-test', () => {
 
 ::right::
 
+<!-- mention vitest cli -->
+<!-- other tools: jasmine, mocha, jest, playwright, deno, bun -->
 <!-- TODO: use ascii snippet? -->
 
 ![alt text](/intro-output.png)
 
-<!-- 
+<!--
 This is one unit test case from Vite.
 https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
 
@@ -78,14 +79,15 @@ Output on the right is what you see when you run `vitest` command.
 <!-- TODO: code on the right -->
 <!-- TODO: more icon -->
 
-- Jest-compatible API
-  - `describe`, `test`, `expect`, ...
+- Jest-compatible API and feature set
+  - `describe`, `test`, `expect`, `mock`, ...
+  - mocking, coverage, ...
 - ESM and TypeScript support out of the box
   - Vite builtin features
 - Extensible via Vite plugin ecosystem
-  - Vue, React, Svelte, ...
+  - React, Vue, Svelte, ...
 - Runtime agnostics
-  - Node.js, Browser, Cloudflare Workers
+  - Node.js, Browser Mode, Cloudflare Workers
 
 ```ts 
 // [add.test.ts]
@@ -123,19 +125,17 @@ test('Hello component', () => {
 })
 ``` -->
 
-<!-- 
-
+<!--
 I would say Vitest is useful its own even if not on Vite projects.
 But, obviously for Vite projects, 
 
 The talk will about general test framework feature implementation.
 Vite and Vitest unique feature is expalined as it comes up.
-
- -->
+-->
 
 ---
 
-# Talk Overview
+# Overview
 
 <!-- 
 TODO: Reverse? package -> features? e.g.
@@ -159,7 +159,12 @@ TODO: code, server-client, architecture here?
 -->
 
 
-- Lifecycle of running tests
+- Lifecycle of test run
+- Vitest monorepo packages (and Vite)
+  - `vitest`
+  - `vite` (`ViteDevServer` and `ModuleRunner`)
+  - `@vitest/runner`
+  - `@vitest/browser`
 - Explain bits and pieces of Vitest as Test framework
   - Assertion libraries: [`@vitest/expect`](https://github.com/vitest-dev/vitest/tree/main/packages/expect), [`@vitest/snapshot`](https://github.com/vitest-dev/vitest/tree/main/packages/snapshot)
     <!-- TODO: reference on license verbatim from Jasmine, Jest -->
@@ -187,7 +192,7 @@ layout: two-cols
 layoutClass: gap-8
 ---
 
-# Lifecycle of running tests
+## Lifecycle of test run
 
 <!--
 TODO: cli, config, sample test, output.
@@ -227,23 +232,24 @@ $ vitest
 
 ---
 
-# Lifecycle of running tests
-
 <!-- TODO: clicks, highlight -->
-<!-- TODO: map each step with reporter duration -->
+<!-- TODO: map each step with reporter duration (prepare, collect, tests) -->
 <!-- TODO: map each step with incremental reporter output -->
 <!-- TODO: this is kinda "visible" part. it doesn't include worker etc. -->
 
 - Select test files to run (CLI arguments, Configuration, etc.)
   - `vitest src/add.test.ts src/dir/ --project=unit --shard=1/3`
   - `defineConfig({ test: { dir: ..., include: ..., exclude: ... }, projects: [...] })`
-- Run test files to collect Test cases
+- Spawn isolated runtime from main process (`child_process`, `worker_threads`, browser)
+  <!-- there is entry point for worker or browser mode index.html -->
+  <!-- not test file itself is entry -->
+- Execute test _files_ to collect Test cases
   - `test("foo", () => { ... })` 
     <!-- (TODO: highlight which part is executed. it's not "...") -->
   - `describe("foo", () => { ... })`
   <!-- At this point, we obtain the tree / forest structure of all suites, hooks, test cases. cf. verbose reporter tree output -->
   <!-- Some tests maybe be skipped via `test.only`,`test.skip`, `vitest -t`, so we resolve skip states here. -->
-- Running Test cases
+- Run Test cases
   - `test("foo", () => { ... })` ("..." is the part actually executed)
   - verify assertions e.g. `expect(...).toEqual(...)`
 - Reporting (incremental and final summary)
@@ -253,15 +259,38 @@ $ vitest
 
 ---
 
-# Test framework features
+# Spawn runtimes and schedule / assign test files
 
-TODO: back to "Talk Overview" slide? what to elaborate here?
-TODO: Should we change the order "top to bottom"? (i.e. from orchestration to individual assertions)
+packages: `vitest`, `tinypool`
 
-- Assertions
-- Test runner
-- Tets runtime
-- Test orchestration
+![alt text](/image.png)
+
+---
+
+# Execute test _files_ to collect test cases
+
+packages: `vitest`, `vite/module-runner`, `@vitest/runner`
+
+TODO: slides from "Test collection and execution (Task tree)"
+
+---
+
+# Execute test cases
+
+packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`
+
+TODO: slides from "Test collection and execution (Task tree)" but move highlight
+
+---
+
+# Reporting (incremental)
+
+TODO: `onCollected`, `onTaskUpdate`, `onConsoleLog`
+
+# Reporting (final summary)
+
+Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
+Coverage reporting
 
 ---
 
@@ -298,6 +327,8 @@ expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 
 # Snapshot testing
 
+`@vitest/snapshot`, `@vitest/pretty-format`
+
 - Test framework agnostic logic lives in `@vitest/snapshot` package
   <!-- Used by webdriverio, rstest -->
   - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
@@ -321,7 +352,9 @@ import { expect } from 'vitest'
 expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 ```
 
-<!-- TODO: sample snapshot inline / file -->
+<!--
+TODO: sample snapshot inline / file
+-->
 
 ---
 
@@ -364,6 +397,8 @@ File(id: add.test.ts)
       result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
 ```
 
+<!-- TODO: fnMap not needed. just move it to task tree above for conciseness -->
+
 ```ts {1|*}
 const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
 fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
@@ -392,6 +427,8 @@ TODO: diagram
 ---
 
 # Test runner
+
+packages: `@vitest/runner`, `vitest`
 
 <!-- TODO: explain browser mode before server module runner? -->
 
@@ -425,12 +462,6 @@ export default defineConfig({
 })
 ```
 
-<!-- ---
-
-# Test runner (Node.js)
-
-TODO: based on `vite/module-runner` -->
-
 ---
 
 # Vite Module Runner
@@ -463,12 +494,10 @@ const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", {"importe
 })
 ```
 
-<!-- ---
-
-# Test runner (Browser mode)
-
-TODO: Vite SPA analogy? Or seems like we can skip it -->
-
+<!--
+TODO: elabrate more
+__vite_ssr_import__ -> fetchModule -> runInlineModule
+-->
 ---
 
 # Module mocking
@@ -587,19 +616,19 @@ TODO
 - Browser mode -> Websocket, BroadcastChannel
 <!-- - UI mode?  -->
 
---- 
+---
 
 # Reporter API
 
 TODO
 
---- 
+---
 
 # Coverage
 
 TODO
 
---- 
+---
 
 # Watch mode
 
@@ -619,4 +648,3 @@ TODO
 
 Thanks to the sponsors https://github.com/sponsors/vitest-dev#sponsors
 and team and contributors https://github.com/vitest-dev/vitest/
-
