@@ -281,7 +281,7 @@ $ vitest
   - `test("foo", () => { ... })` ("..." is the part actually executed)
   - verify assertions e.g. `expect(...).toEqual(...)`
 - Reporting (incremental and final summary)
-  - Error reporting (Error diff formatting, stacktrace with code frame, github annotation, ...)
+  - Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
   - Coverage reporting
 
 ---
@@ -372,42 +372,43 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 # Test runner
 
-TODO
-
+- `interface VitestRunner` abstracts ...
+- `class VitestTestRunner implements VitestRunner`
 - `class VitestTestRunner implements VitestRunner`
 
 ---
 
-# Framework? Features
+# Test runner (Node.js)
 
-## Orchestration
-- **Parallelization** - Run tests in parallel for speed
-- **Isolation** - Each test file runs in isolation
-
-<!-- ```ts
-// vitest.config.ts
-export default defineConfig({
-  test: {
-    pool: 'threads', // or 'forks' for better isolation
-    poolOptions: {
-      threads: { singleThread: false },
-      forks: { singleFork: false }
-    }
-  }
-})
-``` -->
-
-## Reporter
-- Multiple built-in reporters
-- Custom reporter support
-
-## Watch Mode
-- Intelligent file watching
-- Re-run only affected tests
+TODO
 
 ---
 
-# Why Isolation?
+# Test runner (Browser mode)
+
+TODO
+
+---
+
+# Test orchestration
+
+- Workspace support
+- Sharding
+- Pooling test file execution (`tinypool`)
+  - Isolation (`child_process`, `worker_threads`, `iframe`)
+  - Parallelization to utilize multiple CPUs
+- Reporter
+  - built-in reporters
+  - custom reporter API
+- Watch mode
+  - efficient test-rerun by the same mechanism of Vite HMR
+    - file watcher
+    - module graph API
+    - re-transform only changed files
+
+---
+
+# What is isolation?
 
 Understanding the architecture decision. Benefits of Isolation
 
