@@ -373,6 +373,8 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 # Test runner
 
+TODO
+
 - `interface VitestRunner` abstracts ...
 - `class VitestTestRunner implements VitestRunner`
 - `class VitestTestRunner implements VitestRunner`
@@ -381,11 +383,17 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 # Test runner (Node.js)
 
-TODO
+TODO: module runner
 
 ---
 
 # Test runner (Browser mode)
+
+TODO: Vite SPA analogy
+
+---
+
+# Mocking
 
 TODO
 
@@ -418,9 +426,10 @@ TODO
 ---
 
 # Test scheduling
+
 TODO
 
-- recycle workers
+- start fresh worker depending on isolation level
 
 ---
 
@@ -440,6 +449,24 @@ TODO
 
 --- 
 
+# Coverage
+
+TODO
+
+--- 
+
 # Watch mode
+
+TODO
+
+---
+
+# Summary
+
+TODO: Back to initial lifecycles story?
+
+---
+
+# Thank you!
 
 TODO
