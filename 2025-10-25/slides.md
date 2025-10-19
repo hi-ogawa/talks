@@ -253,7 +253,9 @@ $ vitest
 
 ---
 
-# Client-Server architecture and test runtime
+# Client-Server architecture
+
+<!-- TODO: move this right before "Test runner" slide? -->
 
 TODO: diagram
 
@@ -283,7 +285,7 @@ TODO: Should we change the order "top to bottom"? (i.e. from orchestration to in
 
 - Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
   - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
-    <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
+  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
   <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
   <!-- TODO: License from Jest, Jasmine, Underscore -->
 
@@ -316,7 +318,7 @@ expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
   <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
   - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
   <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
-- Some logic is coupled to Vitest system
+- Some logic is coupled to Vitest's test runner
   - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
   <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
   - Coordinate `SnapshotClient` within test lifecycle, e.g.
@@ -339,20 +341,63 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 # Test collection and execution
 
+<!-- TODO: improve layout -->
 <!-- TODO: do we need? move after "Test runner" slides? -->
 <!-- packages/runner/src/collect.ts -->
 <!-- packages/runner/src/run.ts -->
+<!-- interfaces packages/runner/src/types/tasks.ts -->
 
-TODO: `File`, `Suite`, `Task` tree on test runner.
-TODO: On reporter side, corresponding entiries are ....
+<!-- TODO: On server / reporter side entities? -->
+
+```ts {*|2,3,6|4|7} 
+// [add.test.ts]
+describe("add", () => {
+  test('first', () => { 
+    expect(add(1, 2)).toBe(3)
+  })
+  test('second', () => {
+    expect(add(2, 2)).toBe(5)
+  })
+})
+```
+
+<!-- Corresponding tree structure on test runner side after collection: -->
+
+Test runner task tree:
+
+```
+File(id: add.test.ts)
+  Suite(name: add)
+    Test(name: first)
+      result.status: undefined -> 'passed'
+    Test(name: second)
+      result.status: undefined -> 'failed'
+      result.errors: [Error('Expected 5 to be 4')]
+```
+
+```ts
+const fnMap = new WeakMap<Test, Function>();
+// fnMap.set(Test(name: first), () => expect(add(1, 2)).toBe(3))
+// fnMap.set(Test(name: second), () => expect(add(2, 2)).toBe(5))
+```
+
+---
+
+# Test runner and Client-server architecture
+
+<!-- 
+So far, we've talked by assuming "executing test files" is somehow done 
+(including typescript, vue, or any files), but how does it actually work?
+Here we explain powered by Vite dev server.
+-->
+
+TODO: move client-server architecture slide here.
 
 ---
 
 # Test runner
 
 <!-- TODO: explain browser mode before server module runner? -->
-
-TODO
 
 - `interface VitestRunner` is an abstraction for:
   - `importFile`: how to process test files (entry points)
@@ -362,7 +407,7 @@ TODO
   <!-- it was just mentioned for snapshot testing state coordination -->
 - `class VitestTestRunner implements VitestRunner` (Node.js)
   <!-- packages/vitest/src/runtime/runners/test.ts -->
-  - `importFile` is implemented as `ModuleRunner.import` of `vite/module-runner`
+  - `importFile` is implemented based on `ModuleRunner.import` of `vite/module-runner`
 - `class BrowserVitestRunner implements VitestRunner` (Browser mode)
   - `importFile` is implemented as raw dynamic import `await import(/* @vite-ignore */ importpath)`
   <!-- packages/browser/src/client/tester/runner.ts -->
@@ -384,21 +429,21 @@ export default defineConfig({
 })
 ```
 
----
+<!-- ---
 
 # Test runner (Node.js)
 
-TODO: based on `vite/module-runner`
+TODO: based on `vite/module-runner` -->
 
 ---
 
 # Vite Module Runner
 
 - Previously `vite-node` and Vite `ssrLoadModule`
-- `class VitestModuleRunner extends ModuleRunner {...}`
 - Request `fetchModule(id)` to Vite development server
   <!-- Just like browser directly requests javascript files to the server -->
   <!-- TODO: elaborate more? -->
+- `class VitestModuleRunner extends ModuleRunner {...}`
 - "Vite module runner transform" rewrites original `import` and `export` code into special functions,
   so that they can be intercepted and Vite/Vitest has a full control over module evaluation.
   - `import { add } from "/add.js"` <br /> -> `const __vite_ssr_import_0__ = await __vite_ssr_import__("/add.js")`
@@ -432,7 +477,9 @@ TODO: Vite SPA analogy? Or seems like we can skip it -->
 
 # Module mocking
 
-<!-- TODO: put browser mode aside? -->
+<!-- put browser mode aside -->
+<!-- compare "mocking" and "spying" -->
+<!-- @vitest/mocker and @vitest/spy -->
 
 - module mocking
   - `vi.mock` hoisting transform
@@ -441,8 +488,12 @@ TODO: Vite SPA analogy? Or seems like we can skip it -->
     - `vi.mock` registers mocking metadata to `VitestModuleRunner.mocker` states
     - later when `VitestModuleRunner.import(id)` matches the mocked module, it returns the mocked object instead of the original module.
   -->
-- "automocking" algorithm
-  <!-- Deeply mock entire imported module object with `vi.spyOn` -->
+- explicit mocking with factory `vi.mock("./add.js", () => ({ add: vi.fn(() => 42) }))`
+- automocking `vi.mock("./add.js")`
+  - "automocking" algorithm
+  <!-- import original module and deeply replace all exports with spies -->
+  <!-- TODO: visualize { add: vi.fn() } -->
+  <!-- https://vitest.dev/guide/mocking.html#automocking-algorithm -->
 
 ```ts
 import { add } from "./add.js"
