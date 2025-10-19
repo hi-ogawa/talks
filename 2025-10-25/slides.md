@@ -339,15 +339,19 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 ---
 
-# Test collection and execution
+# Test collection and execution (Task tree)
 
-<!-- TODO: improve layout -->
+<!-- TODO: improve layout. improve clicks -->
 <!-- TODO: do we need? move after "Test runner" slides? -->
 <!-- packages/runner/src/collect.ts -->
 <!-- packages/runner/src/run.ts -->
 <!-- interfaces packages/runner/src/types/tasks.ts -->
 
-<!-- TODO: On server / reporter side entities? -->
+<!-- TODO: 
+On server / reporter side entities? explain in next "client server architecture" slide? 
+  onCollected(files: File[]): send task tree to server
+  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
+-->
 
 ```ts {*|2,3,6|4|7} 
 // [add.test.ts]
@@ -368,17 +372,16 @@ Test runner task tree:
 ```
 File(id: add.test.ts)
   Suite(name: add)
-    Test(name: first)
-      result.status: undefined -> 'passed'
-    Test(name: second)
-      result.status: undefined -> 'failed'
-      result.errors: [Error('Expected 5 to be 4')]
+    Test(name: first, id: ...)
+      result { status: 'passed' }
+    Test(name: second, id: ...)
+      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
 ```
 
-```ts
-const fnMap = new WeakMap<Test, Function>();
-// fnMap.set(Test(name: first), () => expect(add(1, 2)).toBe(3))
-// fnMap.set(Test(name: second), () => expect(add(2, 2)).toBe(5))
+```ts {1|2,3}
+const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
+fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
+fnMap.set(secondTest, () => expect(add(2, 2)).toBe(5))
 ```
 
 ---
