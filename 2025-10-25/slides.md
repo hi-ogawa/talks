@@ -395,7 +395,7 @@ TODO
 
 - Workspace support
 - Sharding
-- Pooling test file execution (`tinypool`)
+- Scheduling test file execution (`tinypool`)
   - Isolation (`child_process`, `worker_threads`, `iframe`)
   - Parallelization to utilize multiple CPUs
 - Reporter
@@ -417,6 +417,13 @@ TODO
 
 ---
 
+# Test scheduling
+TODO
+
+- recycle workers
+
+---
+
 # Client-Server Communication
 
 TODO: birpc (runtime agnostic)
@@ -424,3 +431,15 @@ TODO: birpc (runtime agnostic)
 - child_process: IPC
 - worker_threads: MessageChannel
 - browser mode -> Websocket, BroadcastChannel
+
+--- 
+
+# Reporter API
+
+TODO
+
+--- 
+
+# Watch mode
+
+TODO
