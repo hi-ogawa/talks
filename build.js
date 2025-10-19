@@ -24,8 +24,17 @@ for (const talk of talks) {
   const talkDir = join(process.cwd(), talk);
   
   try {
+    // Install dependencies first
+    console.log(`Installing dependencies for ${talk}...`);
+    execSync('npx pnpm install', { 
+      cwd: talkDir, 
+      stdio: 'inherit',
+      env: { ...process.env }
+    });
+    
     // Run the build in the talk directory
-    execSync('pnpm build', { 
+    console.log(`Building ${talk}...`);
+    execSync('npx pnpm build', { 
       cwd: talkDir, 
       stdio: 'inherit',
       env: { ...process.env }
