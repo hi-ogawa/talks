@@ -302,28 +302,40 @@ TODO: Should we change the order "top to bottom"? (i.e. from orchestration to in
 
 ---
 
-# `@vites/expect`: `expect`
+# `expect` API (`@vitest/expect`)
 
-TODO: sample code
+<!-- TODO: jest icon, chai icon -->
 
-- Based on [`chai`](https://www.chaijs.com/) extension system
+- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
+  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
+    <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
+  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
+  <!-- TODO: License from Jest, Jasmine, Underscore -->
+  <!-- similarity to `node:assert` module -->
+  <!-- formatting `@vitest/pretty-format` -->
+  <!-- Diff error output -->
 
 ```ts
 import { expect } from 'vitest'
+expect("Vitest").to.be.a('string') // Chai API
+expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 ```
 
+- Usable as standalone pure assertion library: `toEqual`, ...
+- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
+  - `expect.soft(...)` (accumulate errors within a test case)
+  - `expect.poll(() => ...)` (wait for a condition to be true)
+  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
+  - `toMatchSnapshot` (snapshot testing)
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+
+<!-- TODO: sample chai extension system -->
+
 ---
 
-# `@vites/expect`: `toEqual`
+# `toMatchSnapshot`, `toMatchInlineSnapshot`
 
-TODO: sample
-
-- Port of Jest `toEqual` implementation
-- Error diff xamp
-
----
-
-# `@vites/snapshot`: `toMatchSnapshot`, `toMatchInlineSnapshot`
+`@vitest/snapshot`
 
 TODO: sample
 
