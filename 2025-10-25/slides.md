@@ -521,14 +521,19 @@ So far, we've looked into how each test file are executed, which is "client" sid
 Now, let's look into how tests are orchestrated, which is "server" side logic.
 -->
 
-- Workspace support
+- Multi project support (e.g. `{ projects: ["./packages/*"] }`)
+  <!-- - each project gets a separate `ViteDevServer` instance -->
 - Sharding
-- Scheduling test file execution (`tinypool`)
-  - Isolation (`child_process`, `worker_threads`, `iframe`)
+  - Parallelization to multiple machines
+- Worker pool and Scheduling (`tinypool`)
+  - Pool type / Isolation 
+    - Node.js -> `child_process`, `worker_threads`
+    - Browser mode -> Iframe
   - Parallelization to utilize multiple CPUs
 - Reporter
   - built-in reporters
   - custom reporter API
+  - merging sharded results
 - Watch mode
   - efficient test-rerun by the same mechanism of Vite HMR
     - file watcher
@@ -539,32 +544,48 @@ Now, let's look into how tests are orchestrated, which is "server" side logic.
 
 # What is isolation?
 
-- by default each file is executed with its own `globalThis`
-- `child_process` vs `worker_threads` trade-offs
-  - stability
-  - startup performance
-- `isolate: false` to opt-out from isolation
-  - by reusing single child process / worker thread, it can save time to spawn each one for each test file.
+<!-- TODO: memory is fuzzy. verify current implementation. -->
 
----
+- by default, each file is executed with its own `globalThis`
+  - not only `globalThis`, but each runner side module graph are re-evaluated.
+- `child_process` vs `worker_threads` trade-offs
+  <!-- - stability
+  - startup performance -->
+- `isolate: false` to opt-out from isolation
+  - by reusing existing child process / worker thread, it can save time to spawn each one for each test file.
+  - also run multiple test files through single module runner instance, thus it avoids evaluating same modules multiple times.
+  - it still allows parallelization by splitting multiple test files into multiple pools.
+
+```ts
+export default defineConfig({
+  test: {
+    pool: 'threads', // default is 'forks'
+    isolate: false, // default is true
+  },
+})
+```
+
+TODO: example?
+
+<!-- ---
 
 # Test scheduling
 
-<!-- TODO: test scheduling for browser mode? orchestrator + tester iframe? maybe skip since it's complicated. -->
+TODO: test scheduling for browser mode? orchestrator + tester iframe? maybe skip since it's complicated.
 
 TODO
 
-- start fresh worker depending on isolation level
+- start fresh worker depending on isolation level -->
 
 ---
 
 # Client-Server Communication
 
-TODO: birpc (runtime agnostic)
-
-- child_process: IPC
-- worker_threads: MessageChannel
-- browser mode -> Websocket, BroadcastChannel
+- birpc (runtime agnostic bidirectional rpc library)
+- `child_process`: IPC (inter process communication)
+- `worker_threads:` MessageChannel?
+- Browser mode -> Websocket, BroadcastChannel
+<!-- - UI mode?  -->
 
 --- 
 
