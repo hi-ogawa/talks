@@ -53,35 +53,10 @@ transition: slide-left
 
 ---
 
-# What is Vitest?
-
-TODO: video or image of example test run, vite or vue?
-
----
-
-# What is Vitest?
-
-<!-- TODO: code on the right -->
-
-- Jest-compatible API
-  - `describe`, `test`, `expect`, etc.
-- ESM and TypeScript support out of the box
-  - Vite builtin features
-- Extensible via Vite plugin ecosystem
-  - Vue, React, Svelte, etc.
-
-<!-- 
-
-The talk will more about general test framework feature implementation.
-Vite and Vitest unique feature is expalined additionally.
-
- -->
-
----
-
 # About Me
 
-TODO: github avatar, voidzero logo
+<!-- TODO: move "about me" after intro? -->
+<!-- TODO: github avatar, voidzero logo -->
 
 - <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - Open Source Developer at [VoidZero](https://voidzero.dev/)
@@ -90,35 +65,63 @@ TODO: github avatar, voidzero logo
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
 ---
+layout: two-cols
+---
 
-# Talk Overview
+# What is Vitest?
 
-TODO
+```tsx {3,6,9,14-15,19-20}
+// packages/vite/src/node/__tests__/scan.spec.ts
+import path from 'node:path'
+import { describe, expect, test } from 'vitest'
+import { commentRE, } from '../optimizer/scan'
 
-- Test Framework architecture
-  - Assertion feature
-  - Test runtime feature
-  - ...
-- Vite techniques
-<!-- - Runtime Features -->
-<!-- - Ecosystem & Comparisons -->
+describe('optimizer-scan:script-test', () => {
+  /*...*/
 
-<!-- ---
+  test('component return value test', () => {
+    scriptRE.lastIndex = 0
+    const [, tsOpenTag, tsContent] = scriptRE.exec(
+      `<script lang="ts">${scriptContent}</script>`,
+    )!
+    expect(tsOpenTag).toEqual('<script lang="ts">')
+    expect(tsContent).toEqual(scriptContent)
 
-# Why Testing?
+    scriptRE.lastIndex = 0
+    const [, openTag, content] = scriptRE.exec(...)!
+    expect(openTag).toEqual('<script>')
+    expect(content).toEqual(scriptContent)
+```
 
-TODO: skip assuming obvious? -->
+::right::
+
+<!-- TODO: use ascii snippet? -->
+
+![alt text](/intro-output.png)
+
+<!-- 
+This is one unit test case from Vite.
+https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
+
+You see hopefully familar Test API like `describe`, `test`, `expect`.
+Output on the right is what you see when you run `vitest` command.
+-->
 
 ---
 
-# Lifecycle of running tests
+# What is Vitest?
 
-<!--
-TODO: cli, config, sample test, output.
-TODO: layout, ascii snippet.
--->
+<!-- TODO: code on the right -->
+<!-- TODO: more icon -->
 
-<Transform :scale="0.95" origin="center">
+- Jest-compatible API
+  - `describe`, `test`, `expect`, ...
+- ESM and TypeScript support out of the box
+  - Vite builtin features
+- Extensible via Vite plugin ecosystem
+  - Vue, React, Svelte, ...
+- Runtime agnostics
+  - Node.js, Browser, Cloudflare Workers
 
 ```ts 
 // [add.test.ts]
@@ -132,9 +135,110 @@ describe(add, () => {
 })
 ```
 
+<!-- TODO: morph the code into jsdom vue-->
+
+<!-- ```ts 
+// [hello.test.ts]
+import { test, expect, describe } from "vitest"
+import Hello from './Hello.vue'
+
+test('Hello component', () => {
+  expect(add(1, 2)).toBe(3)
+})
+``` -->
+
+<!-- TODO: morph the code into browser mode vue -->
+
+<!-- ```ts 
+// [hello.test.ts]
+import { test, expect, describe } from "vitest"
+import Hello from './Hello.vue'
+
+test('Hello component', () => {
+  expect(add(1, 2)).toBe(3)
+})
+``` -->
+
+<!-- 
+
+I would say Vitest is useful its own even if not on Vite projects.
+But, obviously for Vite projects, 
+
+The talk will about general test framework feature implementation.
+Vite and Vitest unique feature is expalined as it comes up.
+
+ -->
+
+---
+
+# Talk Overview
+
+<!-- 
+TODO: Reverse? package -> features? e.g.
+@vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
+@vitest/runner -> managing test case hierarchy and execution (`describe`, `test`, timeout, retry)
+vitest, tinypool, birpc -> test orchestration, reporter, etc.
+vite, vite/module-runner -> Javascript runtime with custom transform
+@vitest/mocker -> Module mocking `vi.mock("", () => {})`
+@vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
+
+TODO: code, server-client, architecture e.g.
+
+-->
+
+
+- Lifecycle of running tests
+- Explain bits and pieces of Vitest as Test framework
+  - Assertion libraries: [`@vitest/expect`](https://github.com/vitest-dev/vitest/tree/main/packages/expect), [`@vitest/snapshot`](https://github.com/vitest-dev/vitest/tree/main/packages/snapshot)
+    <!-- TODO: reference on license verbatim from Jasmine, Jest -->
+  - Test runner: `@vitest/runner`
+  - Javscript Runtime: `vite-node`, `vite/module-runner`
+  - Test orchestraion: `vitest`, `vite`, `tinypool`, `birpc`
+
+<!--
+We start from reviewing the basic steps and lifecycle of running tests.
+We then explain and dig deeper about each step and each component.
+Along the way, we see how Vitest utilizes Vite as a foundation of certain components.
+And also we'll see large parts of Vitest are not actually tied to Vite, but general test framework implementation.
+Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you'll be benefit
+from understanding the overall test framework internals.
+-->
+
+<!-- ---
+
+# Why Testing?
+
+TODO: probably can skip assuming it's obvious. -->
+
+---
+layout: two-cols
+layoutClass: gap-8
+---
+
+# Lifecycle of running tests
+
+<!--
+TODO: cli, config, sample test, output.
+TODO: layout, ascii snippet.
+-->
+
+```ts 
+// [add.test.ts]
+import { test, expect, describe } from "vitest"
+import { add } from "./add"
+
+describe(add, () => {
+  test('one plus two', () => {
+    expect(add(1, 2)).toBe(3)
+  })
+})
+```
+
+::right::
+
 ```sh
 $ vitest
- DEV  v4.0.0-beta.18 /home/hiroshi/code/personal/talks/2025-10-25/examples/basic
+ DEV  v4.0.0-beta.18 /.../basic
 
  ✓ src/add.test.ts (1 test) 1ms
    ✓ add (1)
@@ -149,77 +253,79 @@ $ vitest
        press h to show help, press q to quit
 ```
 
-</Transform>
-
 ---
 
-# Lifecycle of running tests (2)
+# Lifecycle of running tests
 
 <!-- TODO: clicks, highlight -->
+<!-- TODO: map each step with reporter duration -->
 <!-- TODO: map each step with incremental reporter output -->
 <!-- TODO: this is kinda "visible" part. it doesn't include worker etc. -->
 
 - Select test files to run (CLI arguments, Configuration, etc.)
-  - `vitest src/.test.ts src/another-dir/ --project xxx`
-  - `defineConfig({ test: { dir: ..., include: ..., exclude: ... } })`
-- Run test files to collect Test cases / hooks
+  - `vitest src/add.test.ts src/dir/ --project xxx`
+  - `defineConfig({ test: { dir: ..., include: ..., exclude: ... }, projects: [...] })`
+- Run test files to collect Test cases
   - `test("foo", () => { ... })` 
     <!-- (TODO: highlight which part is executed. it's not "...") -->
-  - `beforeAll(() => { ... })`
   - `describe("foo", () => { ... })`
-  <!-- At this point, we know the tree structure of all suites, hooks, test cases -->
-- Running Test cases / hooks
-  - `beforeAll(() => { ... })`
+  <!-- At this point, we obtain the tree / forest structure of all suites, hooks, test cases. cf. verbose reporter tree output -->
+  <!-- Some tests maybe be skipped via `test.only`,`test.skip`, `vitest -t`, so we resolve skip states here. -->
+- Running Test cases
   - `test("foo", () => { ... })` ("..." is the part actually executed)
-  - verify `expect(...)`
+  - verify assertions e.g. `expect(...).toEqual(...)`
 - Reporting (incremental and final summary)
-
-<!-- ---
-
-# What is Vitest?
-
-- ⚡️ **Fast** - Powered by Vite
-- 🧪 **Modern** - Native ESM, TypeScript support
-- 🔧 **Compatible** - Jest-compatible API
-- 🌐 **Universal** - Node, Browser, Edge runtime support
-- 🔌 **Extensible** - Vite plugin ecosystem -->
-
-<!-- 
-Default feature set is essentially same like Vite.
-- ESM
-- Typescript
-
-And like you do in your Vite app, it can be extended via Vite plugins.
-- React
-- Vue
-- Svelte
-- etc...
--->
-
-<!-- ---
-
-# What is Vite?
-
-<v-clicks>
-
-- 🚀 **Next Generation Frontend Tooling**
-- ⚡️ Instant Server Start with native ESM
-- 🔥 Lightning Fast HMR (Hot Module Replacement)
-- 🔌 Rich Plugin Interface
-- 📦 Optimized Production Builds with Rollup
-- 🌍 Framework Agnostic - React, Vue, Svelte, etc.
-
-</v-clicks> -->
 
 ---
 
-# Features Overview
+# Client-Server architecture and test runtime
 
-Three Core Categories
+TODO: diagram
 
-- Assertion features
-- Test runtime features
-- Test framework features
+- right: ViteDevServer, Test orchestraion pool, reporting
+- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
+- left-to-right: `fetchModule` (module-runner), http request (browser)
+- right-to-left: transpiled js (vite plugin pipeline)
+- left-to-right: test result to reporter
+
+---
+
+# Test framework features
+
+TODO: back to "Talk Overview" slide? what to elaborate here?
+TODO: Should we change the order "top to bottom"? (i.e. from orchestration to individual assertions)
+
+- Assertions
+- Test runner
+- Tets runtime
+- Test orchestration
+
+---
+
+# `@vites/expect`: `expect`
+
+TODO: sample code
+
+- Based on [`chai`](https://www.chaijs.com/) extension system
+
+```ts
+import { expect } from 'vitest'
+```
+
+---
+
+# `@vites/expect`: `toEqual`
+
+TODO: sample
+
+- Port of Jest `toEqual` implementation
+- Error diff xamp
+
+---
+
+# `@vites/snapshot`: `toMatchSnapshot`, `toMatchInlineSnapshot`
+
+TODO: sample
 
 ---
 

@@ -1,5 +1,5 @@
 {
-  "name": "@vitest/example-basic",
+  "name": "@vitest/example-vue-happy-dom",
   "type": "module",
   "private": true,
   "scripts": {

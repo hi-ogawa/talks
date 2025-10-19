@@ -59,7 +59,7 @@
   - diffing
   - stack trace
 
-### runtime feature
+### runner feature
 
 - coverage
 - mocking
@@ -78,6 +78,8 @@
 - workspace support
 - reporter
 - watch mode
+- coverage
+- mocking
 - (benchmark)
 - (typecheck mode)
 

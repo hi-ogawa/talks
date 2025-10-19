@@ -1,5 +1,5 @@
 {
-  "name": "@vitest/example-basic",
+  "name": "@vitest/example-vue-browser-mode",
   "type": "module",
   "private": true,
   "scripts": {
