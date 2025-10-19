@@ -395,7 +395,10 @@ TODO: based on `vite/module-runner`
 # Vite Module Runner
 
 - Previously `vite-node` and Vite `ssrLoadModule`
+- `class VitestModuleRunner extends ModuleRunner {...}`
 - Request `fetchModule(id)` to Vite development server
+  <!-- Just like browser directly requests javascript files to the server -->
+  <!-- TODO: elaborate more? -->
 - "Vite module runner transform" rewrites original `import` and `export` code into special functions,
   so that they can be intercepted and Vite/Vitest has a full control over module evaluation.
   - `import { add } from "/add.js"` <br /> -> `const __vite_ssr_import_0__ = await __vite_ssr_import__("/add.js")`
@@ -433,8 +436,13 @@ TODO: Vite SPA analogy? Or seems like we can skip it -->
 
 - module mocking
   - `vi.mock` hoisting transform
-  - based on module runner import interception mechanism
+  - works based on module runner import interception mechanism
+  <!-- TODO: explain runtime mechanism? split slides?
+    - `vi.mock` registers mocking metadata to `VitestModuleRunner.mocker` states
+    - later when `VitestModuleRunner.import(id)` matches the mocked module, it returns the mocked object instead of the original module.
+  -->
 - "automocking" algorithm
+  <!-- Deeply mock entire imported module object with `vi.spyOn` -->
 
 ```ts
 import { add } from "./add.js"
