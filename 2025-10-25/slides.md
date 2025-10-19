@@ -140,6 +140,7 @@ vite, vite/module-runner -> Javascript runtime with custom transform
 @vitest/mocker -> Module mocking `vi.mock("", () => {})`
 @vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
 @vitest/browser
+@vitest/spy
 
 TODO: package dependency as hierarchy? e.g.
 vitest -> @vitest/expect, @vitest/snapshot
@@ -352,8 +353,10 @@ TODO: Vite SPA analogy
 
 ---
 
-# Mocking
+# Module mocking
 
+- "automocking" algorithm
+- module mocking 
 TODO
 
 ---
@@ -422,10 +425,14 @@ TODO
 
 # Summary
 
-TODO: Back to initial lifecycles story?
+TODO: Back to initial lifecycles story to summarize?
 
 ---
 
 # Thank you!
 
 TODO
+
+Thanks to the sponsors https://github.com/sponsors/vitest-dev#sponsors
+and team and contributors https://github.com/vitest-dev/vitest/
+
