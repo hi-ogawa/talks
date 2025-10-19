@@ -16,11 +16,17 @@ transition: slide-left
 <!-- TODO: move "about me" after intro? -->
 <!-- TODO: github avatar, voidzero logo -->
 
+<!-- 
+My first Vitest PR on Oct 30, 2023
+https://github.com/vitest-dev/vitest/pull/4396
+-->
+
 - <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - Open Source Developer at [VoidZero](https://voidzero.dev/)
 - [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
 - SSR meta-framework fanatic
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
+
 
 ---
 layout: two-cols
@@ -331,19 +337,71 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 
 ---
 
+# Test collection and execution
+
+<!-- TODO: do we need? move after "Test runner" slides? -->
+<!-- packages/runner/src/collect.ts -->
+<!-- packages/runner/src/run.ts -->
+
+TODO: `File`, `Suite`, `Task` tree on test runner.
+TODO: On reporter side, corresponding entiries are ....
+
+---
+
 # Test runner
+
+<!-- TODO: explain browser mode before server module runner? -->
 
 TODO
 
-- `interface VitestRunner` abstracts ...
+- `interface VitestRunner` is an abstraction for:
+  - `importFile`: how to process test files (entry points)
+  <!-- As mentioned befor in Client-server architecture. 
+    Test file execution starts by importing test files on "client" side. -->
+  - `onBefore/AfterRunSuite`, `onBefore/AfterRunTask`: callback for test execution lifecycle
+  <!-- it was just mentioned for snapshot testing state coordination -->
 - `class VitestTestRunner implements VitestRunner` (Node.js)
+  <!-- packages/vitest/src/runtime/runners/test.ts -->
+  - `importFile` is implemented as `ModuleRunner.import` of `vite/module-runner`
 - `class BrowserVitestRunner implements VitestRunner` (Browser mode)
+  - `importFile` is implemented as raw dynamic import `await import(/* @vite-ignore */ importpath)`
+  <!-- packages/browser/src/client/tester/runner.ts -->
+- As an advanced API, you can even inherit the base class to implement custom runner.
+  <!-- https://vitest.dev/advanced/runner.html#runner-api -->
+  <!-- test/cli/fixtures/custom-runner/test-runner.ts -->
+  <!-- don't know main use case though? -->
+
+```ts
+// [custom-runner.ts]
+import { VitestTestRunner } from 'vitest/runners'
+class CustomTestRunner extends VitestTestRunner { ... }
+
+// [vite.config.ts]
+export default defineConfig({
+  test: {
+    runner: './custom-runner.ts'
+  }
+})
+```
 
 ---
 
 # Test runner (Node.js)
 
 TODO: based on `vite/module-runner`
+
+---
+
+# Vite Module Runner
+
+- Previously `vite-node`, or Vite `ssrLoadModule`
+- request `fetchModule(id)` to ViteDevServer
+- Module runner transform allow all `import` and `export`,
+  so they can be all intercepted and so that Vite/Vitest has a full control over module evaluation.
+  - `import * as lib from "./lib.js"` -> `__vite_ssr_import`
+  - `export const test = "ok"` -> `__vite_ssr_`
+
+<!-- TODO: concrete example -->
 
 ---
 
