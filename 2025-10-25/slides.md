@@ -394,32 +394,77 @@ TODO: based on `vite/module-runner`
 
 # Vite Module Runner
 
-- Previously `vite-node`, or Vite `ssrLoadModule`
-- request `fetchModule(id)` to ViteDevServer
-- Module runner transform allow all `import` and `export`,
-  so they can be all intercepted and so that Vite/Vitest has a full control over module evaluation.
-  - `import * as lib from "./lib.js"` -> `__vite_ssr_import`
-  - `export const test = "ok"` -> `__vite_ssr_`
+- Previously `vite-node` and Vite `ssrLoadModule`
+- Request `fetchModule(id)` to Vite development server
+- "Vite module runner transform" rewrites original `import` and `export` code into special functions,
+  so that they can be intercepted and Vite/Vitest has a full control over module evaluation.
+  - `import { add } from "/add.js"` <br /> -> `const __vite_ssr_import_0__ = await __vite_ssr_import__("/add.js")`
+  - `export function add(...) { ... }` -> `__vite_ssr_exportName__("add", ...)`
+  <!-- VITE_NODE_DEBUG_DUMP=true vitest -->
+  <!-- VITEST_DEBUG_DUMP=.vitest-dump vitest -->
+  <!-- since Vite 4 beta https://github.com/vitest-dev/vitest/pull/8711 -->
 
-<!-- TODO: concrete example -->
+<!-- TODO: before / after code snippet -->
 
----
+```js
+// [.vitest-dump/root/-src-add-test-ts]
+const __vite_ssr_import_0__ = await __vite_ssr_import__("/@fs/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/vitest@4.0.0-beta.18_@types+debug@4.1.12_@types+node@22.18.11_jiti@2.6.1_tsx@4.20.6_yaml@2.8.1/node_modules/vitest/dist/index.js", {"importedNames":["test","expect","describe"]});
+const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", {"importedNames":["add"]});
+
+
+(0,__vite_ssr_import_0__.describe)((0,__vite_ssr_import_1__.add), () => {
+  (0,__vite_ssr_import_0__.test)("one plus two", () => {
+    (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.add)(1, 2)).toBe(3);
+  });
+})
+```
+
+<!-- ---
 
 # Test runner (Browser mode)
 
-TODO: Vite SPA analogy
+TODO: Vite SPA analogy? Or seems like we can skip it -->
 
 ---
 
 # Module mocking
 
+<!-- TODO: put browser mode aside? -->
+
+- module mocking
+  - `vi.mock` hoisting transform
+  - based on module runner import interception mechanism
 - "automocking" algorithm
-- module mocking 
-TODO
+
+```ts
+import { add } from "./add.js"
+
+vi.mock("./add.js", () => ({ add: vi.fn(() => 42) }))
+
+test("add", () => {
+  expect(add(1, 2)).toBe(42)
+})
+```
+
+```ts
+__vite_ssr_import_0__.vi.mock("./add.js", () => ({
+  add: __vite_ssr_import_0__.vi.fn(() => 42)
+}));
+const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
+
+(0,__vite_ssr_import_0__.test)("add", () => {
+  (0,__vite_ssr_import_0__.expect)(__vi_import_0__.add(1, 2)).not.toBe(3);
+})
+```
 
 ---
 
 # Test orchestration
+
+<!--
+So far, we've looked into how each test file are executed, which is "client" side logic.
+Now, let's look into how tests are orchestrated, which is "server" side logic.
+-->
 
 - Workspace support
 - Sharding
@@ -439,13 +484,18 @@ TODO
 
 # What is isolation?
 
+- by default each file is executed with its own `globalThis`
 - `child_process` vs `worker_threads` trade-offs
   - stability
   - startup performance
+- `isolate: false` to opt-out from isolation
+  - by reusing single child process / worker thread, it can save time to spawn each one for each test file.
 
 ---
 
 # Test scheduling
+
+<!-- TODO: test scheduling for browser mode? orchestrator + tester iframe? maybe skip since it's complicated. -->
 
 TODO
 
