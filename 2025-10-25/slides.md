@@ -1,51 +1,9 @@
 ---
-# theme: default
-# # background: https://source.unsplash.com/collection/94734566/1920x1080
-# class: text-center
-# highlighter: shiki
-# lineNumbers: false
-# info: |
-#   ## Inside Vitest: Test Framework Architecture Deep Dive
-  
-#   This talk explores what makes Vitest architecturally unique, including how it leverages Vite's broad framework ecosystem and plugin capabilities, its runtime agnostic architecture that enables running the same tests across Node.js, browsers, and edge environments, and the implementation of core testing features like mocking, coverage, and parallel execution systems.
-  
-#   Vue Fes Japan 2025
-# drawings:
-#   persist: false
-# transition: slide-left
-# title: Inside Vitest - Test Framework Architecture Deep Dive
-# mdc: true
-
-# highlighter: shiki
-# css: unocss
-# colorSchema: dark
-# transition: fade-out
-# mdc: true
-# layout: center
-# glowSeed: 4
-# lang: en
-# title: Inside Vitest - Test Framework Architecture Deep Dive
-
-# theme: seriph
 theme: default
-# colorSchema: light
-# colorSchema: dark
 favicon: /favicon.ico
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-# background: https://cover.sli.dev
-# background: /cover.png
-# backgroundSize: cover
-# some information about your slides (markdown enabled)
 title: Inside Vitest - Test Framework Architecture Deep Dive
 class: text-center
-# https://sli.dev/features/drawing
-# drawings:
-#   persist: false
-# slide transition: https://sli.dev/guide/animations.html#slide-transitions
 transition: slide-left
-# enable MDC Syntax: https://sli.dev/features/mdc
-# mdc: true
 ---
 
 # Inside Vitest <logos-vitest />
@@ -181,6 +139,7 @@ vitest, tinypool, birpc -> test orchestration, reporter, etc.
 vite, vite/module-runner -> Javascript runtime with custom transform
 @vitest/mocker -> Module mocking `vi.mock("", () => {})`
 @vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
+@vitest/browser
 
 TODO: package dependency as hierarchy? e.g.
 vitest -> @vitest/expect, @vitest/snapshot
@@ -376,14 +335,14 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 TODO
 
 - `interface VitestRunner` abstracts ...
-- `class VitestTestRunner implements VitestRunner`
-- `class VitestTestRunner implements VitestRunner`
+- `class VitestTestRunner implements VitestRunner` (Node.js)
+- `class BrowserVitestRunner implements VitestRunner` (Browser mode)
 
 ---
 
 # Test runner (Node.js)
 
-TODO: module runner
+TODO: based on `vite/module-runner`
 
 ---
 
