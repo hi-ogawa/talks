@@ -253,20 +253,6 @@ $ vitest
 
 ---
 
-# Client-Server architecture
-
-<!-- TODO: move this right before "Test runner" slide? -->
-
-TODO: diagram
-
-- right: ViteDevServer, Test orchestraion pool, reporting
-- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
-- left-to-right: `fetchModule` (module-runner), http request (browser)
-- right-to-left: transpiled js (vite plugin pipeline)
-- left-to-right: test result to reporter
-
----
-
 # Test framework features
 
 TODO: back to "Talk Overview" slide? what to elaborate here?
@@ -353,7 +339,7 @@ On server / reporter side entities? explain in next "client server architecture"
   onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
 -->
 
-```ts {*|2,3,6|4|7} 
+```ts {*|2,3,6|4|7|*} 
 // [add.test.ts]
 describe("add", () => {
   test('first', () => { 
@@ -369,7 +355,7 @@ describe("add", () => {
 
 Test runner task tree:
 
-```
+```txt {1,2,3,5|*}
 File(id: add.test.ts)
   Suite(name: add)
     Test(name: first, id: ...)
@@ -378,7 +364,7 @@ File(id: add.test.ts)
       result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
 ```
 
-```ts {1|2,3}
+```ts {1|*}
 const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
 fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
 fnMap.set(secondTest, () => expect(add(2, 2)).toBe(5))
@@ -394,7 +380,14 @@ So far, we've talked by assuming "executing test files" is somehow done
 Here we explain powered by Vite dev server.
 -->
 
-TODO: move client-server architecture slide here.
+TODO: diagram
+
+- right: ViteDevServer, Test orchestraion pool, reporting
+- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
+- left-to-right: `fetchModule` (module-runner), http request (browser)
+- right-to-left: transpiled js (vite plugin pipeline)
+- left-to-right: test result to reporter
+
 
 ---
 
