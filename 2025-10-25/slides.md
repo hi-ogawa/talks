@@ -182,7 +182,13 @@ vite, vite/module-runner -> Javascript runtime with custom transform
 @vitest/mocker -> Module mocking `vi.mock("", () => {})`
 @vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
 
-TODO: code, server-client, architecture e.g.
+TODO: package dependency as hierarchy? e.g.
+vitest -> @vitest/expect, @vitest/snapshot
+       -> @vitest/runner
+       -> @vitest/pretty-format
+       -> vite
+
+TODO: code, server-client, architecture here?
 
 -->
 
@@ -313,9 +319,6 @@ TODO: Should we change the order "top to bottom"? (i.e. from orchestration to in
     <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
   <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
   <!-- TODO: License from Jest, Jasmine, Underscore -->
-  <!-- similarity to `node:assert` module -->
-  <!-- formatting `@vitest/pretty-format` -->
-  <!-- Diff error output -->
 
 ```ts
 import { expect } from 'vitest'
@@ -326,20 +329,52 @@ expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 - Usable as standalone pure assertion library: `toEqual`, ...
 - Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
   - `expect.soft(...)` (accumulate errors within a test case)
-  - `expect.poll(() => ...)` (wait for a condition to be true)
+  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
+  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
   <!-- packages/vitest/src/integrations/chai/pol.ts  -->
   - `toMatchSnapshot` (snapshot testing)
+  <!--  -->
   <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
 
-<!-- TODO: sample chai extension system -->
+<!-- TODO: sample chai extension system (next slide?) -->
+<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
 
 ---
 
-# `toMatchSnapshot`, `toMatchInlineSnapshot`
+# Snapshot testing
 
-`@vitest/snapshot`
+- Test framework agnostic logic lives in `@vitest/snapshot` package
+  <!-- Used by webdriverio, rstest -->
+  - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
+  <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
+  - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
+  <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
+- Some logic is coupled to Vitest system
+  - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+  - Coordinate `SnapshotClient` within test lifecycle, e.g.
+    <!-- packages/vitest/src/runtime/runners/test.ts -->
+    - `VitestRunner.onBeforeRunSuite` -> `SnapshotClient.setup`
+    - `VitestRunner.onAfterRunSuite` -> `SnapshotClient.finish`
+    <!-- also on each test retry, the previous snapshot failure needs to be reset -->
+    <!-- saving snapshot files needs to be done after all `toMatchInlineSnapshot` inside one test file are finished -->
+- Printing logic is implemented in `@vitest/pretty-format` package
+  - Customizable via `expect.addSnapshotSerializer`
 
-TODO: sample
+```ts
+import { expect } from 'vitest'
+expect({ name: 'Vitest' }).toMatchInlineSnapshot()
+```
+
+<!-- TODO: sample snapshot inline / file -->
+
+---
+
+# Test runner
+
+TODO
+
+- `class VitestTestRunner implements VitestRunner`
 
 ---
 
