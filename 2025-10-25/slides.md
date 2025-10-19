@@ -275,6 +275,8 @@ $ vitest
   - `test("foo", () => { ... })` ("..." is the part actually executed)
   - verify assertions e.g. `expect(...).toEqual(...)`
 - Reporting (incremental and final summary)
+  - Error reporting (Error diff formatting, stacktrace with code frame, github annotation, ...)
+  - Coverage reporting
 
 ---
 
