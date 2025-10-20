@@ -40,6 +40,8 @@ layoutClass: gap-8
 
 # What is Vitest?
 
+Unit testing framework
+
 ```tsx {*|1,3,6,9,14-15,19-20}
 // packages/vite/src/node/__tests__/scan.spec.ts
 import path from 'node:path'
@@ -84,24 +86,26 @@ layout: two-cols
 
 # What is Vitest?
 
-<!-- TODO: code on the right -->
-<!-- TODO: more icon -->
+Features
 
 - Jest-compatible API and feature set
   - `describe`, `test`, `expect`, ...
   - mocking, snapshot, coverage, ...
 - ESM and TypeScript support out of the box
-  - Vite builtin features
+  - Vite builtin features available
+  <!-- same transform pipeline -> import("xxx?raw"), import.meta.glob -->
 - Extensible via Vite plugin ecosystem
   - React, Vue, Svelte, ...
 - Runtime agnostics
   - Node.js, Browser Mode, Cloudflare Workers
 
-::right::  
+::right::
 
-```ts 
+<div class="h-8" />
+
+```ts
 // [add.test.ts]
-import { test, expect, describe } from "vitest"
+import { test, expect } from "vitest"
 import { add } from "./add"
 
 test('add', () => {
@@ -109,43 +113,89 @@ test('add', () => {
 })
 ```
 
-<!-- TODO: morph the code into jsdom vue-->
+<div class="h-2" />
 
-<!-- ```ts 
-// [hello.test.ts]
-import { test, expect, describe } from "vitest"
-import Hello from './Hello.vue'
+```ts
+// [Hello.test.ts]
+import { test, expect } from "vitest"
+import { mount } from '@vue/test-utils'
+import Hello from "./Hello.vue";
 
-test('Hello component', () => {
-  expect(add(1, 2)).toBe(3)
+test('Hello', () => {
+  const wrapper = mount(Hello, { attachTo: document.body })
+  expect(wrapper.text()).toContain('Hello')
 })
-``` -->
-
-<!-- TODO: morph the code into browser mode vue -->
-
-<!-- ```ts 
-// [hello.test.ts]
-import { test, expect, describe } from "vitest"
-import Hello from './Hello.vue'
-
-test('Hello component', () => {
-  expect(add(1, 2)).toBe(3)
-})
-``` -->
+```
 
 <!--
-I would say Vitest is useful its own even if not on Vite projects.
-But, obviously for Vite projects, 
-
-The talk will about general test framework feature implementation.
+While there are certain Vite futures Vitest relies on,
+there are other parts which is independent from Vite.
+The talk will talk about such overall test framework feature implementation.
 Vite and Vitest unique feature is expalined as it comes up.
 
 Compared to others:
 - Jest
   - fragmented transform configuration (babel)
-- 
 
+https://github.com/vitest-dev/vitest-browser-vue 
+https://vuejs.org/guide/scaling-up/testing.html#mounting-libraries 
 -->
+
+---
+layout: two-cols
+layoutClass: gap-4
+---
+
+# What is Vitest?
+
+Runtime agnostic ⟶ Browser Mode
+
+<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
+
+```ts
+// [Hello.test.ts]
+import { test, expect } from "vitest"
+import { page } from "vitest/browser";
+import { mount } from '@vue/test-utils'
+import Hello from "./Hello.vue";
+
+test('Hello', () => {
+  mount(Hello, { attachTo: document.body })
+  await expect.element(page.getByText('Hello')).toBeVisible()
+})
+```
+
+```ts
+// [vitest.config.ts]
+import { defineConfig } from "vitest/config"
+import vue from '@vitejs/plugin-vue';
+import { playwright } from '@vitest/browser-playwright'
+
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }],
+    },
+  }
+})
+```
+
+</div>
+
+::right::
+
+<div class="h-8" />
+
+![alt text](/browser-mode-ui.png)
+
+<!-- 
+The same code from previous slide.
+It now runs on browser, which provides a genuine runtime like how your application runs
+instead of simulated jsdom/happy-dom environment on NodeJs.
+ -->
 
 ---
 
