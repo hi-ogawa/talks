@@ -505,7 +505,53 @@ where it doesn't execut `add.test.ts` and `mul.test.ts` in parallel.
 
 # Collecting tests
 
-- Executing test files (`add.test.ts`, `mul.test.ts`, ...)
+- Executing test _files_ to collect test cases
+
+---
+
+# Creating `Task` tree
+
+<!-- TODO: improve layout. improve clicks -->
+<!-- TODO: do we need? move after "Test runner" slides? -->
+<!-- packages/runner/src/collect.ts -->
+<!-- packages/runner/src/run.ts -->
+<!-- interfaces packages/runner/src/types/tasks.ts -->
+
+<!-- TODO: 
+On server / reporter side entities? explain in next "client server architecture" slide? 
+  onCollected(files: File[]): send task tree to server
+  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
+-->
+
+```ts {*|2,3,6|4|7|*} 
+// [add.test.ts]
+describe("add", () => {
+  test('first', () => { 
+    expect(add(1, 2)).toBe(3)
+  })
+  test('second', () => {
+    expect(add(2, 2)).toBe(5)
+  })
+})
+```
+
+<!-- Corresponding tree structure on test runner side after collection: -->
+
+Test runner task tree:
+
+```txt {1,2,3,5|*}
+File(id: add.test.ts)
+  Suite(name: add)
+    Test(name: first, id: ...)
+      result { status: 'passed' }
+    Test(name: second, id: ...)
+      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
+```
+
+<!-- 
+Regardless of isolation mode, inside each worker test files are executed sequentially.
+Here we follow collecting test cases in `add.test.ts`.
+ -->
 
 ---
 
@@ -537,7 +583,7 @@ TODO: `onCollected`, `onTaskUpdate`, `onConsoleLog`
 
 # Reporting (final summary)
 
-Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
+Error reporting (error diff formatting, stacktrace with code frame, github actions annotation (Reporter API), ...)
 Coverage reporting
 
 ---
@@ -547,6 +593,8 @@ Coverage reporting
 Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
 Coverage reporting
 
+---
+hide: true
 ---
 
 # Bidirectional
@@ -619,6 +667,8 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 TODO: sample snapshot inline / file
 -->
 
+---
+hide: true
 ---
 
 # Test collection and execution (Task tree)
