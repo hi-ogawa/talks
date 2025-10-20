@@ -731,7 +731,7 @@ but, how and when did Vitest actually utilitize Vite?
 
 # Test runner and Javascript runtime
 
-packages: `@vitest/runner`, `vitest`
+packages: `@vitest/runner`, `@vitest/browser`, `vite/module-runner`
 
 <!-- TODO: explain browser mode before server module runner? -->
 
@@ -824,8 +824,10 @@ __vite_ssr_import__ -> fetchModule -> runInlineModule
 
 # Module mocking
 
+packages: `@vitest/mocker`, `@vitest/spy`
+
 <!-- put browser mode aside -->
-<!-- compare "mocking" and "spying" -->
+<!-- compare "module mocking" and "spying" -->
 <!-- @vitest/mocker and @vitest/spy -->
 
 - module mocking
