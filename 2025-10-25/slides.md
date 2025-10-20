@@ -505,6 +505,8 @@ where it doesn't execut `add.test.ts` and `mul.test.ts` in parallel.
 
 # Collecting tests
 
+- Executing test files (`add.test.ts`, `mul.test.ts`, ...)
+
 ---
 
 # Execute test _files_ to collect test cases
@@ -831,25 +833,55 @@ hide: true
 TODO
 
 ---
+dragPos:
+  square: 56,437,0,0
+---
 
 # Watch mode
 
 - `vitest`: watch mode is default like development server
 - Efficient test-rerun: similar mechanism to Vite HMR
-  - file watcher API: `ViteDevServer.watch.on("change", ...)`
-  - module graph API: `ViteDevServer.watch.on("change", ...)`
-  - re-transform only changed files
+  - File watcher API: `ViteDevServer.watch.on("change", ...)`
+  - Module graph API: `ModuleGraph.invalidateModule(...)`
+  - Re-transform only changed files
+  - Test worker and runner side module graph is evaluated from scratch
 
-<!-- 
+<div class="h-4" />
+
+```ansi
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 16:51:13
+[2m   Duration [22m 130ms[2m (transform 33ms, setup 0ms, collect 46ms, tests 3ms, environment 0ms, prepare 7ms)[22m
+                    ^^^^^^^^^^^^^^ 👈
+[1m[42m PASS [49m[22m [32mWaiting for file changes...[39m
+```
+
+<!--
 Vite server's module graph keeps previously transformed results.
 It only invalidates changed files.
- -->
+-->
 
 ---
 
 # Summary
 
-TODO: Back to initial lifecycles story to summarize?
+- Test Lifecycle
+  - Test orchestration
+  - Collecting tests
+  - Executing tests
+  - Reporting results
+- Vitest monorepo packages (and Vite)
+  - `vitest`
+  - `vite` (`ViteDevServer`, `ModuleRunner`, `ModuleGraph`)
+  - `@vitest/runner`
+  - `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
+  - `@vitest/mocker`, `@vitest/spy`
+  - `@vitest/browser`
+
+<!-- 
+same as overview
+ -->
 
 ---
 
