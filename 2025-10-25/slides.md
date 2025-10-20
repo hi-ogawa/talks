@@ -300,24 +300,11 @@ test("mul", () => {
 
 ::right::
 
-<div class="h-8" />
+<div class="h-10" />
 
-```sh
-$ vitest
- DEV  v4.0.0-beta.18 /.../basic
-
- ✓ src/add.test.ts (1 test) 1ms
-   ✓ add (1)
-     ✓ one plus two 1ms
-
- Test Files  1 passed (1)
-      Tests  1 passed (1)
-   Start at  01:04:30
-   Duration  165ms (transform 27ms, setup 0ms, collect 37ms, tests 1ms, environment 0ms, prepare 6ms)
-
- PASS  Waiting for file changes...
-       press h to show help, press q to quit
-```
+<div style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0px;">
+<<< @/snippets/lifecycle.ansi
+</div>
 
 ---
 hide: true
