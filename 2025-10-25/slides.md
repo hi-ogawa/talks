@@ -339,7 +339,7 @@ hide: true
 
 # Finding test files to run
 
-<!-- package: `vitest` -->
+package: `vitest`
 
 - CLI arguments (file pattern, overrides, etc.)
 
@@ -416,7 +416,9 @@ import { Worker } from 'node:worker_threads'
 
 # Test runner orchestration
 
-- Browser Mode: `@vitest/browser-playwright`
+packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
+
+- Browser Mode
 
 <Transform :scale="0.9" origin="top center">
 <img src="/test-runner-orchestration-browser-mode.png" />
@@ -505,11 +507,29 @@ where it doesn't execut `add.test.ts` and `mul.test.ts` in parallel.
 
 # Collecting tests
 
-- Executing test _files_ to collect test cases
+- Execute <span v-mark.red="">test files</span> to collect <span v-mark.red="">test cases</span>
+- Main process only knows about test files.
+- Let test runner discover test cases as it executes each test file.
 
+<div class="h-2" />
+
+```ansi
+...
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 16:51:13
+[2m   Duration [22m 130ms[2m (transform 33ms, setup 0ms, collect 46ms, tests 3ms, environment 0ms, prepare 7ms)[22m
+                                              ^^^^^^^^^^^^^^ 👈
+```
+
+---
+layout: two-cols
+layoutClass: gap-4
 ---
 
 # Creating `Task` tree
+
+package: `@vitest/runner`
 
 <!-- TODO: improve layout. improve clicks -->
 <!-- TODO: do we need? move after "Test runner" slides? -->
@@ -523,7 +543,9 @@ On server / reporter side entities? explain in next "client server architecture"
   onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
 -->
 
-```ts {*|2,3,6|4|7|*} 
+<div v-click="1">
+
+```ts {0|1|1,2|1,2,3|1,2,6|*}{at:2}
 // [add.test.ts]
 describe("add", () => {
   test('first', () => { 
@@ -535,39 +557,57 @@ describe("add", () => {
 })
 ```
 
-<!-- Corresponding tree structure on test runner side after collection: -->
+</div>
 
-Test runner task tree:
+::right::
 
-```txt {1,2,3,5|*}
-File(id: add.test.ts)
-  Suite(name: add)
-    Test(name: first, id: ...)
-      result { status: 'passed' }
-    Test(name: second, id: ...)
-      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
+<div class="h-12" />
+
+```ts
+type Task = File | Suite | Test
 ```
+
+<div v-click="1">
+
+```txt {0|1|1,2|1,2,3,4|1,2,5,6|*}{at:2}
+File(id: add.test.ts, id: ...)
+  Suite(name: add, id: ...)
+    Test(name: first, id: ...)
+      fn: () => { expect(add(1, 2)).toBe(3) }
+    Test(name: second, id: ...)
+      fn: () => { expect(add(2, 2)).toBe(5) }
+```
+
+<!-- 
+TODO: how to morph in `result`?
+
+Test(name: first, id: ...)
+  fn: () => { expect(add(1, 2)).toBe(3) }
+  result { status: 'passed' }
+Test(name: second, id: ...)
+  fn: () => { expect(add(2, 2)).toBe(5) }
+  result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
+
+ -->
+
+</div>
 
 <!-- 
 Regardless of isolation mode, inside each worker test files are executed sequentially.
 Here we follow collecting test cases in `add.test.ts`.
+
+`describe`, `test` also corresdponging `Task` types are implemented in `@vitest/runner` package.
+
+As the right, corresponding tree structure on test runner side after collection.
+
+While this is not the part, we actually execute tests
+this is often the part it takes time since any top level import statements are executed 
+and thus entire module graph is evaluated during this phase.
  -->
 
 ---
 
-# Execute test _files_ to collect test cases
-
-<!-- packages: `vitest`, `vite/module-runner`, `@vitest/runner` -->
-
-TODO: slides from "Test collection and execution (Task tree)"
-
-<!-- 
-Importantly, before we execute test files, we don't know about the test cases.
--->
-
----
-
-# Execute test cases
+# Executing tests
 
 <!-- packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot` -->
 
