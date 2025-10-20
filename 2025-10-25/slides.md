@@ -669,18 +669,28 @@ it's a way faster than collecting phase.
 
 ---
 
-# Reporting (incremental)
+# Reporting results
 
-TODO: `onCollected`, `onTaskUpdate`, `onConsoleLog`
+- `onCollected(files: File[])` notify collected `Task` tree
+- `onTaskUpdate(pack: { id, result }[], ...)` notify test status incrementally in batch
+- `onConsoleLog(log: ConsoleLog)` notify captured console logs during test run
+
+<Transform :scale="0.7" origin="top center">
+
+![alt text](/reporting-results.png)
+
+</Transform>
 
 <!-- 
 So far, we just followed what's happening on test runner side,
 but actually, main process is aware of the all those activities and reports the progress to users.
+As said previously, main process only knows about test files.
+Here, we review how main process get notified about test collection and execution progress from test runner side.
  -->
 
 ---
 
-# Reporting (final summary)
+# Reporter API
 
 Error reporting (error diff formatting, stacktrace with code frame, github actions annotation (Reporter API), ...)
 Coverage reporting
@@ -691,14 +701,6 @@ Coverage reporting
 
 Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
 Coverage reporting
-
----
-hide: true
----
-
-# Bidirectional
-
-TODO: `birpc`, `onCancel`
 
 ---
 
