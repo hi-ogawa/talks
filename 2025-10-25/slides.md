@@ -701,6 +701,10 @@ Vitest normalizes them into more convenient form for reporter implementation.
 <img src="/lifecycle-github-actions-reporter.png" />
 </Transform>
 
+<!-- 
+https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2e26c9584e
+ -->
+
 ---
 
 # Where is Vite?
