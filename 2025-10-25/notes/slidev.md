@@ -1,0 +1,3 @@
+- https://claude.ai/chat/9530a8c4-14e6-4ba6-805e-68379876e19e
+- changing code block font size
+  - https://github.com/slidevjs/slidev/issues/1449#issuecomment-2668308876

@@ -35,6 +35,7 @@ https://github.com/vitest-dev/vitest/pull/4396
 
 ---
 layout: two-cols
+layoutClass: gap-8
 ---
 
 # What is Vitest?
@@ -64,17 +65,16 @@ describe('optimizer-scan:script-test', () => {
 
 ::right::
 
-<!-- mention vitest cli -->
-<!-- other tools: jasmine, mocha, jest, playwright, deno, bun -->
-<!-- TODO: use ascii snippet? -->
-
-![alt text](/intro-output.png)
+<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
+<<< @/snippets/vite-unit-test.ansi
+</div>
 
 <!--
 This is one unit test case from Vite.
 https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
 
 You see hopefully familar Test API like `describe`, `test`, `expect`.
+(jasmine, mocha, jest, playwright, deno, bun).
 Output on the right is what you see when you run `vitest` command.
 -->
 
