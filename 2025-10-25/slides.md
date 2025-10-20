@@ -266,21 +266,16 @@ layoutClass: gap-8
 
 Example test run
 
-<!--
-TODO: cli, config, sample test, output.
-TODO: layout, ascii snippet.
--->
-
 ```ts 
 // [add.test.ts]
 import { test, expect, describe } from "vitest"
 import { add } from "./add"
 
 describe("add", () => {
-  test('one plus two', () => {
+  test('first', () => {
     expect(add(1, 2)).toBe(3)
   })
-  test('two plus three', () => {
+  test('second', () => {
     expect(add(2, 3)).toBe(5)
   })
 })
@@ -300,9 +295,7 @@ test("mul", () => {
 
 ::right::
 
-<div class="h-10" />
-
-<div style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0px;">
+<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
 <<< @/snippets/lifecycle.ansi
 </div>
 
