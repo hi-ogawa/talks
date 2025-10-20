@@ -300,35 +300,6 @@ test("mul", () => {
 </div>
 
 ---
-hide: true
----
-
-<!-- TODO: clicks, highlight -->
-<!-- TODO: map each step with reporter duration (prepare, collect, tests) -->
-<!-- TODO: map each step with incremental reporter output -->
-<!-- TODO: this is kinda "visible" part. it doesn't include worker etc. -->
-
-- Select test files to run (CLI arguments, Configuration, etc.)
-  - `vitest src/add.test.ts src/dir/ --project=unit --shard=1/3`
-  - `defineConfig({ test: { dir: ..., include: ..., exclude: ... }, projects: [...] })`
-- Spawn isolated runtime from main process (`child_process`, `worker_threads`, browser)
-  <!-- there is entry point for worker or browser mode index.html -->
-  <!-- not test file itself is entry -->
-- Execute test _files_ to collect Test cases
-  - `test("foo", () => { ... })` 
-    <!-- (TODO: highlight which part is executed. it's not "...") -->
-  - `describe("foo", () => { ... })`
-  <!-- At this point, we obtain the tree / forest structure of all suites, hooks, test cases. cf. verbose reporter tree output -->
-  <!-- Some tests maybe be skipped via `test.only`,`test.skip`, `vitest -t`, so we resolve skip states here. -->
-- Run Test cases
-  - `test("foo", () => { ... })` ("..." is the part actually executed)
-  - verify assertions e.g. `expect(...).toEqual(...)`
-- Reporting (incremental and final summary)
-  - Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
-  - Console log aggregation
-  - Coverage reporting
-
----
 
 # Finding test files to run
 
@@ -685,9 +656,26 @@ Here, we review how main process get notified about test collection and executio
 
 # Reporter API
 
-TODO: ansi snippet output
-TODO: API interface?
-Error reporting (error diff formatting, stacktrace with code frame)
+- Conveniently normalized data structure `TestModule` is provided instead of raw `Task` tree structure.
+- https://vitest.dev/advanced/api/reporters.html
+
+<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 1.4;">
+
+```ts
+import { BaseReporter } from 'vitest/reporters'
+
+export default class CustomReporter extends BaseReporter {
+  onTestRunEnd(
+    testModules: TestModule[],
+    unhandledErrors: SerializedError[],
+  ) {
+    console.log(testModule.length, 'tests finished running')
+    super.onTestRunEnd(testModules, unhandledErrors)
+  }
+}
+```
+
+</div>
 
 <!-- 
 After test runner has finished Task results are all available on main process.
@@ -695,8 +683,15 @@ Vitest has a reporter API to customize how those results are displayed or proces
 
 While raw data is in `File/Suite/Test` based tree structure,
 Vitest normalizes them into more convenient form for reporter implementation.
-
  -->
+
+---
+
+# Example: Default reporter
+
+<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
+<<< @/snippets/lifecycle-default-reporter.ansi
+</div>
 
 ---
 
