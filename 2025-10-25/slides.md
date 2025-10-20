@@ -235,11 +235,6 @@ TODO: code, server-client, architecture here?
   - `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
   - `@vitest/mocker`, `@vitest/spy`
   - `@vitest/browser`
-<!-- - Explain bits and pieces of Vitest as Test framework
-  - Assertion libraries: [`@vitest/expect`](https://github.com/vitest-dev/vitest/tree/main/packages/expect), [`@vitest/snapshot`](https://github.com/vitest-dev/vitest/tree/main/packages/snapshot)
-  - Test runner: `@vitest/runner`
-  - Javscript Runtime: `vite-node`, `vite/module-runner`
-  - Test orchestraion: `vitest`, `vite`, `tinypool`, `birpc` -->
 
 <!-- Vitest monorepo packages dependency tree? -->
 
@@ -252,11 +247,15 @@ Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you
 from understanding the overall test framework internals.
 -->
 
-<!-- ---
+---
 
-# Why Testing?
+# Vitest Monorepo Packages Dependencies
 
-TODO: probably can skip assuming it's obvious. -->
+<img src="/vitest-monorepo-packages.png" />
+
+<!-- 
+reference https://npmgraph.js.org/?q=vitest%40beta
+-->
 
 ---
 layout: two-cols
