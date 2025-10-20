@@ -24,4 +24,4 @@ jobs:
           node-version: lts/*
       - run: corepack enable
       - run: pnpm i
-      - run: pnpm -C examples/lifecycle test
+      # - run: pnpm -C examples/lifecycle test

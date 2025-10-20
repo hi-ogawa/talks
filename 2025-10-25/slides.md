@@ -697,7 +697,9 @@ Vitest normalizes them into more convenient form for reporter implementation.
 
 # Example: Github Action Reporter
 
-TODO: screenshots
+<Transform :scale="0.65" origin="top center">
+<img src="/lifecycle-github-actions-reporter.png" />
+</Transform>
 
 ---
 
