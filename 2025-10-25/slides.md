@@ -264,6 +264,8 @@ layoutClass: gap-8
 
 # Test Lifecycle
 
+Example test run
+
 <!--
 TODO: cli, config, sample test, output.
 TODO: layout, ascii snippet.
@@ -278,10 +280,27 @@ describe("add", () => {
   test('one plus two', () => {
     expect(add(1, 2)).toBe(3)
   })
+  test('two plus three', () => {
+    expect(add(2, 3)).toBe(5)
+  })
+})
+```
+
+<div class="h-2" />
+
+```ts 
+// [mul.test.ts]
+import { expect, test } from "vitest"
+import { mul } from "./mul"
+
+test("mul", () => {
+  expect(mul(2, 3)).toBe(6)
 })
 ```
 
 ::right::
+
+<div class="h-8" />
 
 ```sh
 $ vitest
@@ -300,6 +319,8 @@ $ vitest
        press h to show help, press q to quit
 ```
 
+---
+hide: true
 ---
 
 <!-- TODO: clicks, highlight -->
@@ -333,9 +354,7 @@ $ vitest
 
 Spawn runtimes and schedule / assign test files
 
-<!-- packages: `vitest`, `tinypool` -->
-
-![alt text](/image.png)
+![alt text](/test-runner-orchestration.png)
 
 <!-- 
 TODO:
