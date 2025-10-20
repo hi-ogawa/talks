@@ -10,8 +10,16 @@ transition: slide-left
 ## Test Framework Architecture Deep Dive
 
 ---
+layout: two-cols
+---
 
 # About Me
+
+- Hiroshi Ogawa <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
+- [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
+- Open Source Developer at [VoidZero](https://voidzero.dev/) <img src="/voidzero-icon.svg" class="h-5 inline" />
+- SSR meta-framework fanatic 
+- [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
 <!-- TODO: move "about me" after intro? -->
 <!-- TODO: github avatar, voidzero logo -->
@@ -21,11 +29,9 @@ My first Vitest PR on Oct 30, 2023
 https://github.com/vitest-dev/vitest/pull/4396
 -->
 
-- Hiroshi Ogawa <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
-- [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
-- Open Source Developer at [VoidZero](https://voidzero.dev/) <img src="/voidzero-icon.svg" class="h-5 inline" />
-- SSR meta-framework fanatic 
-- [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
+::right::
+
+<img src="/avatar.jpeg" class="w-60 mx-auto mt-10 rounded-full" />
 
 ---
 layout: two-cols
