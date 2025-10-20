@@ -580,7 +580,7 @@ File(id: add.test.ts)
 [2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
 [2m   Start at [22m 16:51:13
 [2m   Duration [22m 130ms[2m (transform 33ms, setup 0ms, collect 46ms, tests 3ms, environment 0ms, prepare 7ms)[22m
-                    ^^^^^^^^^^^^^^ 👈          ^^^^^^^^^^^^^ 👈
+                                               ^^^^^^^^^^^^^ 👈
 ```
 
 </div>
@@ -692,155 +692,50 @@ Here, we review how main process get notified about test collection and executio
 
 # Reporter API
 
-Error reporting (error diff formatting, stacktrace with code frame, github actions annotation (Reporter API), ...)
-Coverage reporting
-
----
-
-# Client-server architecture
-
-Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
-Coverage reporting
-
----
-
-# `expect` API
-
-packages: `@vitest/expect`, `@vitest/pretty-format`
-
-<!-- TODO: jest icon, chai icon -->
-
-- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
-  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
-  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
-  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
-  <!-- TODO: License from Jest, Jasmine, Underscore -->
-
-```ts
-import { expect } from 'vitest'
-expect("Vitest").to.be.a('string') // Chai API
-expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
-```
-
-- Usable as standalone pure assertion library: `toEqual`, ...
-- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
-  - `expect.soft(...)` (accumulate errors within a test case)
-  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
-  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
-  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
-  - `toMatchSnapshot` (snapshot testing)
-  <!--  -->
-  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
-
-<!-- TODO: sample chai extension system (next slide?) -->
-<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
-
----
-
-# Snapshot testing
-
-`@vitest/snapshot`, `@vitest/pretty-format`
-
-- Test framework agnostic logic lives in `@vitest/snapshot` package
-  <!-- Used by webdriverio, rstest -->
-  - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
-  <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
-  - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
-  <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
-- Some logic is coupled to Vitest's test runner
-  - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
-  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
-  - Coordinate `SnapshotClient` within test lifecycle, e.g.
-    <!-- packages/vitest/src/runtime/runners/test.ts -->
-    - `VitestRunner.onBeforeRunSuite` -> `SnapshotClient.setup`
-    - `VitestRunner.onAfterRunSuite` -> `SnapshotClient.finish`
-    <!-- also on each test retry, the previous snapshot failure needs to be reset -->
-    <!-- saving snapshot files needs to be done after all `toMatchInlineSnapshot` inside one test file are finished -->
-- Printing logic is implemented in `@vitest/pretty-format` package
-  - Customizable via `expect.addSnapshotSerializer`
-
-```ts
-import { expect } from 'vitest'
-expect({ name: 'Vitest' }).toMatchInlineSnapshot()
-```
-
-<!--
-TODO: sample snapshot inline / file
--->
-
----
-hide: true
----
-
-# Test collection and execution (Task tree)
-
-<!-- TODO: improve layout. improve clicks -->
-<!-- TODO: do we need? move after "Test runner" slides? -->
-<!-- packages/runner/src/collect.ts -->
-<!-- packages/runner/src/run.ts -->
-<!-- interfaces packages/runner/src/types/tasks.ts -->
-
-<!-- TODO: 
-On server / reporter side entities? explain in next "client server architecture" slide? 
-  onCollected(files: File[]): send task tree to server
-  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
--->
-
-```ts {*|2,3,6|4|7|*} 
-// [add.test.ts]
-describe("add", () => {
-  test('first', () => { 
-    expect(add(1, 2)).toBe(3)
-  })
-  test('second', () => {
-    expect(add(2, 2)).toBe(5)
-  })
-})
-```
-
-<!-- Corresponding tree structure on test runner side after collection: -->
-
-Test runner task tree:
-
-```txt {1,2,3,5|*}
-File(id: add.test.ts)
-  Suite(name: add)
-    Test(name: first, id: ...)
-      result { status: 'passed' }
-    Test(name: second, id: ...)
-      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
-```
-
-<!-- TODO: fnMap not needed. just move it to task tree above for conciseness -->
-
-```ts {1|*}
-const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
-fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
-fnMap.set(secondTest, () => expect(add(2, 2)).toBe(5))
-```
-
----
-
-# Test runner and Client-server architecture
+TODO: ansi snippet output
+TODO: API interface?
+Error reporting (error diff formatting, stacktrace with code frame)
 
 <!-- 
-So far, we've talked by assuming "executing test files" is somehow done 
-(including typescript, vue, or any files), but how does it actually work?
-Here we explain powered by Vite dev server.
--->
+After test runner has finished Task results are all available on main process.
+Vitest has a reporter API to customize how those results are displayed or processed.
 
-TODO: diagram
+While raw data is in `File/Suite/Test` based tree structure,
+Vitest normalizes them into more convenient form for reporter implementation.
 
-- right: ViteDevServer, Test orchestraion pool, reporting
-- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
-- left-to-right: `fetchModule` (module-runner), http request (browser)
-- right-to-left: transpiled js (vite plugin pipeline)
-- left-to-right: test result to reporter
-
+ -->
 
 ---
 
-# Test runner
+# Example: Github Action Reporter
+
+TODO: screenshots
+
+---
+
+# Where is Vite?
+
+<v-click>
+
+```ansi
+...
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m3 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 16:51:13
+[2m   Duration [22m 130ms[2m (transform 33ms, setup 0ms, collect 46ms, tests 3ms, environment 0ms, prepare 7ms)[22m
+                    ^^^^^^^^^^^^^^ 👈
+```
+
+</v-click>
+
+<!-- 
+So, it looks like we've followed entire test lifecycle from test file selection, orchestration, collection, execution, and reporting.
+but, how and when did Vitest actually utilitize Vite?
+-->
+
+---
+
+# Test runner and Javascript runtime
 
 packages: `@vitest/runner`, `vitest`
 
@@ -875,6 +770,25 @@ export default defineConfig({
   }
 })
 ```
+
+<!-- 
+So far, we've talked by assuming "executing test files" is somehow done 
+(including typescript, vue, or any files), but how does it actually work?
+Here we explain powered by Vite dev server.
+-->
+
+---
+
+# Client-server architecture
+
+
+TODO: diagram
+
+- right: ViteDevServer, Test orchestraion pool, reporting
+- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
+- left-to-right: `fetchModule` (module-runner), http request (browser)
+- right-to-left: transpiled js (vite plugin pipeline)
+- left-to-right: test result to reporter
 
 ---
 
@@ -959,6 +873,128 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
 hide: true
 ---
 
+# `expect` API
+
+packages: `@vitest/expect`, `@vitest/pretty-format`
+
+<!-- TODO: jest icon, chai icon -->
+
+- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
+  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
+  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
+  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
+  <!-- TODO: License from Jest, Jasmine, Underscore -->
+
+```ts
+import { expect } from 'vitest'
+expect("Vitest").to.be.a('string') // Chai API
+expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
+```
+
+- Usable as standalone pure assertion library: `toEqual`, ...
+- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
+  - `expect.soft(...)` (accumulate errors within a test case)
+  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
+  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
+  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
+  - `toMatchSnapshot` (snapshot testing)
+  <!--  -->
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+
+<!-- TODO: sample chai extension system (next slide?) -->
+<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
+
+---
+hide: true
+---
+
+# Snapshot testing
+
+`@vitest/snapshot`, `@vitest/pretty-format`
+
+- Test framework agnostic logic lives in `@vitest/snapshot` package
+  <!-- Used by webdriverio, rstest -->
+  - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
+  <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
+  - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
+  <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
+- Some logic is coupled to Vitest's test runner
+  - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+  - Coordinate `SnapshotClient` within test lifecycle, e.g.
+    <!-- packages/vitest/src/runtime/runners/test.ts -->
+    - `VitestRunner.onBeforeRunSuite` -> `SnapshotClient.setup`
+    - `VitestRunner.onAfterRunSuite` -> `SnapshotClient.finish`
+    <!-- also on each test retry, the previous snapshot failure needs to be reset -->
+    <!-- saving snapshot files needs to be done after all `toMatchInlineSnapshot` inside one test file are finished -->
+- Printing logic is implemented in `@vitest/pretty-format` package
+  - Customizable via `expect.addSnapshotSerializer`
+
+```ts
+import { expect } from 'vitest'
+expect({ name: 'Vitest' }).toMatchInlineSnapshot()
+```
+
+<!--
+TODO: sample snapshot inline / file
+-->
+
+---
+hide: true
+---
+
+# Test collection and execution (Task tree)
+
+<!-- TODO: improve layout. improve clicks -->
+<!-- TODO: do we need? move after "Test runner" slides? -->
+<!-- packages/runner/src/collect.ts -->
+<!-- packages/runner/src/run.ts -->
+<!-- interfaces packages/runner/src/types/tasks.ts -->
+
+<!-- TODO: 
+On server / reporter side entities? explain in next "client server architecture" slide? 
+  onCollected(files: File[]): send task tree to server
+  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
+-->
+
+```ts {*|2,3,6|4|7|*} 
+// [add.test.ts]
+describe("add", () => {
+  test('first', () => { 
+    expect(add(1, 2)).toBe(3)
+  })
+  test('second', () => {
+    expect(add(2, 2)).toBe(5)
+  })
+})
+```
+
+<!-- Corresponding tree structure on test runner side after collection: -->
+
+Test runner task tree:
+
+```txt {1,2,3,5|*}
+File(id: add.test.ts)
+  Suite(name: add)
+    Test(name: first, id: ...)
+      result { status: 'passed' }
+    Test(name: second, id: ...)
+      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
+```
+
+<!-- TODO: fnMap not needed. just move it to task tree above for conciseness -->
+
+```ts {1|*}
+const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
+fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
+fnMap.set(secondTest, () => expect(add(2, 2)).toBe(5))
+```
+
+
+---
+hide: true
+---
+
 # Client-Server Communication
 
 - birpc (runtime agnostic bidirectional rpc library)
@@ -984,8 +1020,7 @@ hide: true
 TODO
 
 ---
-dragPos:
-  square: 56,437,0,0
+hide: true
 ---
 
 # Watch mode
