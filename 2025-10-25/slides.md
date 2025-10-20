@@ -225,7 +225,7 @@ TODO: code, server-client, architecture here?
 
 - Test Lifecycle
   - Test orchestration
-  - Collection tests
+  - Collecting tests
   - Executing tests
   - Reporting results
 - Vitest monorepo packages (and Vite)
@@ -344,7 +344,9 @@ hide: true
 - CLI arguments (file pattern, overrides, etc.)
 
 ```sh
-vitest src/add.test.ts src/dir/ --project=unit --shard=1/3
+vitest src/add.test.ts src/dir/
+vitest --project=unit 
+vitest --shard=1/3
 ```
 
 <div class="h-4" />
@@ -367,21 +369,78 @@ export default defineConfig({
 <!-- 
 First Vitest needs to search for test files.
 Config file is optional.
+it's mostly globing.
  -->
 
 ---
 
 # Test runner orchestration
 
-Spawn runtimes and schedule / assign test files
+packages: `vitest`, `tinypool`
 
-![alt text](/test-runner-orchestration.png)
+- Spawn isolated runtime from main process and assign test files
+- The default is `pool: "forks"`
+
+```ts
+import { fork } from "node:child_process"
+```
+
+<Transform :scale="0.7" origin="top center">
+<img src="/test-runner-orchestration.png" />
+</Transform>
 
 <!-- 
-TODO:
-mention Worker, browser mode orchestration
-multiple projects case
- -->
+This is the default mode `pool: "forks"`.
+The unit of isolation is by test fie.
+Allow cpu based parallelization.
+there is a wrapper entrypoint file. the test file itself is not executed directly).
+multiple projects case.
+Not spawning new process for each test file, but limited based on available cpu.
+-->
+
+---
+
+# Test runner orchestration
+
+- `pool: "threads"`
+
+```js
+import { Worker } from 'node:worker_threads'
+```
+
+<Transform :scale="0.8" origin="top center">
+<img src="/test-runner-orchestration-threads.png" />
+</Transform>
+
+---
+
+# Test runner orchestration
+
+- Browser Mode: `@vitest/browser-playwright`
+
+<Transform :scale="0.9" origin="top center">
+<img src="/test-runner-orchestration-browser-mode.png" />
+</Transform>
+
+---
+
+# Test runner orchestration
+
+- No isolation (`vitest --no-isolate` or `isolate: false`)
+
+<Transform :scale="0.9" origin="top center">
+<img src="/test-runner-orchestration-no-isolate.png" />
+</Transform>
+
+---
+
+# Why isolation?
+
+TODO 
+- compare `pool`?
+- explain isolation?
+
+<!-- TODO: move later slide to here -->
 
 ---
 
