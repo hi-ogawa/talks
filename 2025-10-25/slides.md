@@ -224,7 +224,7 @@ TODO: code, server-client, architecture here?
 
 
 - Test Lifecycle
-  - Test runner orchestration
+  - Test orchestration
   - Collection tests
   - Executing tests
   - Reporting results
@@ -337,6 +337,40 @@ hide: true
 
 ---
 
+# Finding test files to run
+
+<!-- package: `vitest` -->
+
+- CLI arguments (file pattern, overrides, etc.)
+
+```sh
+vitest src/add.test.ts src/dir/ --project=unit --shard=1/3
+```
+
+<div class="h-4" />
+
+- Configuration
+
+```ts
+export default defineConfig({
+  test: {
+    dir: ...,
+    include: ...,
+    exclude: ...,
+  },
+  projects: [
+    ...
+  ]
+})
+```
+
+<!-- 
+First Vitest needs to search for test files.
+Config file is optional.
+ -->
+
+---
+
 # Test runner orchestration
 
 Spawn runtimes and schedule / assign test files
@@ -356,6 +390,10 @@ multiple projects case
 <!-- packages: `vitest`, `vite/module-runner`, `@vitest/runner` -->
 
 TODO: slides from "Test collection and execution (Task tree)"
+
+<!-- 
+Importantly, before we execute test files, we don't know about the test cases.
+-->
 
 ---
 

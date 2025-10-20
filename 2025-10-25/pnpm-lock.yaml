@@ -27,7 +27,19 @@ importers:
         specifier: beta
         version: 4.0.0-beta.18(@types/debug@4.1.12)(@types/node@22.18.11)(@vitest/browser-playwright@4.0.0-beta.18)(happy-dom@20.0.7)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
+  examples/lifecycle:
+    devDependencies:
+      vitest:
+        specifier: beta
+        version: 4.0.0-beta.18(@types/debug@4.1.12)(@types/node@22.18.11)(@vitest/browser-playwright@4.0.0-beta.18)(happy-dom@20.0.7)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+
   examples/mocking:
+    devDependencies:
+      vitest:
+        specifier: beta
+        version: 4.0.0-beta.18(@types/debug@4.1.12)(@types/node@22.18.11)(@vitest/browser-playwright@4.0.0-beta.18)(happy-dom@20.0.7)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+
+  examples/projects:
     devDependencies:
       vitest:
         specifier: beta
