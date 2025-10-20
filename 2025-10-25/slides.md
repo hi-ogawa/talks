@@ -727,7 +727,7 @@ export default defineConfig({
 
 # Vite Module Runner
 
-- Previously `vite-node` and Vite `ssrLoadModule`
+- `vite-node` (< Vitest 4)
 - Request `fetchModule(id)` to Vite development server
   <!-- Just like browser directly requests javascript files to the server -->
   <!-- TODO: elaborate more? -->
@@ -806,71 +806,6 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
 hide: true
 ---
 
-# Test orchestration
-
-<!--
-So far, we've looked into how each test file are executed, which is "client" side logic.
-Now, let's look into how tests are orchestrated, which is "server" side logic.
--->
-
-- Multi project support (e.g. `{ projects: ["./packages/*"] }`)
-  <!-- - each project gets a separate `ViteDevServer` instance -->
-- Sharding
-  - Parallelization to multiple machines
-- Worker pool and Scheduling (`tinypool`)
-  - Pool type / Isolation 
-    - Node.js -> `child_process`, `worker_threads`
-    - Browser mode -> Iframe
-  - Parallelization to utilize multiple CPUs
-- Reporter
-  - built-in reporters
-  - custom reporter API
-  - merging sharded results
-- Watch mode
-  - efficient test-rerun by the same mechanism of Vite HMR
-    - file watcher
-    - module graph API
-    - re-transform only changed files
-
----
-
-# What is isolation?
-
-<!-- TODO: memory is fuzzy. verify current implementation. -->
-
-- by default, each file is executed with its own `globalThis`
-  - not only `globalThis`, but each runner side module graph are re-evaluated.
-- `child_process` vs `worker_threads` trade-offs
-  <!-- - stability
-  - startup performance -->
-- `isolate: false` to opt-out from isolation
-  - by reusing existing child process / worker thread, it can save time to spawn each one for each test file.
-  - also run multiple test files through single module runner instance, thus it avoids evaluating same modules multiple times.
-  - it still allows parallelization by splitting multiple test files into multiple pools.
-
-```ts
-export default defineConfig({
-  test: {
-    pool: 'threads', // default is 'forks'
-    isolate: false, // default is true
-  },
-})
-```
-
-TODO: example?
-
-<!-- ---
-
-# Test scheduling
-
-TODO: test scheduling for browser mode? orchestrator + tester iframe? maybe skip since it's complicated.
-
-TODO
-
-- start fresh worker depending on isolation level -->
-
----
-
 # Client-Server Communication
 
 - birpc (runtime agnostic bidirectional rpc library)
@@ -880,22 +815,35 @@ TODO
 <!-- - UI mode?  -->
 
 ---
+hide: true
+---
 
 # Reporter API
 
 TODO
 
-<!-- ---
+---
+hide: true
+---
 
 # Coverage
 
-TODO -->
+TODO
 
 ---
 
 # Watch mode
 
-TODO
+- `vitest`: watch mode is default like development server
+- Efficient test-rerun: similar mechanism to Vite HMR
+  - file watcher API: `ViteDevServer.watch.on("change", ...)`
+  - module graph API: `ViteDevServer.watch.on("change", ...)`
+  - re-transform only changed files
+
+<!-- 
+Vite server's module graph keeps previously transformed results.
+It only invalidates changed files.
+ -->
 
 ---
 
@@ -907,7 +855,5 @@ TODO: Back to initial lifecycles story to summarize?
 
 # Thank you!
 
-<!-- TODO
-
-Thanks to the sponsors https://github.com/sponsors/vitest-dev#sponsors
-and team and contributors https://github.com/vitest-dev/vitest/ -->
+- Sponsors: [Github](https://github.com/sponsors/vitest-dev#sponsors), [Open Collective](https://opencollective.com/vitest)
+- Team and Contributors [vitest-dev/vitest](https://github.com/vitest-dev/vitest/)
