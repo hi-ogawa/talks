@@ -459,12 +459,51 @@ export default defineConfig({
 Initially `threads` was the default.
 However, we continued to receive issue of worker threads, which often resolved by switching to `forks`.
 process.chdir is available only with child_process.
-While `isolate: false` is considered faster, test files execution order can affect each other more than isolated case.
+While `isolate: false` is considered faster, test files execution order can affect each other and non deterministic behavior can manifest.
+Test execution is always isolated from main process.
+ -->
+
+---
+layout: two-cols
+layoutClass: gap-4
+---
+
+# Isolation example
+
+```ts
+// [add.test.ts]
+import { test } from "vitest"
+import { shared } from "./shared"
+
+test("add", ...)
+```
+
+```ts
+// [mul.test.ts]
+import { test } from "vitest"
+import { shared } from "./shared"
+
+test("mul", ...)
+```
+
+```ts
+// [shared.ts]
+console.log("[shared.ts evaluated]")
+export const shared = "shared";
+```
+
+::right::
+
+![alt text](/isolation-example.png)
+
+<!-- 
+This also shows a trade off of `isolate: false`
+where it doesn't execut `add.test.ts` and `mul.test.ts` in parallel.
  -->
 
 ---
 
-# No isolation example
+# Collecting tests
 
 ---
 
