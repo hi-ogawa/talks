@@ -345,8 +345,8 @@ hide: true
 
 ```sh
 vitest src/add.test.ts src/dir/
-vitest --project=unit 
-vitest --shard=1/3
+vitest --project=unit #
+vitest --shard=1/3 # parallelize across multiple machines
 ```
 
 <div class="h-4" />
@@ -434,13 +434,37 @@ import { Worker } from 'node:worker_threads'
 
 ---
 
-# Why isolation?
+# About isolation and pool
 
-TODO 
-- compare `pool`?
-- explain isolation?
+- `pool: "forks"`, `"threads"`, `"vmThreads"`
+  - `forks` as default for stability
+- `isolate: false` to opt-out from isolation
+  - Reusing existing child process / worker thread can save time to spawn for each test file.
+    Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
+  - This mode still allows splitting multiple test files into multiple pools for parallelization to benefit multiple CPUs.
+- Docs [Improving Performance](https://vitest.dev/guide/improving-performance.html)
 
-<!-- TODO: move later slide to here -->
+<div class="h-4" />
+
+```ts
+export default defineConfig({
+  test: {
+    pool: 'threads', // default is 'forks'
+    isolate: false, // default is true
+  },
+})
+```
+
+<!-- 
+Initially `threads` was the default.
+However, we continued to receive issue of worker threads, which often resolved by switching to `forks`.
+process.chdir is available only with child_process.
+While `isolate: false` is considered faster, test files execution order can affect each other more than isolated case.
+ -->
+
+---
+
+# No isolation example
 
 ---
 
@@ -739,6 +763,8 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
 })
 ```
 
+---
+hide: true
 ---
 
 # Test orchestration
