@@ -23,8 +23,8 @@ https://github.com/vitest-dev/vitest/pull/4396
 
 - Hiroshi Ogawa <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
-- Open Source Developer at [VoidZero](https://voidzero.dev/)
-- SSR meta-framework fanatic
+- Open Source Developer at [VoidZero](https://voidzero.dev/) <img src="/voidzero-icon.svg" class="h-5 inline" />
+- SSR meta-framework fanatic 
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
 ---
@@ -73,6 +73,8 @@ Output on the right is what you see when you run `vitest` command.
 -->
 
 ---
+layout: two-cols
+---
 
 # What is Vitest?
 
@@ -89,15 +91,15 @@ Output on the right is what you see when you run `vitest` command.
 - Runtime agnostics
   - Node.js, Browser Mode, Cloudflare Workers
 
+::right::  
+
 ```ts 
 // [add.test.ts]
 import { test, expect, describe } from "vitest"
 import { add } from "./add"
 
-describe(add, () => {
-  test('one plus two', () => {
-    expect(add(1, 2)).toBe(3)
-  })
+test('add', () => {
+  expect(add(1, 2)).toBe(3)
 })
 ```
 
@@ -131,6 +133,12 @@ But, obviously for Vite projects,
 
 The talk will about general test framework feature implementation.
 Vite and Vitest unique feature is expalined as it comes up.
+
+Compared to others:
+- Jest
+  - fragmented transform configuration (babel)
+- 
+
 -->
 
 ---
@@ -159,18 +167,25 @@ TODO: code, server-client, architecture here?
 -->
 
 
-- Lifecycle of test run
+- Test Lifecycle
+  - Test runner orchestration
+  - Collection tests
+  - Executing tests
+  - Reporting results
 - Vitest monorepo packages (and Vite)
   - `vitest`
-  - `vite` (`ViteDevServer` and `ModuleRunner`)
+  - `vite` (`ViteDevServer`, `ModuleRunner`, `ModuleGraph`)
   - `@vitest/runner`
+  - `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
+  - `@vitest/mocker`, `@vitest/spy`
   - `@vitest/browser`
-- Explain bits and pieces of Vitest as Test framework
+<!-- - Explain bits and pieces of Vitest as Test framework
   - Assertion libraries: [`@vitest/expect`](https://github.com/vitest-dev/vitest/tree/main/packages/expect), [`@vitest/snapshot`](https://github.com/vitest-dev/vitest/tree/main/packages/snapshot)
-    <!-- TODO: reference on license verbatim from Jasmine, Jest -->
   - Test runner: `@vitest/runner`
   - Javscript Runtime: `vite-node`, `vite/module-runner`
-  - Test orchestraion: `vitest`, `vite`, `tinypool`, `birpc`
+  - Test orchestraion: `vitest`, `vite`, `tinypool`, `birpc` -->
+
+<!-- Vitest monorepo packages dependency tree? -->
 
 <!--
 We start from reviewing the basic steps and lifecycle of running tests.
@@ -192,7 +207,7 @@ layout: two-cols
 layoutClass: gap-8
 ---
 
-## Lifecycle of test run
+# Test Lifecycle
 
 <!--
 TODO: cli, config, sample test, output.
@@ -204,7 +219,7 @@ TODO: layout, ascii snippet.
 import { test, expect, describe } from "vitest"
 import { add } from "./add"
 
-describe(add, () => {
+describe("add", () => {
   test('one plus two', () => {
     expect(add(1, 2)).toBe(3)
   })
@@ -259,17 +274,25 @@ $ vitest
 
 ---
 
-# Spawn runtimes and schedule / assign test files
+# Test runner orchestration
 
-packages: `vitest`, `tinypool`
+Spawn runtimes and schedule / assign test files
+
+<!-- packages: `vitest`, `tinypool` -->
 
 ![alt text](/image.png)
+
+<!-- 
+TODO:
+mention Worker, browser mode orchestration
+multiple projects case
+ -->
 
 ---
 
 # Execute test _files_ to collect test cases
 
-packages: `vitest`, `vite/module-runner`, `@vitest/runner`
+<!-- packages: `vitest`, `vite/module-runner`, `@vitest/runner` -->
 
 TODO: slides from "Test collection and execution (Task tree)"
 
@@ -277,7 +300,7 @@ TODO: slides from "Test collection and execution (Task tree)"
 
 # Execute test cases
 
-packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`
+<!-- packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot` -->
 
 TODO: slides from "Test collection and execution (Task tree)" but move highlight
 
@@ -287,6 +310,8 @@ TODO: slides from "Test collection and execution (Task tree)" but move highlight
 
 TODO: `onCollected`, `onTaskUpdate`, `onConsoleLog`
 
+---
+
 # Reporting (final summary)
 
 Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
@@ -294,7 +319,22 @@ Coverage reporting
 
 ---
 
-# `expect` API (`@vitest/expect`)
+# Client-server architecture
+
+Error reporting (error diff formatting, stacktrace with code frame, github actions annotation, ...)
+Coverage reporting
+
+---
+
+# Bidirectional
+
+TODO: `birpc`, `onCancel`
+
+---
+
+# `expect` API
+
+packages: `@vitest/expect`, `@vitest/pretty-format`
 
 <!-- TODO: jest icon, chai icon -->
 
@@ -622,11 +662,11 @@ TODO
 
 TODO
 
----
+<!-- ---
 
 # Coverage
 
-TODO
+TODO -->
 
 ---
 
@@ -644,7 +684,7 @@ TODO: Back to initial lifecycles story to summarize?
 
 # Thank you!
 
-TODO
+<!-- TODO
 
 Thanks to the sponsors https://github.com/sponsors/vitest-dev#sponsors
-and team and contributors https://github.com/vitest-dev/vitest/
+and team and contributors https://github.com/vitest-dev/vitest/ -->
