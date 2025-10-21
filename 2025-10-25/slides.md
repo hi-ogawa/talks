@@ -256,7 +256,7 @@ layoutClass: gap-8
 
 Example test run
 
-```ts 
+```ts
 // [add.test.ts]
 import { test, expect, describe } from "vitest"
 import { add } from "./add"
@@ -266,7 +266,7 @@ describe("add", () => {
     expect(add(1, 2)).toBe(3)
   })
   test('second', () => {
-    expect(add(2, 3)).toBe(5)
+    expect(add(2, 3)).toBe(4)
   })
 })
 ```
@@ -494,11 +494,11 @@ On server / reporter side entities? explain in next "client server architecture"
 ```ts {0|1|1,2|1,2,3|1,2,6|*}{at:2}
 // [add.test.ts]
 describe("add", () => {
-  test('first', () => { 
+  test('first', () => {
     expect(add(1, 2)).toBe(3)
   })
   test('second', () => {
-    expect(add(2, 2)).toBe(5)
+    expect(add(2, 3)).toBe(4)
   })
 })
 ```
@@ -518,7 +518,7 @@ File(id: add.test.ts)
       fn: () => { expect(add(1, 2)).toBe(3) }
       result: undefined
     Test(name: second)
-      fn: () => { expect(add(2, 2)).toBe(5) }
+      fn: () => { expect(add(2, 3)).toBe(4) }
       result: undefined
 ```
 
@@ -570,7 +570,7 @@ File(id: add.test.ts)
       fn: () => { expect(add(1, 2)).toBe(3) }
       result: undefined
     Test(name: second)
-      fn: () => { expect(add(2, 2)).toBe(5) }
+      fn: () => { expect(add(2, 3)).toBe(4) }
       result: undefined
 ```
 
@@ -581,7 +581,7 @@ File(id: add.test.ts)
       fn: () => { expect(add(1, 2)).toBe(3) }
       result: { status: 'passed' }
     Test(name: second)
-      fn: () => { expect(add(2, 2)).toBe(5) }
+      fn: () => { expect(add(2, 3)).toBe(4) }
       result: undefined
 ```
 
@@ -592,7 +592,7 @@ File(id: add.test.ts)
       fn: () => { expect(add(1, 2)).toBe(3) }
       result: { status: 'passed' }
     Test(name: second)
-      fn: () => { expect(add(2, 2)).toBe(5) }
+      fn: () => { expect(add(2, 3)).toBe(4) }
       result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
 ```
 ````
