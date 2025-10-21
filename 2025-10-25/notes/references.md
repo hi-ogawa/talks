@@ -17,7 +17,7 @@
 ## reference talks
 
 - Vite Conf https://www.youtube.com/channel/UCXXpIonjN9ATkXjOJsOwvjg
-  - Vladimir (2024) https://www.kyoutube.com/watch?v=0yydlwCBVuM
+  - Vladimir (2024) https://www.youtube.com/watch?v=0yydlwCBVuM
   - Ari (2024) https://www.youtube.com/watch?v=UOdgx2Mm3X8
 - Vue Fes Talks https://www.youtube.com/@Vuejs-bn2cg/videos
   - Nozomu / Vite Internals (2024) https://www.youtube.com/watch?v=anb7mdLuaqg
