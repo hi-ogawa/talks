@@ -745,16 +745,13 @@ const msg = ref('Hello World!')
 
 ::right::
 
-<div style="--slidev-code-font-size: 7px; --slidev-code-line-height: 0px;">
+<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
 
 ```js
 // [clientEnvironment.transformRequest(...)]
 import { ref } from "/xxx/vue.js?v=7756971e"
 ...
-const _sfc_main = {
-  __name: 'Hello',
-  setup(__props, { expose: __expose }) { ... }
-}
+const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } }
 ...
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return (_openBlock(), _createElementBlock(_Fragment, null, [
@@ -770,19 +767,12 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-browser-mode/src/Hello.vue"]])
 ```
 
-</div>
-
-<div style="--slidev-code-font-size: 7px; --slidev-code-line-height: 0px;">
-
 ```js
 // [ssrEnvironment.transformRequest(...)]
 __vite_ssr_exportName__("default", () => { try { return __vite_ssr_export_default__ } catch {} });
 const __vite_ssr_import_0__ = await __vite_ssr_import__("/xxx/node_modules/vue/index.mjs", {"importedNames":["ref"]});
 ...
-const _sfc_main = {
-  __name: 'Hello',
-  setup(__props, { expose: __expose }) { ... }
-};
+const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } };
 ...
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
   _push(`<!--[--><h1>${
@@ -798,6 +788,7 @@ const __vite_ssr_export_default__ = /*#__PURE__*/(0,__vite_ssr_import_3__.defaul
 </div>
 
 <!-- 
+TODO: animation to highlight difference
 compare Vue SFC client / ssr transform
 mention:
   - vue playground
