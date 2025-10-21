@@ -75,7 +75,7 @@ describe('optimizer-scan:script-test', () => {
 This is one unit test case from Vite.
 https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
 
-You see hopefully familar Test API like `describe`, `test`, `expect`.
+You see hopefully familiar Test API like `describe`, `test`, `expect`.
 (jasmine, mocha, jest, playwright, deno, bun).
 Output on the right is what you see when you run `vitest` command.
 -->
@@ -128,10 +128,10 @@ test('Hello', () => {
 ```
 
 <!--
-While there are certain Vite futures Vitest relies on,
+While there are certain Vite features Vitest relies on,
 there are other parts which is independent from Vite.
 The talk will talk about such overall test framework feature implementation.
-Vite and Vitest unique feature is expalined as it comes up.
+Vite and Vitest unique feature is explained as it comes up.
 
 Compared to others:
 - Jest
@@ -221,7 +221,7 @@ We start from reviewing the basic steps and lifecycle of running tests.
 We then explain and dig deeper about each step and each component.
 Along the way, we see how Vitest utilizes Vite as a foundation of certain components.
 And also we'll see large parts of Vitest are not actually tied to Vite, but general test framework implementation.
-Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you'll be benefit
+Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you'll benefit
 from understanding the overall test framework internals.
 
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
@@ -454,7 +454,7 @@ export const shared = "shared";
 
 <!-- 
 This also shows a trade off of `isolate: false`
-where it doesn't execut `add.test.ts` and `mul.test.ts` in parallel.
+where it doesn't execute `add.test.ts` and `mul.test.ts` in parallel.
  -->
 
 ---
@@ -545,7 +545,7 @@ File(id: add.test.ts)
 Regardless of isolation mode, inside each worker test files are executed sequentially.
 Here we follow collecting test cases in `add.test.ts`.
 
-`describe`, `test` also corresdponging `Task` types are implemented in `@vitest/runner` package.
+`describe`, `test` also corresponding `Task` types are implemented in `@vitest/runner` package.
 
 As the right, corresponding tree structure on test runner side after collection.
 
@@ -613,7 +613,7 @@ File(id: add.test.ts)
 </v-clicks>
 
 <!-- 
-Here, finally we execut each tests and see the results.
+Here, finally we execute each tests and see the results.
 By default, they are sequentially executed. 
 @vitest/runner provides `describe/test.current` to allow multiple asynchronous tests in parallel.
 
@@ -714,7 +714,7 @@ https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2
 
 <!-- 
 So, it looks like we've followed entire test lifecycle from test file selection, orchestration, collection, execution, and reporting.
-but, how and when did Vitest actually utilitize Vite?
+but, how and when did Vitest actually utilize Vite?
 -->
 
 ---
@@ -842,7 +842,7 @@ class BrowserVitestRunner implements VitestRunner {
 
 <!--
 Let's see how Vitest represent such abstraction internally.
-As mentioned befor in Client-server architecture. Test file execution starts by importing test files on "client" side.
+As mentioned before in Client-server architecture. Test file execution starts by importing test files on "client" side.
 -->
 
 ---
@@ -905,7 +905,7 @@ VITE_NODE_DEBUG_DUMP=true vitest
 VITEST_DEBUG_DUMP=.vitest-dump vitest
 since Vite 4 beta https://github.com/vitest-dev/vitest/pull/8711
 
-TODO: elabrate more
+TODO: elaborate more
 __vite_ssr_import__ -> fetchModule -> runInlineModule
 -->
 
