@@ -5,13 +5,11 @@
 - [x] Improved Overview slide with narrative approach (commit ba175cc)
 - [x] Replaced Summary with Key Takeaways (commit cc38453)
 - [x] Changed em-dashes to colons in Key Takeaways
+- [x] Fixed grammar errors at slides.md:131-133
+  - "The talk will talk about" → "The talk covers"
+  - "unique feature is" → "unique features are"
 
 ## Remaining Items
-
-### Grammar Fix
-- **Location:** slides.md:131
-- **Issue:** "there are other parts which is independent from Vite"
-- **Fix:** Change to "which **are** independent"
 
 ### TODOs in File
 - **Location:** slides.md:24

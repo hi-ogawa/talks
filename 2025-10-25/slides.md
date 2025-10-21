@@ -129,8 +129,8 @@ test('Hello', () => {
 <!--
 While there are certain Vite features Vitest relies on,
 there are other parts which are independent from Vite.
-The talk will talk about such overall test framework feature implementation.
-Vite and Vitest unique feature is explained as it comes up.
+The talk covers overall test framework feature implementation.
+Vite and Vitest unique features are explained as they come up.
 
 Compared to others:
 - Jest
