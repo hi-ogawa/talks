@@ -200,29 +200,17 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 
 # Overview
 
-- Test Lifecycle
-  - Test orchestration
-  - Collecting tests
-  - Executing tests
-  - Reporting results
-- Vitest monorepo packages (and Vite)
-  - `vitest`
-  - `vite` (`ViteDevServer`, `ModuleRunner`, `ModuleGraph`)
-  - `@vitest/runner`
-  - `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
-  - `@vitest/mocker`, `@vitest/spy`
-  - `@vitest/browser`
+<div />
 
-<!-- Vitest monorepo packages dependency tree? -->
+This talk follows the **test lifecycle** to explore Vitest architecture:
+- Orchestration → Collection → Execution → Reporting
+
+Along the way, we'll explore:
+- Which parts are **general test framework** implementation
+- How **Vite** powers test runtime (ModuleRunner, transform, etc.)
+- How **monorepo packages** divide responsibilities
 
 <!--
-We start from reviewing the basic steps and lifecycle of running tests.
-We then explain and dig deeper about each step and each component.
-Along the way, we see how Vitest utilizes Vite as a foundation of certain components.
-And also we'll see large parts of Vitest are not actually tied to Vite, but general test framework implementation.
-Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you'll benefit
-from understanding the overall test framework internals.
-
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
 @vitest/runner -> managing test case hierarchy and execution (`describe`, `test`, timeout, retry)
 vitest, tinypool, birpc -> test orchestration, reporter, etc.
