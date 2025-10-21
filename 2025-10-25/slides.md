@@ -71,6 +71,8 @@ describe('optimizer-scan:script-test', () => {
 </div>
 
 <!--
+TODO: find a simpler more obvious example?
+
 This is one unit test case from Vite.
 https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
 
