@@ -646,6 +646,8 @@ export default class CustomReporter extends BaseReporter {
 }
 ```
 
+<!-- TODO: defineConfig({ test: { reporter: ... }}) -->
+
 </div>
 
 <!-- 
@@ -677,6 +679,8 @@ https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2
 ---
 
 # Where is Vite?
+
+- We followed the entire lifecycle of test run, but how does Vite come into play?
 
 <v-click>
 
