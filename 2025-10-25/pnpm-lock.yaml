@@ -90,6 +90,24 @@ importers:
         specifier: ^3.5.22
         version: 3.5.22(typescript@5.9.3)
 
+  examples/vue-ssr:
+    devDependencies:
+      '@vitejs/plugin-vue':
+        specifier: ^6.0.1
+        version: 6.0.1(vite@7.1.10(@types/node@22.18.11)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
+      '@vue/test-utils':
+        specifier: ^2.4.6
+        version: 2.4.6
+      happy-dom:
+        specifier: ^20.0.7
+        version: 20.0.7
+      vitest:
+        specifier: beta
+        version: 4.0.0-beta.18(@types/debug@4.1.12)(@types/node@22.18.11)(@vitest/browser-playwright@4.0.0-beta.18)(happy-dom@20.0.7)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
+      vue:
+        specifier: ^3.5.22
+        version: 3.5.22(typescript@5.9.3)
+
 packages:
 
   '@antfu/install-pkg@1.1.0':
