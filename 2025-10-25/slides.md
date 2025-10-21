@@ -870,38 +870,50 @@ export default defineConfig({
 
 # Vite Module Runner
 
-- `vite-node` (< Vitest 4)
-- Request `fetchModule(id)` to Vite development server
-  <!-- Just like browser directly requests javascript files to the server -->
-  <!-- TODO: elaborate more? -->
-- `class VitestModuleRunner extends ModuleRunner {...}`
-- "Vite module runner transform" rewrites original `import` and `export` code into special functions,
-  so that they can be intercepted and Vite/Vitest has a full control over module evaluation.
-  - `import { add } from "/add.js"` <br /> -> `const __vite_ssr_import_0__ = await __vite_ssr_import__("/add.js")`
-  - `export function add(...) { ... }` -> `__vite_ssr_exportName__("add", ...)`
-  <!-- VITE_NODE_DEBUG_DUMP=true vitest -->
-  <!-- VITEST_DEBUG_DUMP=.vitest-dump vitest -->
-  <!-- since Vite 4 beta https://github.com/vitest-dev/vitest/pull/8711 -->
+- "Vite module runner transform" rewrites original `import` and `export` into runtime functions.
+  - `import` ⟶ `__vite_ssr_import__`
+  - `export` ⟶ `__vite_ssr_exportName__`
+- Run `VITE_NODE_DEBUG_DUMP=true vitest` (`VITEST_DEBUG_DUMP=.vitest-dump vitest` for Vitest 4)
 
-<!-- TODO: before / after code snippet -->
+```js
+// [src/add.test.ts]
+import { test, expect } from "vitest"
+import { add } from "./add"
+
+test("add", () => {
+  expect(add(1, 2)).toBe(3)
+});
+```
 
 ```js
 // [.vitest-dump/root/-src-add-test-ts]
-const __vite_ssr_import_0__ = await __vite_ssr_import__("/@fs/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/vitest@4.0.0-beta.18_@types+debug@4.1.12_@types+node@22.18.11_jiti@2.6.1_tsx@4.20.6_yaml@2.8.1/node_modules/vitest/dist/index.js", {"importedNames":["test","expect","describe"]});
-const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", {"importedNames":["add"]});
+const __vite_ssr_import_0__ = await __vite_ssr_import__("/xxx/node_modules/vitest/dist/index.js", ...);
+const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", ...);
 
-
-(0,__vite_ssr_import_0__.describe)((0,__vite_ssr_import_1__.add), () => {
-  (0,__vite_ssr_import_0__.test)("one plus two", () => {
-    (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.add)(1, 2)).toBe(3);
-  });
-})
+(0,__vite_ssr_import_0__.test)("add", () => {
+  (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.add)(1, 2)).toBe(3);
+});
 ```
 
 <!--
+This allows Vite/Vitest to implement module evaluation mechanism.
+
+VITE_NODE_DEBUG_DUMP=true vitest
+VITEST_DEBUG_DUMP=.vitest-dump vitest
+since Vite 4 beta https://github.com/vitest-dev/vitest/pull/8711
+
 TODO: elabrate more
 __vite_ssr_import__ -> fetchModule -> runInlineModule
 -->
+
+---
+hide: true
+---
+
+# Vite Module Runner
+
+TODO: elaborate `__vite_ssr_import__ -> fetchModule -> runInlineModule`. diagram?
+
 ---
 
 # Module mocking
@@ -925,6 +937,10 @@ packages: `@vitest/mocker`, `@vitest/spy`
   <!-- import original module and deeply replace all exports with spies -->
   <!-- TODO: visualize { add: vi.fn() } -->
   <!-- https://vitest.dev/guide/mocking.html#automocking-algorithm -->
+
+---
+
+# Module mocking
 
 ```ts
 import { add } from "./add.js"
