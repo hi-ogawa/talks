@@ -723,7 +723,9 @@ but, how and when did Vitest actually utilitize Vite?
 
 Client-server architecture
 
-- TODO: diagram
+<Transform :scale="0.85" origin="top center">
+<img src="/test-runner-and-vite-environment-api.png" />
+</Transform>
 
 <!--
 We talked about test files being executed on test runner side.
@@ -786,7 +788,10 @@ mention:
 - Historically, `vite-node` has been used to achieve the same architecture before Vitest 4.
 - `import { ViteNodeRunner } from "vite-node/client"` on test runner
 - `import { ViteNodeServer } from "vite-node/server"` on main process
-- TODO: diagram
+
+<Transform :scale="0.75" origin="top center">
+<img src="/vite-node.png" />
+</Transform>
 
 ---
 layout: two-cols
