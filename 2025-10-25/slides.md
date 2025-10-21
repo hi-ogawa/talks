@@ -1135,8 +1135,8 @@ It only invalidates changed files.
 
 # Key Takeaways
 
-- **Test lifecycle drives architecture** — Understanding orchestration, collection, execution, and reporting is fundamental to test framework design
+- **Test lifecycle drives architecture:** Understanding orchestration, collection, execution, and reporting is fundamental to test framework design
 
-- **Client-server architecture** — Test runner (client) communicates with main process (server) to achieve runtime-agnostic execution (Node.js, Browser, etc.) 
+- **Client-server architecture:** Test runner (client) communicates with main process (server) to achieve runtime-agnostic execution (Node.js, Browser, etc.)
 
-- **Vite as a foundation** — Module runner + transform pipeline powers test runtime, similar to how Vite handles SSR applications
+- **Vite as a foundation:** Module runner + transform pipeline powers test runtime, similar to how Vite handles SPA / SSR
