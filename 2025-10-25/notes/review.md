@@ -8,6 +8,10 @@
 - [x] Fixed grammar errors at slides.md:131-133
   - "The talk will talk about" → "The talk covers"
   - "unique feature is" → "unique features are"
+- [x] Updated script.md to match current slide structure
+  - Merged timeline.md timing into script.md
+  - Removed timeline.md
+  - Script now follows test lifecycle approach
 
 ## Remaining Items
 

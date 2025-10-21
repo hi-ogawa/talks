@@ -1,319 +1,311 @@
-# Talk Script
+# Talk Script - Inside Vitest Architecture Deep Dive
 
-## Slide 1: Title - Inside Vitest
+**Total Duration: 30 minutes**
 
-"Hello everyone! Welcome to Vue Fes Japan 2025. Today I'm excited to share with you a deep dive into Vitest's architecture - how it works under the hood and what makes it unique as a modern test framework."
+---
+
+## Introduction (3 minutes) - 0:00-3:00
+
+### Slide 1: Title
+*0:00-0:30*
+
+"Hello everyone! Today we're diving deep into Vitest's architecture - understanding how it works internally and what makes it a powerful modern test framework."
 
 **[Pause, click to next slide]**
 
 ---
 
-## Slide 2: About Me & Talk Overview
+### Slide 2: About Me
+*0:30-1:30*
 
-"Let me briefly introduce myself. I'm a software engineer who's been contributing to the Vite and Vitest ecosystems. I'm passionate about developer tools and testing frameworks, and I've spent a lot of time exploring how these tools work internally."
+"Quick introduction - I'm Hiroshi Ogawa, part of the Vite and Vitest core teams, and I work at VoidZero as an open source developer. I'm passionate about SSR meta-frameworks and have been contributing to the Vite ecosystem, including work on Vite RSC support."
 
-**[Point to right side]**
-
-"In today's talk, we'll explore four main areas: Vitest's architecture, how it integrates with Vite, the runtime features it provides, and how it compares to other solutions in the ecosystem."
-
----
-
-## Slide 3: What is Vitest?
-
-"For those new to Vitest, let me give you a quick overview of what makes it special."
-
-**[Click through each point]**
-
-"It's **fast** - powered by Vite's lightning-fast build pipeline. It's **modern** - with native ESM support and first-class TypeScript integration. It has a **compatible** API with Jest, making migration easier. It's **universal** - you can run the same tests in Node, browsers, and edge environments. And it's **extensible** - it can use any Vite plugin."
+**[Point to avatar on right]**
 
 ---
 
-## Slide 4: What is Vite?
+### Slide 3-5: What is Vitest?
+*1:30-3:00*
 
-"Before we dive deeper, let me quickly explain Vite for anyone who might not be familiar."
+**[Slide 3 - Basic Example]**
 
-**[Click through]**
+"For those new to Vitest - here's what a typical test looks like. It's a unit testing framework with familiar APIs like describe, test, and expect."
 
-"Vite is a next-generation frontend build tool that provides instant server start with native ESM, lightning-fast HMR, a rich plugin interface, optimized production builds with Rollup, and it's framework agnostic - working with React, Vue, Svelte, and more."
+**[Click through code highlights]**
 
-"This foundation is crucial because Vitest leverages all of these capabilities for testing."
+**[Slide 4 - Features]**
 
----
+"Key features: Jest-compatible API, ESM and TypeScript support out of the box, extensible via Vite plugins, and runtime agnostic - running on Node.js, browsers, even Cloudflare Workers."
 
-## Slide 5: Features Overview
+**[Slide 5 - Browser Mode]**
 
-"Now let's look at Vitest's features. We'll organize them into three core categories."
-
----
-
-## Slide 6: Assertion Features
-
-"First, **assertion features**."
-
-**[Click for Pure Assertion]**
-
-"Vitest provides a pure assertion API that's compatible with Jest and Chai, with rich matchers and support for custom matchers."
-
-**[Click for Integrated with Runtime]**
-
-"But it's not just about assertions - they're deeply integrated with the test runtime, providing automatic test isolation and built-in snapshot testing."
-
-**[Click for Diffing Errors]**
-
-"When tests fail, you get beautiful error diffs with source code context, making debugging much easier."
+"Here's the same test running in browser mode - genuine browser runtime instead of jsdom simulation."
 
 ---
 
-## Slide 7: Runtime Features
+## Overview & Approach (2 minutes) - 3:00-5:00
 
-"Second, **runtime features** - the capabilities that execute during test runs."
+### Slide 6: Overview
+*3:00-4:00*
 
-**[Click through each feature]**
+"This talk follows the **test lifecycle** to explore Vitest's architecture: orchestration, collection, execution, and reporting."
 
-"Built-in **coverage** with c8 or istanbul. Powerful **mocking** for modules and functions. Configurable **timeouts and retries** for flaky tests. **Fixture** support for setup and teardown. Clean **error stack traces** that actually help you debug. And **console logging interception** to capture output from your tests."
+**[Pause]**
 
----
-
-## Slide 8: Framework Features - Orchestration
-
-"Third, **framework features** - how Vitest manages and runs your tests."
-
-**[Click for Orchestration]**
-
-"The orchestration layer handles **parallelization** - running tests in parallel for speed - and **isolation** - ensuring each test file runs in isolation for reliability."
-
-**[Click for Reporter]**
-
-"There are multiple built-in reporters, and you can create custom ones."
-
-**[Click for Watch Mode]**
-
-"Watch mode intelligently watches files and re-runs only affected tests."
+"Along the way, we'll see which parts are general test framework implementation, how Vite powers the runtime, and how the monorepo packages divide responsibilities."
 
 ---
 
-## Slide 9: Additional Framework Features
+### Slide 7: Vitest Monorepo Packages Dependencies
+*4:00-5:00*
 
-**[Click through]**
+"Here's the dependency graph of Vitest's monorepo packages. We'll explore these as we follow the test lifecycle."
 
-"There's also benchmark mode for performance testing and typecheck mode for type-level testing with tsd."
-
----
-
-## Slide 10: Vite-Specific Techniques
-
-"Now let's explore how Vitest leverages Vite's power - this is where things get really interesting."
+**[Let diagram settle, don't go into detail]**
 
 ---
 
-## Slide 11: Transform Pipeline
+## Test Lifecycle (12 minutes) - 5:00-17:00
 
-**[Click through]**
+### Slide 8: Test Lifecycle - Example
+*5:00-6:00*
 
-"Vitest reuses Vite's transform pipeline. This means all Vite plugins work with Vitest automatically. TypeScript, JSX, Vue, Svelte - all supported out of the box. Any custom transformations you've set up via plugins just work."
+"Let's start with a simple example - two test files: add.test.ts and mul.test.ts. Watch what happens when we run vitest."
 
----
+**[Show output on right side]**
 
-## Slide 12: Module Graph
-
-**[Click through]**
-
-"Vite maintains a module dependency graph - a map of which modules depend on which others. Vitest uses this to enable intelligent test re-running. When you change a file, it only re-runs tests that are affected by that change. This is what powers watch mode's efficiency."
+"We'll break down each step of this process."
 
 ---
 
-## Slide 13: Module Runner
+### Slide 9: Finding test files to run
+*6:00-7:00*
 
-**[Click through]**
+"First, Vitest needs to find test files - through CLI arguments or configuration. This is mostly globbing."
 
-"The Vite Module Runner is what powers Vitest's Node runtime. It's a direct evolution from vite-node, executing modules in Node.js with Vite transforms applied. This is a recent collaboration between the Vite and Vitest teams - you can check out the PR for details."
-
----
-
-## Slide 14: Browser Mode
-
-**[Click through]**
-
-"The Vite Client powers Vitest's browser mode. This lets you run tests directly in real browsers, test browser-specific APIs, and integrate with tools like Playwright and WebdriverIO for true environment fidelity."
+**[Click through examples]**
 
 ---
 
-## Slide 15: Why Isolation?
+### Slide 10-13: Test runner orchestration
+*7:00-10:00*
 
-"Let's take a moment to understand why Vitest runs each test file in isolation. This is a key architectural decision."
+**[Slide 10 - Forks]**
 
----
+"Next is orchestration. By default, Vitest uses `pool: 'forks'` - spawning isolated child processes for test files. This allows CPU-based parallelization."
 
-## Slide 16: Benefits of Isolation
+**[Point to diagram]**
 
-**[Click for Unlocks Key Features]**
+**[Slide 11 - Threads]**
 
-"Isolation unlocks several key features: You can capture runtime logs per test file. You can safely run tests in parallel. And there's no cross-test pollution - each test starts with a clean state."
+"Alternative is `pool: 'threads'` using worker threads."
 
-**[Click for Stability]**
+**[Slide 12 - Browser Mode]**
 
-"It also provides stability benefits. There are trade-offs between worker threads and forked processes, but isolation gives you predictable test behavior and better error handling."
+"Browser mode uses Playwright or WebdriverIO to orchestrate tests in real browsers."
 
----
+**[Slide 13 - No Isolate]**
 
-## Slide 17: Ecosystem Features
-
-"Beyond core testing, Vitest has a rich ecosystem."
-
----
-
-## Slide 18: Framework Integrations
-
-**[Click through]**
-
-"Vue with @vue/test-utils. React Testing Library. Svelte Testing Library. Solid Testing Library. And more - basically any framework you're using likely has great Vitest support."
+"You can also opt out of isolation with `isolate: false` for faster execution, though with tradeoffs."
 
 ---
 
-## Slide 19: Environment Integrations
+### Slide 14-15: About isolation and pool
+*10:00-11:30*
 
-**[Click through]**
+"Why isolation? `forks` is default for stability. With `isolate: false`, you reuse processes but tests can affect each other. There's always a tradeoff between speed and reliability."
 
-"Browser mode with Playwright, WebdriverIO, or Puppeteer. Cloudflare Workers for edge runtime testing. Storybook for component testing integration. And a custom environments API if you need something specific."
+**[Show isolation example diagram]**
 
----
-
-## Slide 20: Comparison to Other Frameworks
-
-"Let's see how Vitest fits into the broader testing ecosystem."
+"This example shows how shared modules are evaluated once vs multiple times."
 
 ---
 
-## Slide 21: Vitest vs Jest
+### Slide 16-17: Collecting tests
+*11:30-13:00*
 
-**[Click for Advantages]**
+"Once files are assigned to workers, we **collect** test cases by executing the test files."
 
-"Compared to Jest, Vitest is faster thanks to Vite's speed, has native ESM support, leverages the Vite plugin ecosystem, and supports multiple runtime targets."
+**[Slide 17 - Creating Task tree]**
 
-**[Click for Compatibility]**
+"As we execute, we build a Task tree - File contains Suites, which contain Tests."
 
-"But importantly, it maintains a Jest-compatible API, providing an easy migration path."
+**[Click through the synchronized animations showing code and tree structure]**
 
----
-
-## Slide 22: Vitest vs Mocha
-
-**[Click for More Features]**
-
-"Compared to Mocha, Vitest provides more features out of the box - built-in assertions, mocking, coverage integration, and modern defaults."
-
-**[Click for Similar Philosophy]**
-
-"But both share a similar philosophy of being flexible, extensible, and plugin-based."
+"This collection phase is often the slow part since all top-level imports are evaluated."
 
 ---
 
-## Slide 23: Runtime Built-ins
+### Slide 18: Executing Test
+*13:00-14:30*
 
-**[Click through]**
+"After collection, we execute each test function and capture results."
 
-"There are also runtime built-ins to consider: Node.js has node:test, Deno has its built-in test runner, and Bun has bun test which is very fast."
+**[Click through magic-move animation showing status changes]**
 
-"Vitest complements these with framework integration, the Vite plugin ecosystem, and cross-runtime compatibility."
-
----
-
-## Slide 24: Architecture Deep Dive - Core Components
-
-"Now let's look at the core components that make up Vitest's architecture."
+"Test execution is usually much faster than collection for simple tests."
 
 ---
 
-## Slide 25: Core Components Detail
+### Slide 19-22: Reporting results
+*14:30-17:00*
 
-**[Click through each]**
+**[Slide 19 - Architecture diagram]**
 
-"First, the **Vite Runtime & Plugin Mechanism** - where Vite Module Runner becomes Vitest Node Runtime, and Vite Client becomes Browser Mode."
+"Main process gets notified through events: onCollected, onTaskUpdate, onConsoleLog."
 
-"Second, the **Test Runner and Assertion** on the runtime side - the actual test execution engine and assertion library."
+**[Slide 20 - Reporter API]**
 
-"Third, **Test Orchestration** on the server side - handling file discovery, scheduling, and worker pool management."
+"Vitest provides a Reporter API with normalized TestModule structure."
 
-"And fourth, the **Reporter** - formatting output and aggregating results."
+**[Slide 21-22 - Examples]**
 
----
-
-## Slide 26: Best Practices & Optimization
-
-"Understanding these internals helps you write better tests. Let me share some practical tips."
+"Default reporter shows this nice terminal output. GitHub Actions reporter integrates with CI annotations."
 
 ---
 
-## Slide 27: Performance Tips
+## Vite Integration (8 minutes) - 17:00-25:00
 
-**[Click through]**
+### Slide 23: Where is Vite?
+*17:00-17:30*
 
-"Choose between thread pools and forked processes based on your needs. Leverage watch mode for fast iteration. Write focused, isolated tests. Configure coverage strategically - don't over-test. And use Vite plugins for any transformations you need."
+"So where does Vite come in? Look at the duration - 'transform 33ms'."
 
----
+**[Click to reveal]**
 
-## Slide 28: Testing Patterns
-
-**[Click through]**
-
-"Prefer unit tests for speed. Use browser mode when you actually need to test DOM APIs. Mock external dependencies. Use snapshots judiciously - they're powerful but can become brittle. And always write deterministic tests - no random data or time dependencies."
+"Vite powers the module transformation."
 
 ---
 
-## Slide 29: Key Takeaways
+### Slide 24: Test runner and Vite environment API
+*17:30-18:30*
 
-"Let me summarize the key points."
+"This is the client-server architecture. Node tests work like Vite SSR apps. Browser mode works like Vite client apps."
 
----
-
-## Slide 30: Summary
-
-**[Click through each]**
-
-"First: Vitest leverages Vite's entire ecosystem - plugins, transforms, and the module graph."
-
-"Second: Its runtime agnostic architecture works across Node, Browser, and Edge environments."
-
-"Third: Isolation enables powerful features like parallelization, per-test logging, and stability."
-
-"Fourth: It provides a modern testing experience that's both fast and feature-rich while maintaining compatibility."
-
-"And fifth: Understanding these internals helps you write better tests with better performance and patterns."
+**[Point to diagram showing bidirectional communication]**
 
 ---
 
-## Slide 31: Thank You
+### Slide 25: SSR / Client environment
+*18:30-20:00*
 
-"Thank you all for your attention! I hope this deep dive into Vitest's architecture was helpful. I'm happy to take questions now."
+"Here's a concrete example - Vue SFC transform. Same component, but client environment produces render functions, while SSR environment produces server-side render functions."
 
-**[Pause for questions]**
+**[Point to the differences in transform output]**
 
-"Here are some resources if you want to learn more - the Vitest documentation, Vite documentation, and the Vue Fes Japan 2025 website."
+"Vite handles all this through its environment API."
 
 ---
 
-## Notes for Speaker
+### Slide 26: vite-node → Vite environment API
+*20:00-20:45*
 
-### Pacing
-- Speak clearly and not too fast
-- Pause after each major point
-- Allow clicks/animations to complete before continuing
-- Watch the time - aim for natural pacing without rushing
+"Historically, this was achieved with vite-node. Vitest 4 migrated to Vite's official environment API - a great collaboration between the teams."
+
+---
+
+### Slide 27: Test runner
+*20:45-21:30*
+
+"@vitest/runner defines the VitestRunner interface with importFile and lifecycle callbacks."
+
+**[Show right side]**
+
+"Vite module runner implements this for Node. Browser mode implements it with native import."
+
+---
+
+### Slide 28: Vite Module Runner
+*21:30-23:00*
+
+"Module runner rewrites import and export into runtime functions like `__vite_ssr_import__`."
+
+**[Show transformation example]**
+
+"You can see this yourself with VITE_NODE_DEBUG_DUMP=true."
+
+---
+
+### Slide 29-30: Module mocking
+*23:00-25:00*
+
+**[Slide 29]**
+
+"Module mocking: auto-mocking replaces exports with spies, manual-mocking provides custom implementation."
+
+**[Slide 30]**
+
+"Vitest transforms vi.mock calls to the top, before imports, so mocking state is registered first."
+
+**[Point to transformation showing vi.mock being hoisted]**
+
+---
+
+## Wrap-up (5 minutes) - 25:00-30:00
+
+### Slide 31: Key Takeaways
+*25:00-27:00*
+
+**[Click through each takeaway]**
+
+"Let me summarize the key architectural insights:"
+
+"First: Test lifecycle drives the architecture - understanding orchestration, collection, execution, and reporting is fundamental."
+
+"Second: Client-server architecture enables runtime-agnostic execution across Node.js, browsers, and other environments."
+
+"Third: Vite as foundation - the module runner and transform pipeline power the test runtime, similar to SSR."
+
+---
+
+### Closing
+*27:00-30:00*
+
+"Thank you for your attention! I hope this deep dive into Vitest's internals was helpful for understanding how modern test frameworks work."
+
+**[Pause]**
+
+"I'm happy to take questions now."
+
+---
+
+## Speaker Notes
+
+### Pacing Guidelines
+- **Total: 30 minutes** with ~5 min for Q&A
+- Speak clearly, not too fast
+- Allow animations to complete
+- Watch audience engagement - adjust depth as needed
+- Keep introduction and overview tight (5 min total)
+- Core technical content (test lifecycle + Vite integration): 20 minutes
+- Leave time for wrap-up and transition to Q&A
+
+### Time Markers (Check Points)
+- 5 min: Should be finishing Overview
+- 10 min: Should be in middle of Orchestration/Isolation
+- 17 min: Should be starting "Where is Vite?"
+- 25 min: Should be at Key Takeaways
+- 27 min: Open for questions
+
+### Flexibility
+- **If running short**: Expand on examples, show more code details
+- **If running long**: Skip or compress isolation example, compress comparison examples
+- **Technical difficulties**: Have static slides ready, skip animations
 
 ### Engagement
 - Make eye contact with audience
-- Use hand gestures to emphasize key points
-- Show enthusiasm about the technology
-- Be ready to skip or expand sections based on time
+- Use hand gestures to emphasize architecture concepts
+- Show enthusiasm about the collaboration between Vite/Vitest teams
+- Balance technical depth with accessibility
 
 ### Technical Level
-- Assume audience has basic testing knowledge
-- Don't assume deep Vite knowledge - explain when needed
-- Balance theory with practical insights
-- Use concrete examples when possible
+- Assume basic testing knowledge (describe, test, expect)
+- Don't assume deep Vite knowledge - explain concepts as you go
+- Focus on architecture patterns applicable to other test frameworks
+- Use concrete examples from the actual Vitest codebase
 
-### Backup Plans
-- If running short on time: Skip or shorten Best Practices section
-- If running long: Speed through comparison slides
-- If technical difficulties: Have static version of slides ready
-- Questions during talk: Brief answers, defer detailed ones to Q&A
+### Key Emphasis Points
+- Test lifecycle as organizing principle
+- Client-server architecture for runtime flexibility
+- Vite's role vs framework-agnostic parts
+- How this knowledge helps write better tests
