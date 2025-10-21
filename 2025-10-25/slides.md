@@ -326,9 +326,7 @@ packages: `vitest`, `tinypool`
 import { fork } from "node:child_process"
 ```
 
-<Transform :scale="0.7" origin="top center">
-<img src="/test-runner-orchestration.png" />
-</Transform>
+<img src="/test-runner-orchestration.png" class="w-[70%] mx-auto" />
 
 <!-- 
 This is the default mode `pool: "forks"`.
@@ -349,9 +347,7 @@ Not spawning new process for each test file, but limited based on available cpu.
 import { Worker } from 'node:worker_threads'
 ```
 
-<Transform :scale="0.8" origin="top center">
-<img src="/test-runner-orchestration-threads.png" />
-</Transform>
+<img src="/test-runner-orchestration-threads.png" class="w-[80%] mx-auto" />
 
 ---
 
@@ -361,9 +357,7 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 - Browser Mode
 
-<Transform :scale="0.9" origin="top center">
-<img src="/test-runner-orchestration-browser-mode.png" />
-</Transform>
+<img src="/test-runner-orchestration-browser-mode.png" class="w-[90%] mx-auto" />
 
 ---
 
@@ -371,9 +365,7 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 - No isolation (`vitest --no-isolate` or `isolate: false`)
 
-<Transform :scale="0.9" origin="top center">
-<img src="/test-runner-orchestration-no-isolate.png" />
-</Transform>
+<img src="/test-runner-orchestration-no-isolate.png" class="w-[90%] mx-auto" />
 
 ---
 
@@ -609,11 +601,7 @@ it's a way faster than collecting phase.
 - `onTaskUpdate(pack: { id, result }[], ...)` notify test status incrementally in batch
 - `onConsoleLog(log: ConsoleLog)` notify captured console logs during test run
 
-<Transform :scale="0.7" origin="top center">
-
-![alt text](/reporting-results.png)
-
-</Transform>
+<img src="/reporting-results.png" class="w-[70%] mx-auto" />
 
 <!-- 
 So far, we just followed what's happening on test runner side,
@@ -667,9 +655,7 @@ Vitest normalizes them into more convenient form for reporter implementation.
 
 # Example: Github Action Reporter
 
-<Transform :scale="0.65" origin="top center">
-<img src="/lifecycle-github-actions-reporter.png" />
-</Transform>
+<img src="/lifecycle-github-actions-reporter.png" class="w-[65%] mx-auto" />
 
 <!-- 
 https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2e26c9584e
@@ -703,9 +689,7 @@ but, how and when did Vitest actually utilize Vite?
 
 Client-server architecture
 
-<Transform :scale="0.85" origin="top center">
-<img src="/test-runner-and-vite-environment-api.png" />
-</Transform>
+<img src="/test-runner-and-vite-environment-api.png" class="w-[85%] mx-auto" />
 
 <!--
 We talked about test files being executed on test runner side.
@@ -804,9 +788,7 @@ mention:
 - `import { ViteNodeRunner } from "vite-node/client"` on test runner
 - `import { ViteNodeServer } from "vite-node/server"` on main process
 
-<Transform :scale="0.75" origin="top center">
-<img src="/vite-node.png" />
-</Transform>
+<img src="/vite-node.png" class="w-[75%] mx-auto" />
 
 ---
 layout: two-cols
