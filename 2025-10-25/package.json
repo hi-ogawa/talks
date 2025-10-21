@@ -1,13 +1,13 @@
 {
   "name": "vitest-talk",
   "private": true,
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "slidev",
     "build": "slidev build",
     "export": "slidev export"
   },
-  "license": "MIT",
   "devDependencies": {
     "@iconify-json/logos": "^1.2.9",
     "@iconify-json/ri": "^1.2.6",
