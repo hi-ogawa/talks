@@ -17,7 +17,7 @@ layout: two-cols
 
 - Hiroshi Ogawa <a href="https://github.com/hi-ogawa" target="_blank">@hi-ogawa <ri-github-fill /></a>
 - [Vite](https://vite.dev/) <logos-vitejs /> and [Vitest](https://vitest.dev/) <logos-vitest /> core team member
-- Open Source Developer at [VoidZero](https://voidzero.dev/) <img src="/voidzero-icon.svg" class="h-5 inline" />
+- Working at [VoidZero](https://voidzero.dev/) <img src="/voidzero-icon.svg" class="h-5 inline" />
 - SSR meta-framework fanatic 
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
@@ -208,7 +208,8 @@ This talk follows the **test lifecycle** to explore Vitest architecture:
 Along the way, we'll explore:
 - Which parts are **general test framework** implementation
 - How **Vite** powers test runtime (ModuleRunner, transform, etc.)
-- How **monorepo packages** divide responsibilities
+- How each **package** divide responsibilities
+  - `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
 
 <!--
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
@@ -231,6 +232,12 @@ mention:
 <img src="/vitest-monorepo-packages.png" />
 
 <!-- 
+TODO:
+categorize better
+- vitest: main cli entry, test orchestration, reporter
+- @vitest/runner: `describe`, `test`, `TestRunner`
+- @vitest/expect, @vitest/snapshot, @vitest/spy: independent utilities
+
 reference https://npmgraph.js.org/?q=vitest%40beta
 -->
 
