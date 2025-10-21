@@ -819,10 +819,13 @@ interface VitestRunner {
 ```js
 // packages/vitest/src/runtime/runners/test.ts
 class VitestTestRunner implements VitestRunner {
-  moduleRunner: ModuleRunner
+  moduleRunner: VitestModuleRunner
   async importFile(filepath: string, ...) {
     return this.moduleRunner.import(filepath)
   }
+}
+class VitestModuleRunner extends ModuleRunner {
+  // override implementation for module mocking, etc.
 }
 ```
 
@@ -920,27 +923,34 @@ TODO: elaborate `__vite_ssr_import__ -> fetchModule -> runInlineModule`. diagram
 
 packages: `@vitest/mocker`, `@vitest/spy`
 
-<!-- put browser mode aside -->
-<!-- compare "module mocking" and "spying" -->
-<!-- @vitest/mocker and @vitest/spy -->
+- Auto-mocking `vi.mock("./add.js")`
+  - import original module and deeply replace all exports with spies.
+- Manual-mocking with factory `vi.mock("./add.js", () => ...)`
+  - the original module is not imported but implementation is provided inline.
 
-- module mocking
-  - `vi.mock` hoisting transform
-  - works based on module runner import interception mechanism
-  <!-- TODO: explain runtime mechanism? split slides?
-    - `vi.mock` registers mocking metadata to `VitestModuleRunner.mocker` states
-    - later when `VitestModuleRunner.import(id)` matches the mocked module, it returns the mocked object instead of the original module.
-  -->
-- explicit mocking with factory `vi.mock("./add.js", () => ({ add: vi.fn(() => 42) }))`
-- automocking `vi.mock("./add.js")`
-  - "automocking" algorithm
-  <!-- import original module and deeply replace all exports with spies -->
-  <!-- TODO: visualize { add: vi.fn() } -->
-  <!-- https://vitest.dev/guide/mocking.html#automocking-algorithm -->
+```ts
+import { test, expect } from "vitest"
+import { add } from "./add"
+import { mul } from "./mul"
+
+vi.mock("./add.js") // auto-mocking
+vi.mock("./mul.js", () => ({ add: vi.fn(() => 42) })) // manual-mocking
+
+test("add", () => {
+  expect(add(1, 2)).toBeUndefined()
+  expect(mul(2, 3)).toBe(42)
+})
+```
+
+<!--
+https://vitest.dev/guide/mocking.html#automocking-algorithm
+-->
 
 ---
 
-# Module mocking
+# Module mocking with Module Runner
+
+- Vitest transforms `vi.mock` to be at the top, so it's processed before `import`.
 
 ```ts
 import { add } from "./add.js"
@@ -953,13 +963,15 @@ test("add", () => {
 ```
 
 ```ts
+// register mocking state before import
 __vite_ssr_import_0__.vi.mock("./add.js", () => ({
   add: __vite_ssr_import_0__.vi.fn(() => 42)
 }));
+// import is intercepted by Vitest to implement mocking
 const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
 
 (0,__vite_ssr_import_0__.test)("add", () => {
-  (0,__vite_ssr_import_0__.expect)(__vi_import_0__.add(1, 2)).not.toBe(3);
+  (0,__vite_ssr_import_0__.expect)(__vi_import_0__.add(1, 2)).toBe(42);
 })
 ```
 
