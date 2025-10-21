@@ -1123,4 +1123,4 @@ It only invalidates changed files.
 
 - **Client-server architecture:** Test runner (client) communicates with main process (server) to achieve runtime-agnostic execution (Node.js, Browser, etc.)
 
-- **Vite as a foundation:** Module runner + transform pipeline powers test runtime with the same mechanism as Vite SPA / SSR applications
+- **Vite as a foundation:** Test runtime leverages the same transform pipeline and module runner as Vite's client and SSR execution
