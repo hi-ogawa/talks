@@ -207,7 +207,7 @@ This talk follows the **test lifecycle** to explore Vitest architecture:
 
 Along the way, we'll explore:
 - Which parts are **general test framework** implementation
-- How **Vite** powers test runtime (ModuleRunner, transform, etc.)
+- How **Vite** powers test runtime (ModuleRunner, Browser mode, transform, etc.)
 - How each **package** divide responsibilities
   - `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
 
@@ -229,7 +229,11 @@ mention:
 
 # Vitest Monorepo Packages Dependencies
 
-<img src="/vitest-monorepo-packages.png" />
+- **vitest** - main cli entry, test orchestration, reporter
+- **@vitest/runner** - `describe/suite`, `it/test`
+- **@vitest/expect, @vitest/snapshot, @vitest/spy** - <br /> independently usable libraries for `expect`, `toMatchSnapshot`, `vi.fn()`
+
+<img src="/vitest-monorepo-packages.png" class="mx-auto w-[85%]" />
 
 <!-- 
 TODO:
