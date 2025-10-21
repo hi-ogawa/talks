@@ -1133,28 +1133,10 @@ It only invalidates changed files.
 
 ---
 
-# Summary
+# Key Takeaways
 
-- Test Lifecycle
-  - Test orchestration
-  - Collecting tests
-  - Executing tests
-  - Reporting results
-- Vitest monorepo packages (and Vite)
-  - `vitest`
-  - `vite` (`ViteDevServer`, `ModuleRunner`, `ModuleGraph`)
-  - `@vitest/runner`
-  - `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
-  - `@vitest/mocker`, `@vitest/spy`
-  - `@vitest/browser`
+- **Test lifecycle drives architecture** — Understanding orchestration, collection, execution, and reporting is fundamental to test framework design
 
-<!-- 
-same as overview
- -->
+- **Client-server architecture** — Test runner (client) communicates with main process (server) to achieve runtime-agnostic execution (Node.js, Browser, etc.) 
 
----
-
-# Thank you!
-
-- Sponsors: [Github](https://github.com/sponsors/vitest-dev#sponsors), [Open Collective](https://opencollective.com/vitest)
-- Team and Contributors [vitest-dev/vitest](https://github.com/vitest-dev/vitest/)
+- **Vite as a foundation** — Module runner + transform pipeline powers test runtime, similar to how Vite handles SSR applications
