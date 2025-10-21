@@ -201,28 +201,6 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 
 # Overview
 
-<!-- 
-TODO: Reverse? package -> features? e.g.
-@vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
-@vitest/runner -> managing test case hierarchy and execution (`describe`, `test`, timeout, retry)
-vitest, tinypool, birpc -> test orchestration, reporter, etc.
-vite, vite/module-runner -> Javascript runtime with custom transform
-@vitest/mocker -> Module mocking `vi.mock("", () => {})`
-@vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
-@vitest/browser
-@vitest/spy
-
-TODO: package dependency as hierarchy? e.g.
-vitest -> @vitest/expect, @vitest/snapshot
-       -> @vitest/runner
-       -> @vitest/pretty-format
-       -> vite
-
-TODO: code, server-client, architecture here?
-
--->
-
-
 - Test Lifecycle
   - Test orchestration
   - Collecting tests
@@ -245,6 +223,18 @@ Along the way, we see how Vitest utilizes Vite as a foundation of certain compon
 And also we'll see large parts of Vitest are not actually tied to Vite, but general test framework implementation.
 Even if you are not Vitest users but Jest, Playwright, etc. users, I believe you'll be benefit
 from understanding the overall test framework internals.
+
+@vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
+@vitest/runner -> managing test case hierarchy and execution (`describe`, `test`, timeout, retry)
+vitest, tinypool, birpc -> test orchestration, reporter, etc.
+vite, vite/module-runner -> Javascript runtime with custom transform
+@vitest/mocker -> Module mocking `vi.mock("", () => {})`
+@vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
+@vitest/browser
+@vitest/spy
+
+mention:
+  Vite environment API
 -->
 
 ---
@@ -729,24 +719,135 @@ but, how and when did Vitest actually utilitize Vite?
 
 ---
 
-# Test runner and Javascript runtime
+# Test runner and Vite environment API
 
-packages: `@vitest/runner`, `@vitest/browser`, `vite/module-runner`
+Client-server architecture
 
-<!-- TODO: explain browser mode before server module runner? -->
+- TODO: diagram
 
-- `interface VitestRunner` is an abstraction for:
-  - `importFile`: how to process test files (entry points)
-  <!-- As mentioned befor in Client-server architecture. 
-    Test file execution starts by importing test files on "client" side. -->
-  - `onBefore/AfterRunSuite`, `onBefore/AfterRunTask`: callback for test execution lifecycle
-  <!-- it was just mentioned for snapshot testing state coordination -->
-- `class VitestTestRunner implements VitestRunner` (Node.js)
-  <!-- packages/vitest/src/runtime/runners/test.ts -->
-  - `importFile` is implemented based on `ModuleRunner.import` of `vite/module-runner`
-- `class BrowserVitestRunner implements VitestRunner` (Browser mode)
-  - `importFile` is implemented as raw dynamic import `await import(/* @vite-ignore */ importpath)`
-  <!-- packages/browser/src/client/tester/runner.ts -->
+<!--
+We talked about test files being executed on test runner side.
+But how is that actually done?
+
+Node test works like Vite SSR app.
+Browser mode works like Vite client app.
+
+mention
+  - Vite environment API https://vite.dev/guide/api-environment.html
+  - historically speacking vite-node/client <-> vite-node/server
+  - Vue client transform / ssr transform comparison?
+-->
+
+---
+layout: two-cols
+layoutClass: gap-4
+---
+
+# SSR / Client environment
+
+- Vue SFC transform by `@vitejs/plugin-vue`
+- Vite module runner transform
+
+```vue
+<script setup>
+import { ref } from 'vue'
+const msg = ref('Hello World!')
+</script>
+
+<template>
+  <h1>{{ msg }}</h1>
+  <input v-model="msg" />
+</template>
+```
+
+::right::
+
+```js
+// [clientEnvironment.transformRequest(...)]
+TODO
+```
+
+```js
+// [ssrEnvironment.transformRequest(...)]
+TODO
+```
+
+<!-- 
+compare Vue SFC client / ssr transform
+mention:
+  - vue playground
+  - @vitejs/plugin-rsc?
+ -->
+
+---
+
+# `vite-node` ⟶ Vite environment API
+
+- Historically, `vite-node` has been used to achieve the same architecture before Vitest 4.
+- `import { ViteNodeRunner } from "vite-node/client"` on test runner
+- `import { ViteNodeServer } from "vite-node/server"` on main process
+- TODO: diagram
+
+---
+layout: two-cols
+layoutClass: gap-4
+---
+
+# Test runner
+
+- `@vitest/runner` defines an interface
+
+```js
+// packages/runner/src/types/runner.ts
+interface VitestRunner {
+  // how to process test files (entry points)
+  importFile(filepath: string, ...): Promise<unknown>
+
+  // Callbacks for each test lifecycle
+  onBeforeRunTask(test: Test): unknown
+  onAfterRunTask(test: Test): unknown
+  ...
+}
+```
+
+::right::
+
+<div class="h-13" />
+
+- Vite module runner
+
+```js
+// packages/vitest/src/runtime/runners/test.ts
+class VitestTestRunner implements VitestRunner {
+  moduleRunner: ModuleRunner
+  async importFile(filepath: string, ...) {
+    return this.moduleRunner.import(filepath)
+  }
+}
+```
+
+- Browser mode
+
+```js
+// packages/browser/src/client/tester/runner.ts
+class BrowserVitestRunner implements VitestRunner {
+  async importFile(filepath: string, ...) {
+    await import(filepath) // request to Vite dev server
+  }
+}
+```
+
+<!--
+Let's see how Vitest represent such abstraction internally.
+As mentioned befor in Client-server architecture. Test file execution starts by importing test files on "client" side.
+-->
+
+---
+hide: true
+---
+
+# Custom Test runner
+
 - As an advanced API, you can even inherit the base class to implement custom runner.
   <!-- https://vitest.dev/advanced/runner.html#runner-api -->
   <!-- test/cli/fixtures/custom-runner/test-runner.ts -->
@@ -764,25 +865,6 @@ export default defineConfig({
   }
 })
 ```
-
-<!-- 
-So far, we've talked by assuming "executing test files" is somehow done 
-(including typescript, vue, or any files), but how does it actually work?
-Here we explain powered by Vite dev server.
--->
-
----
-
-# Client-server architecture
-
-
-TODO: diagram
-
-- right: ViteDevServer, Test orchestraion pool, reporting
-- left: browsers, child process forks, worker threads. `import("./add.test.ts")`
-- left-to-right: `fetchModule` (module-runner), http request (browser)
-- right-to-left: transpiled js (vite plugin pipeline)
-- left-to-right: test result to reporter
 
 ---
 
@@ -934,58 +1016,6 @@ expect({ name: 'Vitest' }).toMatchInlineSnapshot()
 <!--
 TODO: sample snapshot inline / file
 -->
-
----
-hide: true
----
-
-# Test collection and execution (Task tree)
-
-<!-- TODO: improve layout. improve clicks -->
-<!-- TODO: do we need? move after "Test runner" slides? -->
-<!-- packages/runner/src/collect.ts -->
-<!-- packages/runner/src/run.ts -->
-<!-- interfaces packages/runner/src/types/tasks.ts -->
-
-<!-- TODO: 
-On server / reporter side entities? explain in next "client server architecture" slide? 
-  onCollected(files: File[]): send task tree to server
-  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
--->
-
-```ts {*|2,3,6|4|7|*} 
-// [add.test.ts]
-describe("add", () => {
-  test('first', () => { 
-    expect(add(1, 2)).toBe(3)
-  })
-  test('second', () => {
-    expect(add(2, 2)).toBe(5)
-  })
-})
-```
-
-<!-- Corresponding tree structure on test runner side after collection: -->
-
-Test runner task tree:
-
-```txt {1,2,3,5|*}
-File(id: add.test.ts)
-  Suite(name: add)
-    Test(name: first, id: ...)
-      result { status: 'passed' }
-    Test(name: second, id: ...)
-      result { status: 'failed', errors: [Error('Expected 5 to be 4')] }
-```
-
-<!-- TODO: fnMap not needed. just move it to task tree above for conciseness -->
-
-```ts {1|*}
-const fnMap = new WeakMap<Test, Function>(); // global map in `@vitest/runner`
-fnMap.set(firstTest,  () => expect(add(1, 2)).toBe(3))
-fnMap.set(secondTest, () => expect(add(2, 2)).toBe(5))
-```
-
 
 ---
 hide: true
