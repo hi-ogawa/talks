@@ -22,7 +22,6 @@ layout: two-cols
 - [Vite RSC support `@vitejs/plugin-rsc`](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/README.md) <logos-react />
 
 <!-- TODO: move "about me" after intro? -->
-<!-- TODO: github avatar, voidzero logo -->
 
 <!-- 
 My first Vitest PR on Oct 30, 2023
@@ -129,7 +128,7 @@ test('Hello', () => {
 
 <!--
 While there are certain Vite features Vitest relies on,
-there are other parts which is independent from Vite.
+there are other parts which are independent from Vite.
 The talk will talk about such overall test framework feature implementation.
 Vite and Vitest unique feature is explained as it comes up.
 
@@ -471,18 +470,6 @@ where it doesn't execute `add.test.ts` and `mul.test.ts` in parallel.
 
 package: `@vitest/runner`
 
-<!-- TODO: improve layout. improve clicks -->
-<!-- TODO: do we need? move after "Test runner" slides? -->
-<!-- packages/runner/src/collect.ts -->
-<!-- packages/runner/src/run.ts -->
-<!-- interfaces packages/runner/src/types/tasks.ts -->
-
-<!-- TODO: 
-On server / reporter side entities? explain in next "client server architecture" slide? 
-  onCollected(files: File[]): send task tree to server
-  onTaskUpdate(pack: { id, result }[], ...): send test results incrementally in batch
--->
-
 <div>
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -542,6 +529,11 @@ File(id: add.test.ts)
 </div>
 
 <!-- 
+
+packages/runner/src/collect.ts
+packages/runner/src/run.ts
+interfaces packages/runner/src/types/tasks.ts
+
 Regardless of isolation mode, inside each worker test files are executed sequentially.
 Here we follow collecting test cases in `add.test.ts`.
 
