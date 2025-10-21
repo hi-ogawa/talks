@@ -7,5 +7,5 @@ import { createApp } from "vue";
 test('Hello', async () => {
   const app = createApp(Hello);
   const html = await renderToString(app);
-  expect(html).toMatchInlineSnapshot(`"<span>Hello!</span>"`)
+  expect(html).toMatchInlineSnapshot(`"<!--[--><h1>Hello World!</h1><input value="Hello World!"><!--]-->"`)
 })

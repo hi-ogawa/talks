@@ -748,7 +748,8 @@ layoutClass: gap-4
 # SSR / Client environment
 
 - Vue SFC transform by `@vitejs/plugin-vue`
-- Vite module runner transform
+- Vite module runner transform is additionally applied for SSR
+- [Vue SFC Playground](https://play.vuejs.org/#eNp9kUFLwzAUx7/KM5cqzBXR0+gGKgP1oKKCl1xG99ZlpklIXuag9Lv7krK5w9it7//7v/SXthP3zo23EcVEVKH2yhEEpOhm0qjWWU/QgccV9LDytoWCq4U00tTWBII2NDBN/LJ4Qq0tfFuvlxfFlTRVORzHB/FA2Dq9IOQJoFrfzLouL/d9VfKUU2VcJNhet3aJeioFcymgZFiVR/tiJCjw61eqGW+CNWzepX0pats6pdG/OVKsJ8UEMklswXa/LzkjH3G0z+s11j8n8k3YpUyKd48B/RalODBa+AZpwPPPV9zx8wGyfdTcPgM/MFgdk+NQe4hmydpHvWz7nL+/Ms1XmO8ITdhfKommZp/7UvA/eTxz9X/d2/Fd3pOmF/0fEx+nNQ==)
 
 ```vue
 <script setup>
@@ -764,20 +765,63 @@ const msg = ref('Hello World!')
 
 ::right::
 
+<div style="--slidev-code-font-size: 7px; --slidev-code-line-height: 0px;">
+
 ```js
 // [clientEnvironment.transformRequest(...)]
-TODO
+import { ref } from "/xxx/vue.js?v=7756971e"
+...
+const _sfc_main = {
+  __name: 'Hello',
+  setup(__props, { expose: __expose }) { ... }
+}
+...
+function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return (_openBlock(), _createElementBlock(_Fragment, null, [
+    _createElementVNode("h1", null, _toDisplayString($setup.msg), 1 /* TEXT */),
+    _withDirectives(_createElementVNode("input", {
+      "onUpdate:modelValue": _cache[0] || (_cache[0] = $event => (($setup.msg) = $event))
+    }, null, 512 /* NEED_PATCH */), [
+      [_vModelText, $setup.msg]
+    ])
+  ], 64 /* STABLE_FRAGMENT */))
+}
+...
+export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-browser-mode/src/Hello.vue"]])
 ```
+
+</div>
+
+<div style="--slidev-code-font-size: 7px; --slidev-code-line-height: 0px;">
 
 ```js
 // [ssrEnvironment.transformRequest(...)]
-TODO
+__vite_ssr_exportName__("default", () => { try { return __vite_ssr_export_default__ } catch {} });
+const __vite_ssr_import_0__ = await __vite_ssr_import__("/xxx/node_modules/vue/index.mjs", {"importedNames":["ref"]});
+...
+const _sfc_main = {
+  __name: 'Hello',
+  setup(__props, { expose: __expose }) { ... }
+};
+...
+function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
+  _push(`<!--[--><h1>${
+    (0,__vite_ssr_import_1__.ssrInterpolate)($setup.msg)
+  }</h1><input${
+    (0,__vite_ssr_import_1__.ssrRenderAttr)("value", $setup.msg)
+  }><!--]-->`)
+}
+...
+const __vite_ssr_export_default__ = /*#__PURE__*/(0,__vite_ssr_import_3__.default)(_sfc_main, [['ssrRender',_sfc_ssrRender],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-ssr/src/Hello.vue"]])
 ```
+
+</div>
 
 <!-- 
 compare Vue SFC client / ssr transform
 mention:
   - vue playground
+    - https://play.vuejs.org/#eNp9kUFLwzAUx7/KM5cqzBXR0+gGKgP1oKKCl1xG99ZlpklIXuag9Lv7krK5w9it7//7v/SXthP3zo23EcVEVKH2yhEEpOhm0qjWWU/QgccV9LDytoWCq4U00tTWBII2NDBN/LJ4Qq0tfFuvlxfFlTRVORzHB/FA2Dq9IOQJoFrfzLouL/d9VfKUU2VcJNhet3aJeioFcymgZFiVR/tiJCjw61eqGW+CNWzepX0pats6pdG/OVKsJ8UEMklswXa/LzkjH3G0z+s11j8n8k3YpUyKd48B/RalODBa+AZpwPPPV9zx8wGyfdTcPgM/MFgdk+NQe4hmydpHvWz7nL+/Ms1XmO8ITdhfKommZp/7UvA/eTxz9X/d2/Fd3pOmF/0fEx+nNQ==
   - @vitejs/plugin-rsc?
  -->
 

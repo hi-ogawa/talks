@@ -6,8 +6,15 @@ import Hello from "./Hello.vue";
 test('Hello', () => {
   const wrapper = mount(Hello, { attachTo: document.body })
   expect(wrapper.element).toMatchInlineSnapshot(`
-    <span>
-      Hello!
-    </span>
+    <div
+      data-v-app=""
+    >
+      
+      <h1>
+        Hello World!
+      </h1>
+      <input />
+      
+    </div>
   `)
 })
