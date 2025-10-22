@@ -457,7 +457,7 @@ where it doesn't execute `add.test.ts` and `mul.test.ts` in parallel.
 
 # Collecting tests
 
-- Execute <span v-mark.red="">test files</span> to collect <span v-mark.red="">test cases</span>
+- Execute **test files** to collect **test cases**
 - Main process only knows about test files.
 - Let test runner discover test cases as it executes each test file.
 
