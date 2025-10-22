@@ -3,9 +3,6 @@
 [1m[46m RUN [49m[22m [36mv3.2.4 [39m[90m/home/hiroshi/code/others/vite[39m
 
 ...
-     [32m✓[39m Rollup logs of warn should be handled by vite[32m 7[2mms[22m[39m
-     [32m✓[39m onLog passed by user is called[32m 9[2mms[22m[39m
-     [32m✓[39m onwarn passed by user is called[32m 9[2mms[22m[39m
      [32m✓[39m should throw error when warning contains UNRESOLVED_IMPORT[32m 2[2mms[22m[39m
      [32m✓[39m should ignore dynamic import warnings (Unsupported expression)[32m 1[2mms[22m[39m
      [32m✓[39m should ignore dynamic import warnings (statically analyzed)[32m 1[2mms[22m[39m

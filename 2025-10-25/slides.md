@@ -39,9 +39,9 @@ layoutClass: gap-8
 
 # What is Vitest?
 
-Unit testing framework
+Unit testing framework: `describe`, `test`, `expect`, ...
 
-```tsx {*|1,3,6,9,14-15,19-20}
+```tsx {1,3,6,9,14-15,19-20}
 // packages/vite/src/node/__tests__/scan.spec.ts
 import path from 'node:path'
 import { describe, expect, test } from 'vitest'
@@ -66,7 +66,7 @@ describe('optimizer-scan:script-test', () => {
 
 ::right::
 
-<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
+<div style="--slidev-code-font-size: 9px; --slidev-code-line-height: 0px;">
 <<< @/snippets/vite-unit-test.ansi
 </div>
 
@@ -94,11 +94,11 @@ Features
   - mocking, snapshot, coverage, ...
 - ESM and TypeScript support out of the box
   - Vite builtin features available
-  <!-- same transform pipeline -> import("xxx?raw"), import.meta.glob -->
 - Extensible via Vite plugin ecosystem
   - React, Vue, Svelte, ...
 - Runtime agnostics
   - Node.js, Browser Mode, Cloudflare Workers
+- Powerful Advanced API and Programmatic API
 
 ::right::
 
@@ -129,6 +129,10 @@ test('Hello', () => {
 ```
 
 <!--
+mention
+- same transform pipeline -> import("xxx?raw"), import.meta.glob
+- mention Vitest itself supports powerful customization and programmatic API e.g. Cloudflare pool, storybook, ...
+
 While there are certain Vite features Vitest relies on,
 there are other parts which are independent from Vite.
 The talk covers overall test framework feature implementation.
@@ -240,7 +244,7 @@ mention:
 <!-- 
 TODO:
 categorize better
-- vitest: main cli entry, test orchestration, reporter
+- vitest: main cli entry, test orchestration, reporter, various exports from vitest/xxx
 - @vitest/runner: `describe`, `test`, `TestRunner`
 - @vitest/expect, @vitest/snapshot, @vitest/spy: independent utilities
 
