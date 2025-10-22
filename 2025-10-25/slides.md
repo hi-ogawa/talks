@@ -235,9 +235,9 @@ mention:
 
 # Vitest Monorepo Packages Dependencies
 
-- **vitest** - main cli entry, test orchestration, reporter
+- **vitest** - cli entry, test orchestration, reporter, re-exports other packages
 - **@vitest/runner** - `describe/suite`, `it/test`
-- **@vitest/expect, @vitest/snapshot, @vitest/spy** - <br /> independently usable libraries for `expect`, `toMatchSnapshot`, `vi.fn()`
+- **@vitest/expect, @vitest/snapshot, @vitest/spy** - <br /> standalone libraries for `expect`, `toMatchSnapshot`, `vi.fn()`
 
 <img src="/vitest-monorepo-packages.png" class="mx-auto w-[85%]" />
 
