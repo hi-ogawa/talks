@@ -653,6 +653,7 @@ Here, we review how main process get notified about test collection and executio
 <div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 1.4;">
 
 ```ts
+// [custom-reporter.ts]
 import { BaseReporter } from 'vitest/reporters'
 
 export default class CustomReporter extends BaseReporter {
@@ -660,13 +661,22 @@ export default class CustomReporter extends BaseReporter {
     testModules: TestModule[],
     unhandledErrors: SerializedError[],
   ) {
-    console.log(testModule.length, 'tests finished running')
+    console.log(testModules.length, 'tests finished running')
     super.onTestRunEnd(testModules, unhandledErrors)
   }
 }
 ```
 
-<!-- TODO: defineConfig({ test: { reporter: ... }}) -->
+```ts
+// [vitest.config.ts]
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  test: {
+    reporters: ['./custom-reporter.ts'],
+  },
+})
+```
 
 </div>
 
