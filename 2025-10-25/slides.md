@@ -557,7 +557,7 @@ packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`, `@vitest/prett
 <v-clicks>
 
 ````md magic-move
-```js
+```js {3-5}
 File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
@@ -568,7 +568,7 @@ File(name: add.test.ts)
       result: undefined
 ```
 
-```js
+```js {3-5}
 File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
@@ -579,7 +579,7 @@ File(name: add.test.ts)
       result: undefined
 ```
 
-```js
+```js {6-8}
 File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
@@ -590,7 +590,7 @@ File(name: add.test.ts)
       result: undefined
 ```
 
-```js
+```js {6-8}
 File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
