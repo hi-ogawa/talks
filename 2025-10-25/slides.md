@@ -471,11 +471,11 @@ package: `@vitest/runner`
 
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
 
-<div v-click="1">
+<div>
 
 <div class="mt-10" />
 
-```ts {0|1|1,2|1,2,3|1,2,6|*}{at:2}
+```ts {*|1|1,2|1,2,3|1,2,6|*}{at:0}
 // [add.test.ts]
 describe("add", () => {
   test('first', () => {
@@ -489,14 +489,14 @@ describe("add", () => {
 
 </div>
 
-<div v-click="1">
+<div>
 
 ```ts
 type Task = File | Suite | Test
 ```
 
-```js {0|1|1,2|1,2,3,4,5|1,2,6,7,8|*}{at:2}
-File(id: add.test.ts)
+```js {0|1|1,2|1,2,3,4,5|1,2,6,7,8|*}{at:0}
+File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) }
@@ -510,7 +510,7 @@ File(id: add.test.ts)
 
 <div class="mt-4" />
 
-<div v-click="7">
+<div v-click="6">
 
 ```ansi
 ...
