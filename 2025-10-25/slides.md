@@ -495,7 +495,7 @@ describe("add", () => {
 type Task = File | Suite | Test
 ```
 
-```js {0|1|1,2|1,2,3,4,5|1,2,6,7,8|*}{at:0}
+```js {0|1|1,2|1,2,3,4|1,2,6,7|*}{at:0}
 File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
@@ -508,9 +508,14 @@ File(name: add.test.ts)
 
 </div></div>
 
-<div class="mt-4" />
+<div class="mt-2" />
 
 <div v-click="6">
+
+<span class="text-sm">
+This phase often takes time since it involves executing import statements
+and evaluating dependencies modules.
+</span>
 
 ```ansi
 ...
@@ -553,10 +558,10 @@ packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`, `@vitest/prett
 
 ````md magic-move
 ```js
-File(id: add.test.ts)
+File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
-      fn: () => { expect(add(1, 2)).toBe(3) }
+      fn: () => { expect(add(1, 2)).toBe(3) } 👈
       result: undefined
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) }
@@ -564,10 +569,10 @@ File(id: add.test.ts)
 ```
 
 ```js
-File(id: add.test.ts)
+File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
-      fn: () => { expect(add(1, 2)).toBe(3) }
+      fn: () => { expect(add(1, 2)).toBe(3) } 👈
       result: { status: 'passed' }
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) }
@@ -575,13 +580,24 @@ File(id: add.test.ts)
 ```
 
 ```js
-File(id: add.test.ts)
+File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) }
       result: { status: 'passed' }
     Test(name: second)
-      fn: () => { expect(add(2, 3)).toBe(4) }
+      fn: () => { expect(add(2, 3)).toBe(4) } 👈
+      result: undefined
+```
+
+```js
+File(name: add.test.ts)
+  Suite(name: add)
+    Test(name: first)
+      fn: () => { expect(add(1, 2)).toBe(3) }
+      result: { status: 'passed' }
+    Test(name: second)
+      fn: () => { expect(add(2, 3)).toBe(4) } 👈
       result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
 ```
 ````
