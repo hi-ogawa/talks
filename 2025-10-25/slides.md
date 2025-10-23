@@ -315,8 +315,6 @@ test("mul", () => {
 
 # Finding test files to run
 
-package: `vitest`
-
 - CLI arguments
 
 ```sh
@@ -332,13 +330,13 @@ vitest --shard=1/3 # parallelize across multiple machines
 ```ts
 export default defineConfig({
   test: {
+    include: ["**/*.test.ts"],
+    exlucde: ["**/e2e/**"],
     projects: [
       {
         name: "unit",
         test: {
-          // more globbing
-          include: ["**/*.test.ts"],
-          exclude: [...],
+          include: ["**/*.unit.ts"],
         }
       },
       ...
