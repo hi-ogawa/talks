@@ -317,11 +317,11 @@ test("mul", () => {
 
 package: `vitest`
 
-- CLI arguments (file pattern, overrides, etc.)
+- CLI arguments
 
 ```sh
-vitest src/add.test.ts src/dir/
-vitest --project=unit #
+vitest src/add.test.ts src/dir/ # glob file pattern
+vitest --project=unit # filter projects
 vitest --shard=1/3 # parallelize across multiple machines
 ```
 
@@ -332,10 +332,15 @@ vitest --shard=1/3 # parallelize across multiple machines
 ```ts
 export default defineConfig({
   test: {
-    dir: ...,
-    include: ...,
-    exclude: ...,
     projects: [
+      {
+        name: "unit",
+        test: {
+          // more globbing
+          include: ["**/*.test.ts"],
+          exclude: [...],
+        }
+      },
       ...
     ]
   },
