@@ -639,6 +639,8 @@ Orchestration → Collection → 👉 **Execution** → Reporting
 
 packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
 
+- Finally execute each `Test` functions and record results.
+
 <v-clicks>
 
 ````md magic-move
@@ -697,9 +699,22 @@ File(name: add.test.ts)
       fn: () => { expect(add(2, 3)).toBe(4) } 👈
       result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
 ```
+
+```js
+File(name: add.test.ts)
+  Suite(name: add)
+    Test(name: first)
+      fn: () => { expect(add(1, 2)).toBe(3) }
+      result: { status: 'passed' }
+    Test(name: second)
+      fn: () => { expect(add(2, 3)).toBe(4) }
+      result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
+```
 ````
 
 <div class="mt-4">
+
+- It's common to have a test execution time to be shorter than collection time.
 
 ```ansi
 ...
@@ -722,6 +737,12 @@ By default, they are sequentially executed.
 In the reporter duration, "test XXXms" shows the duration and as you can see for this trivial tests,
 it's a way faster than collecting phase.
  -->
+
+---
+
+# Executing `Test`
+
+TODO: go further. fixture, hooks, timeout, retry, concurrent.
 
 ---
 
