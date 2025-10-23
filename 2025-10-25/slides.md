@@ -257,7 +257,7 @@ mention:
 - **@vitest/runner** - `describe/suite`, `it/test`
 - **@vitest/expect, @vitest/snapshot, @vitest/spy** - <br /> standalone libraries for `expect`, `toMatchSnapshot`, `vi.fn()`
 
-<img src="/vitest-monorepo-packages.png" class="mx-auto w-[85%]" />
+<img src="/monorepo-packages.png" class="mx-auto w-[85%]" />
 
 <!-- 
 TODO:
@@ -335,10 +335,10 @@ export default defineConfig({
     dir: ...,
     include: ...,
     exclude: ...,
+    projects: [
+      ...
+    ]
   },
-  projects: [
-    ...
-  ]
 })
 ```
 
