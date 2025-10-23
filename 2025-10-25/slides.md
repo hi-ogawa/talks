@@ -714,7 +714,7 @@ File(name: add.test.ts)
 
 <div class="mt-4">
 
-- It's common to have a test execution time to be shorter than collection time.
+- Depending on the nature of tests, a test execution time can be shorter than collection time.
 
 ```ansi
 ...
