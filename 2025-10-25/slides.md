@@ -312,11 +312,23 @@ test("mul", () => {
 </div>
 
 ---
+
+# Test Lifecycle
+
+<div>
+
+👉 **Orchestration** → Collection → Execution → Reporting
+
+</div>
+
+---
 layout: two-cols
 layoutClass: gap-4
 ---
 
-# Finding test files to run
+# Test Orchestration
+
+Find test files to run
 
 - Configuration
 
@@ -359,7 +371,7 @@ it's mostly globing.
 
 ---
 
-# Test runner orchestration
+# Test orchestration
 
 packages: `vitest`, ~~`tinypool`~~
 
@@ -383,7 +395,7 @@ Not spawning new process for each test file, but limited based on available cpu.
 
 ---
 
-# Test runner orchestration
+# Test orchestration
 
 - `pool: "threads"`
 
@@ -395,7 +407,7 @@ import { Worker } from 'node:worker_threads'
 
 ---
 
-# Test runner orchestration
+# Test orchestration
 
 packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
@@ -405,7 +417,7 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 ---
 
-# Test runner orchestration
+# Test orchestration
 
 - No isolation (`vitest --no-isolate` or `isolate: false`)
 
@@ -479,6 +491,16 @@ export const shared = "shared";
 This also shows a trade off of `isolate: false`
 where it doesn't execute `add.test.ts` and `mul.test.ts` in parallel.
  -->
+
+---
+
+# Test Lifecycle
+
+<div>
+
+Orchestration → 👉 **Collection** → Execution → Reporting
+
+</div>
 
 ---
 
@@ -577,6 +599,16 @@ and thus entire module graph is evaluated during this phase.
 
 ---
 
+# Test Lifecycle
+
+<div>
+
+Orchestration → Collection → 👉 **Execution** → Reporting
+
+</div>
+
+---
+
 # Executing `Test`
 
 packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`, `@vitest/pretty-format`
@@ -652,6 +684,16 @@ By default, they are sequentially executed.
 In the reporter duration, "test XXXms" shows the duration and as you can see for this trivial tests,
 it's a way faster than collecting phase.
  -->
+
+---
+
+# Test Lifecycle
+
+<div>
+
+Orchestration → Collection → Execution → 👉 **Reporting**
+
+</div>
 
 ---
 
