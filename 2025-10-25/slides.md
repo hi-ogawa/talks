@@ -39,7 +39,7 @@ layoutClass: gap-8
 
 # What is Vitest?
 
-Unit testing framework: `describe`, `test`, `expect`, ...
+Testing framework
 
 ```tsx {1,3,6,9,14-15,19-20}
 // packages/vite/src/node/__tests__/scan.spec.ts
@@ -98,7 +98,8 @@ Features
   - React, Vue, Svelte, ...
 - Runtime agnostics
   - Node.js, Browser Mode, Cloudflare Workers
-- Powerful Advanced API and Programmatic API
+- Advanced API and Programmatic API
+  - Powerful customization to serve ecosystem
 
 ::right::
 
@@ -132,6 +133,7 @@ test('Hello', () => {
 mention
 - same transform pipeline -> import("xxx?raw"), import.meta.glob
 - mention Vitest itself supports powerful customization and programmatic API e.g. Cloudflare pool, storybook, ...
+  vscode extension
 
 While there are certain Vite features Vitest relies on,
 there are other parts which are independent from Vite.
@@ -200,6 +202,22 @@ export default defineConfig({
 The same code from previous slide.
 It now runs on browser, which provides a genuine runtime like how your application runs
 instead of simulated jsdom/happy-dom environment on NodeJs.
+ -->
+
+---
+
+# Vitest 4 is out!
+
+- [Annoucement Blog](https://vitest.dev/blog/vitest-4.html)
+- [State of Vitest (ViteConf 2025)](https://www.youtube.com/watch?v=AGmVjX_iilo) by Vladimir <a href="https://github.com/sheremet-va" target="_blank">@sheremet-va <ri-github-fill /></a>
+
+<img src="/vitest4.png" class="h-[65%] mt-10 mx-auto" />
+
+<!-- 
+- Vitest 4 is just released on 10/23
+- Browser mode stable with visual regresssion, tracing etc..
+- Pool system rewrite
+- Checkout the blog post and Vladimir's ViteConf talk on Youtube!
  -->
 
 ---
