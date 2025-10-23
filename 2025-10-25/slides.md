@@ -361,7 +361,7 @@ it's mostly globing.
 
 # Test runner orchestration
 
-packages: `vitest`, `tinypool`
+packages: `vitest`, ~~`tinypool`~~
 
 - Spawn isolated runtime from main process and assign test files
 - The default is `pool: "forks"`
