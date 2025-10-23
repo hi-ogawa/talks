@@ -599,6 +599,30 @@ and thus entire module graph is evaluated during this phase.
 
 ---
 
+# Filtering `Task` to run
+
+- `describe.skip/only`, `test.skip/only`, `vitest -t <test-name-filter>`
+- Since the filtering happens on test runner side, test file executions cannot be skipped.
+- Since each test file runs independently, one file's `only` does not affect other files.
+
+```js
+// [one.test.ts]
+test.only('one', () => {
+  expect(1).toBe(1)
+})
+```
+
+```js
+// [another.test.ts]
+test('another', () => {
+  expect(2).toBe(2)
+})
+```
+
+- `vitest` will run both files.
+
+---
+
 # Test Lifecycle
 
 <div>
