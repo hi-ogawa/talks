@@ -598,6 +598,39 @@ and thus entire module graph is evaluated during this phase.
  -->
 
 ---
+hide: true
+---
+
+# Understanding "Duration"
+
+- The example from the first slide from Vite's unit test suites.
+- The total duration can be presented way shorter than other components.
+- This is because everything processing happens in parallel and each component duration is accumulated.
+
+```ansi
+...
+[2m Test Files [22m [1m[32m46 passed[39m[22m[90m (46)[39m
+[2m      Tests [22m [1m[32m660 passed[39m[22m[90m (660)[39m
+[2m   Start at [22m 12:58:28
+[2m   Duration [22m 2.48s[2m (transform 2.32s, setup 0ms, collect 17.44s, tests 9.23s, environment 4ms, prepare 1.56s)[22m
+             ^^^^^            ^^^^^                     ^^^^^^        ^^^^^
+             Total
+```
+
+- By forcing single file execution, we can see each component duration more clearly.
+
+```sh
+$ vitest --fileParallelism=false
+```
+
+```ansi
+ Test Files  47 passed (47)
+      Tests  672 passed (672)
+   Start at  01:22:14
+   Duration  4.70s (transform 797ms, setup 0ms, collect 1.31s, tests 3.06s, environment 1ms, prepare 41ms)
+```
+
+---
 
 # Filtering `Task` to run
 
@@ -743,6 +776,7 @@ it's a way faster than collecting phase.
 # Executing `Test`
 
 TODO: go further. fixture, hooks, timeout, retry, concurrent.
+TODO: some `expect` example which is integrated with test runner `expect.poll/soft`?
 
 ---
 
@@ -757,6 +791,8 @@ Orchestration → Collection → Execution → 👉 **Reporting**
 ---
 
 # Reporting results
+
+packages: `birpc`
 
 - `onCollected(files: File[])` notify collected `Task` tree
 - `onTaskUpdate(pack: { id, result }[], ...)` notify test status incrementally in batch
