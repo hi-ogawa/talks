@@ -607,19 +607,21 @@ and thus entire module graph is evaluated during this phase.
 
 ```js
 // [one.test.ts]
-test.only('one', () => {
+test.only('a', () => { // --> run ✅
   expect(1).toBe(1)
+})
+
+test('b', () => {      // --> skip ❌
+  expect(2).toBe(2)
 })
 ```
 
 ```js
 // [another.test.ts]
-test('another', () => {
-  expect(2).toBe(2)
+test('c', () => {      // --> run ✅
+  expect(3).toBe(3)
 })
 ```
-
-- `vitest` will run both files.
 
 ---
 
@@ -640,6 +642,18 @@ packages: `@vitest/runner`, `@vitest/expect`, `@vitest/snapshot`, `@vitest/prett
 <v-clicks>
 
 ````md magic-move
+
+```js {4,7}
+File(name: add.test.ts)
+  Suite(name: add)
+    Test(name: first)
+      fn: () => { expect(add(1, 2)).toBe(3) } 👈
+      result: undefined
+    Test(name: second)
+      fn: () => { expect(add(2, 3)).toBe(4) } 👈
+      result: undefined
+```
+
 ```js {3-5}
 File(name: add.test.ts)
   Suite(name: add)
