@@ -312,18 +312,11 @@ test("mul", () => {
 </div>
 
 ---
+layout: two-cols
+layoutClass: gap-4
+---
 
 # Finding test files to run
-
-- CLI arguments
-
-```sh
-vitest src/add.test.ts src/dir/ # glob file pattern
-vitest --project=unit # filter projects
-vitest --shard=1/3 # parallelize across multiple machines
-```
-
-<div class="h-4" />
 
 - Configuration
 
@@ -344,6 +337,19 @@ export default defineConfig({
   },
 })
 ```
+
+::right::
+
+<div class="h-14" />
+
+- CLI arguments to overrides
+
+```sh
+vitest src/add.test.ts src/dir/ # glob file pattern
+vitest --project=unit # filter projects
+vitest --shard=1/3 # parallelize across multiple machines
+```
+
 
 <!-- 
 First Vitest needs to search for test files.
