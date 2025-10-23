@@ -1,0 +1,250 @@
+__vite_ssr_exportName__("prime", () => { try { return prime } catch {} });
+function cov_25m4s3spry() {
+  var path = "/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.ts";
+  var hash = "04949962669dae0cdcb1193d9dd71e3193765abb";
+  var global = globalThis;
+  var gcv = "__VITEST_COVERAGE__";
+  var coverageData = {
+    path: "/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.ts",
+    statementMap: {
+      "0": {
+        start: {
+          line: 2,
+          column: 2
+        },
+        end: {
+          line: 15,
+          column: 3
+        }
+      },
+      "1": {
+        start: {
+          line: 4,
+          column: 6
+        },
+        end: {
+          line: 4,
+          column: 15
+        }
+      },
+      "2": {
+        start: {
+          line: 6,
+          column: 6
+        },
+        end: {
+          line: 6,
+          column: 15
+        }
+      },
+      "3": {
+        start: {
+          line: 8,
+          column: 6
+        },
+        end: {
+          line: 8,
+          column: 15
+        }
+      },
+      "4": {
+        start: {
+          line: 10,
+          column: 6
+        },
+        end: {
+          line: 10,
+          column: 15
+        }
+      },
+      "5": {
+        start: {
+          line: 12,
+          column: 6
+        },
+        end: {
+          line: 12,
+          column: 16
+        }
+      },
+      "6": {
+        start: {
+          line: 14,
+          column: 6
+        },
+        end: {
+          line: 14,
+          column: 16
+        }
+      }
+    },
+    fnMap: {
+      "0": {
+        name: "prime",
+        decl: {
+          start: {
+            line: 1,
+            column: 16
+          },
+          end: {
+            line: 1,
+            column: 21
+          }
+        },
+        loc: {
+          start: {
+            line: 1,
+            column: 25
+          },
+          end: {
+            line: 16,
+            column: 1
+          }
+        },
+        line: 1
+      }
+    },
+    branchMap: {
+      "0": {
+        loc: {
+          start: {
+            line: 2,
+            column: 2
+          },
+          end: {
+            line: 15,
+            column: 3
+          }
+        },
+        type: "switch",
+        locations: [{
+          start: {
+            line: 3,
+            column: 4
+          },
+          end: {
+            line: 4,
+            column: 15
+          }
+        }, {
+          start: {
+            line: 5,
+            column: 4
+          },
+          end: {
+            line: 6,
+            column: 15
+          }
+        }, {
+          start: {
+            line: 7,
+            column: 4
+          },
+          end: {
+            line: 8,
+            column: 15
+          }
+        }, {
+          start: {
+            line: 9,
+            column: 4
+          },
+          end: {
+            line: 10,
+            column: 15
+          }
+        }, {
+          start: {
+            line: 11,
+            column: 4
+          },
+          end: {
+            line: 12,
+            column: 16
+          }
+        }, {
+          start: {
+            line: 13,
+            column: 4
+          },
+          end: {
+            line: 14,
+            column: 16
+          }
+        }],
+        line: 2
+      }
+    },
+    s: {
+      "0": 0,
+      "1": 0,
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0
+    },
+    f: {
+      "0": 0
+    },
+    b: {
+      "0": [0, 0, 0, 0, 0, 0]
+    },
+    inputSourceMap: {
+      version: 3,
+      sources: ["/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.ts"],
+      sourcesContent: ["export function prime(x: number): number {\n  switch (x) {\n    case 1:\n      return 2;\n    case 2:\n      return 3;\n    case 3: \n      return 5;\n    case 4:\n      return 7;\n    case 5:\n      return 11; \n    default:\n      return -1;\n  }\n}\n"],
+      mappings: "AAAO,gBAAS,MAAM,GAAmB;AACvC,UAAQ,GAAG;AAAA,IACT,KAAK;AACH,aAAO;AAAA,IACT,KAAK;AACH,aAAO;AAAA,IACT,KAAK;AACH,aAAO;AAAA,IACT,KAAK;AACH,aAAO;AAAA,IACT,KAAK;AACH,aAAO;AAAA,IACT;AACE,aAAO;AAAA,EACX;AACF;",
+      names: []
+    },
+    _coverageSchema: "1a1c01bbd47fc00a2c39e90264f33305004495a9",
+    hash: "04949962669dae0cdcb1193d9dd71e3193765abb"
+  };
+  var coverage = global[gcv] || (global[gcv] = {});
+  if (!coverage[path] || coverage[path].hash !== hash) {
+    coverage[path] = coverageData;
+  };
+  var actualCoverage = coverage[path];
+  {
+    // @ts-ignore
+    cov_25m4s3spry = function () {
+      return actualCoverage;
+    };
+  }
+  return actualCoverage;
+}
+cov_25m4s3spry();
+function prime(x) {
+  cov_25m4s3spry().f[0]++;
+  cov_25m4s3spry().s[0]++;
+  switch (x) {
+    case 1:
+      cov_25m4s3spry().b[0][0]++;
+      cov_25m4s3spry().s[1]++;
+      return 2;
+    case 2:
+      cov_25m4s3spry().b[0][1]++;
+      cov_25m4s3spry().s[2]++;
+      return 3;
+    case 3:
+      cov_25m4s3spry().b[0][2]++;
+      cov_25m4s3spry().s[3]++;
+      return 5;
+    case 4:
+      cov_25m4s3spry().b[0][3]++;
+      cov_25m4s3spry().s[4]++;
+      return 7;
+    case 5:
+      cov_25m4s3spry().b[0][4]++;
+      cov_25m4s3spry().s[5]++;
+      return 11;
+    default:
+      cov_25m4s3spry().b[0][5]++;
+      cov_25m4s3spry().s[6]++;
+      return -1;
+  }
+}
+//# sourceMappingSource=vite-generated
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBQUEsQ0FBQTs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztJQWVBO0lBQUFBLGNBQUEsWUFBQUEsQ0FBQTtNQUFBLE9BQUFDLGNBQUE7SUFBQTtFQUFBO0VBQUEsT0FBQUEsY0FBQTtBQUFBO0FBQUFELGNBQUE7QUFmTyxTQUFTRSxNQUFNQyxDQUFBLEVBQW1CO0VBQUFILGNBQUEsR0FBQUksQ0FBQTtFQUFBSixjQUFBLEdBQUFLLENBQUE7RUFDdkMsUUFBUUYsQ0FBQTtJQUNOLEtBQUs7TUFBQUgsY0FBQSxHQUFBTSxDQUFBO01BQUFOLGNBQUEsR0FBQUssQ0FBQTtNQUNILE9BQU87SUFDVCxLQUFLO01BQUFMLGNBQUEsR0FBQU0sQ0FBQTtNQUFBTixjQUFBLEdBQUFLLENBQUE7TUFDSCxPQUFPO0lBQ1QsS0FBSztNQUFBTCxjQUFBLEdBQUFNLENBQUE7TUFBQU4sY0FBQSxHQUFBSyxDQUFBO01BQ0gsT0FBTztJQUNULEtBQUs7TUFBQUwsY0FBQSxHQUFBTSxDQUFBO01BQUFOLGNBQUEsR0FBQUssQ0FBQTtNQUNILE9BQU87SUFDVCxLQUFLO01BQUFMLGNBQUEsR0FBQU0sQ0FBQTtNQUFBTixjQUFBLEdBQUFLLENBQUE7TUFDSCxPQUFPO0lBQ1Q7TUFBQUwsY0FBQSxHQUFBTSxDQUFBO01BQUFOLGNBQUEsR0FBQUssQ0FBQTtNQUNFLE9BQU87RUFDWDtBQUNGIiwibmFtZXMiOlsiY292XzI1bTRzM3NwcnkiLCJhY3R1YWxDb3ZlcmFnZSIsInByaW1lIiwieCIsImYiLCJzIiwiYiJdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJkZW1vLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCBmdW5jdGlvbiBwcmltZSh4OiBudW1iZXIpOiBudW1iZXIge1xuICBzd2l0Y2ggKHgpIHtcbiAgICBjYXNlIDE6XG4gICAgICByZXR1cm4gMjtcbiAgICBjYXNlIDI6XG4gICAgICByZXR1cm4gMztcbiAgICBjYXNlIDM6IFxuICAgICAgcmV0dXJuIDU7XG4gICAgY2FzZSA0OlxuICAgICAgcmV0dXJuIDc7XG4gICAgY2FzZSA1OlxuICAgICAgcmV0dXJuIDExOyBcbiAgICBkZWZhdWx0OlxuICAgICAgcmV0dXJuIC0xO1xuICB9XG59XG4iXSwiZmlsZSI6Ii9zcmMvZGVtby50cyJ9
+
+// {"id":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.ts","file":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.ts"}
