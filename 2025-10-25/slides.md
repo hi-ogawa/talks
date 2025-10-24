@@ -1203,7 +1203,11 @@ Vitest normalizes them into more convenient form for reporter implementation.
 
 # Example: Github Actions Reporter
 
-<img src="/lifecycle-github-actions-reporter.png" class="w-[65%] mx-auto" />
+```sh
+::error file={/xxx/add.test.ts},line={9},...::AssertionError: expected 5 to be 4 ...
+```
+
+<img src="/lifecycle-github-actions-reporter.png" class="w-[60%] mx-auto" />
 
 <!-- 
 https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2e26c9584e
@@ -1300,10 +1304,10 @@ const msg = ref('Hello World!')
 
 <v-click>
 
-<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
+<div style="--slidev-code-font-size: 12px; --slidev-code-line-height: 0px;">
 
-```js {5-14}
-import { ref } from "/xxx/vue.js?v=7756971e"
+```js {1,5-14}
+// [client transform]
 ...
 const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } }
 ...
@@ -1318,12 +1322,10 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   ], 64 /* STABLE_FRAGMENT */))
 }
 ...
-export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-browser-mode/src/Hello.vue"]])
 ```
 
-```js {6-12}
-__vite_ssr_exportName__("default", () => { try { return __vite_ssr_export_default__ } catch {} });
-const __vite_ssr_import_0__ = await __vite_ssr_import__("/xxx/node_modules/vue/index.mjs", {"importedNames":["ref"]});
+```js {1,5-12}
+// [ssr transform]
 ...
 const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } };
 ...
@@ -1335,7 +1337,6 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
   }><!--]-->`)
 }
 ...
-const __vite_ssr_export_default__ = /*#__PURE__*/(0,__vite_ssr_import_3__.default)(_sfc_main, [['ssrRender',_sfc_ssrRender],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-ssr/src/Hello.vue"]])
 ```
 
 </div>
