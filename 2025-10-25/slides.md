@@ -828,7 +828,7 @@ File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) } 👈
-      result: { status: 'passed' }
+      result: { status: 'pass' }
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) }
       result: undefined
@@ -839,7 +839,7 @@ File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) }
-      result: { status: 'passed' }
+      result: { status: 'pass' }
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) } 👈
       result: undefined
@@ -850,10 +850,10 @@ File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) }
-      result: { status: 'passed' }
+      result: { status: 'pass' }
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) } 👈
-      result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
+      result: { status: 'fail', errors: [Error('Expected 5 to be 4', diff="...")] }
 ```
 
 ```js
@@ -861,10 +861,10 @@ File(name: add.test.ts)
   Suite(name: add)
     Test(name: first)
       fn: () => { expect(add(1, 2)).toBe(3) }
-      result: { status: 'passed' }
+      result: { status: 'pass' }
     Test(name: second)
       fn: () => { expect(add(2, 3)).toBe(4) }
-      result: { status: 'failed', errors: [Error('Expected 5 to be 4', diff="...")] }
+      result: { status: 'fail', errors: [Error('Expected 5 to be 4', diff="...")] }
 ```
 ````
 
@@ -955,6 +955,7 @@ File
 
 packages: `@vitest/expect`, `@vitest/pretty-format`
 
+- `@vitest/expect`: usable as standalone assertion library
 - Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system: `toEqual`, `expect.extend`, `expect.any` ...
 
 ```ts
@@ -963,12 +964,13 @@ expect("Vitest").to.be.a('string') // Chai API
 expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 ```
 
-- `@vitest/expect`: usable as standalone assertion library
 - Error message formatting is implemented by post processing caught errors on test runner.
 
 <div class="flex gap-4" style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0;">
 
 <div class="flex-1">
+
+<v-click>
 
 ```js [raw error object]
 AssertionError {
@@ -979,9 +981,13 @@ AssertionError {
 }
 ```
 
+</v-click>
+
 </div>
 
 <div class="w-[40%]">
+
+<v-click>
 
 ```ansi [format actual/expected and generate diff]
 [32m- Expected[39m
@@ -992,7 +998,10 @@ AssertionError {
 [2m  }[22m
 ```
 
+</v-click>
+
 </div>
+
 
 </div>
 
@@ -1000,18 +1009,33 @@ AssertionError {
 
 # Test runner aware assertions
 
-- Some APIs are coupled to Vitest's test runner implementation
+- Some `expect` APIs are coupled to Vitest's test runner implementation
   - `expect.soft`, `expect.poll`, `toMatchSnapshot`, ...
 - `expect.soft`: accumulate assertion errors until the test end without stopping execution
 
+<v-clicks>
+
 ```js
-test("...", () => {
+test("softy", ({ expect }) => {
   // both errors are surfaced at the end of the test
   expect.soft(1 + 1).toBe(3) // -> ❌ expected 2 to be 3
   expect.soft(1 + 2).toBe(4) // -> ❌ expected 3 to be 4
 })
 ```
 
+```js
+Test(name: "softy")
+  fn: () => ...
+  result: {
+    status: 'fail',
+    errors: [
+      Error('❌ expected 2 to be 3'),
+      Error('❌ expected 3 to be 4'),
+    ]
+  }
+```
+
+</v-clicks>
 
 <!-- 
 
