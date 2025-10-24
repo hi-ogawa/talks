@@ -833,7 +833,7 @@ $ vitest one.test.ts # => runs only 'a'
 ```
 
 <!--
-ここまででtest casesは見つけ出してきたのですが、この段階でtest fileの中でどれをskipするのがという`skip/only`やtestの名前でCLIからfilteringされたものを処理します。
+ここまででtest casesは見つけ出してきたのですが、さらに、この段階でtest fileの中でどれをskipするのがという`skip/only`やtestの名前でCLIからfilteringされたものを処理します。
 -->
 
 ---
@@ -1168,6 +1168,10 @@ Orchestration → Collection → Execution → 👉 **Reporting**
 
 </div>
 
+<!--
+それでは最後の4番目のstepとしてreportingを話します。
+-->
+
 ---
 
 # Reporting results
@@ -1178,12 +1182,13 @@ Orchestration → Collection → Execution → 👉 **Reporting**
 
 <img src="/reporting-results.png" class="w-[70%] mx-auto" />
 
-<!-- 
-So far, we just followed what's happening on test runner side,
-but actually, main process is aware of the all those activities and reports the progress to users.
-As said previously, main process only knows about test files.
-Here, we review how main process get notified about test collection and execution progress from test runner side.
- -->
+<!--
+ここまで、左側のtest runnerがtest fileそしてtest caseを実行して、Task tree structureを管理していましたが、それをmain process側に持ってくる仕組みがあります。
+
+実際には、2番目のstepのcollectionの段階でtest runnerはmain process側に見つかったtest caseの情報を送っています。
+
+また3番目のstepのtest caseを実行した際の、pass/failのtest結果やconsole.logの情報はそのeventが発生次第、main process側に送って、Cliがreal timeでtestの結果をterminalに表示できるような仕組みになっています。
+-->
 
 ---
 
@@ -1201,6 +1206,16 @@ Here, we review how main process get notified about test collection and executio
 <img src="/birpc-on-cancel.png" class="w-[70%] mx-auto" />
 
 </v-click>
+
+<!--
+そして、ここまでは言及していませんでしたが、test runner sideとmain processのdataのやりとりがどうなっているかという話をここでしようと思います。
+
+Vitestはpoolごとに使えるcommunicationの媒体が違いつつもbirpcというprotocol agnosticなrpc libraryをもとにして、共通化されたinterfaceでeventを双方から送る仕組みを作っています。
+
+例えば、今まで挙げた、fork, worker thread, browser mod を比べてみるとこうなります。
+
+eventの方向としては、基本的にtest runner側がmain processにtestのstatusを送るのが主ですが、逆方向のeventの例として、VitestのterminalでControl+Cを押したときに、main processからchild processを強制的にkillするのではなく、test runner自身が、testを全部skipをさせるような仕組みがあります。
+-->
 
 ---
 
@@ -1240,13 +1255,11 @@ export default defineConfig({
 
 </div>
 
-<!-- 
-After test runner has finished Task results are all available on main process.
-Vitest has a reporter API to customize how those results are displayed or processed.
+<!--
+ここまでの過程で、main process側がtestの結果または途中結果を得た際に、こういった情報を最終的にどのようにprocessまたは表示するかをreporter APIでcustomizeできます。
 
-While raw data is in `File/Suite/Test` based tree structure,
-Vitest normalizes them into more convenient form for reporter implementation.
- -->
+Builtin reporterも様々ありますがこのAPIをもとに作られていてます。
+-->
 
 ---
 
@@ -1255,6 +1268,10 @@ Vitest normalizes them into more convenient form for reporter implementation.
 <div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
 <<< @/snippets/lifecycle-default-reporter.ansi
 </div>
+
+<!--
+Default reporterはTestの途中経過をreal timeで表示しつつ、Errorの詳細をsource code blockとともに表示します。
+-->
 
 ---
 
@@ -1266,9 +1283,11 @@ Vitest normalizes them into more convenient form for reporter implementation.
 
 <img src="/lifecycle-github-actions-reporter.png" class="w-[60%] mx-auto" />
 
-<!-- 
+<!--
+Github actions reporterはtest errorをgithub UIのfile viewで表示するためのformatが決まっているので、それにそって全部testが終わった後に、このような"::error..."というようなdirectiveをconsoleにoutputするようになっています。
+
 https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2e26c9584e
- -->
+-->
 
 ---
 
@@ -1551,7 +1570,9 @@ const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", ...);
 
 この様子をVitestはdebugの手助けの一分として、簡単に見れるように、DEBUG_DUMP environment variableでfileに書き出すようになっています。ここにあるのが一つの例です。
 
-一行目にある named importのvitest が vite_ssr_import functionになるのが見えます。
+一行目にある named importのvitest が vite_ssr_import functionになるのが見えます。 `test` functionがvite_ssr_import_0をreferenceしたものになっています。
+
+これによって、Vite module runnerはimportの仕組みを自身のsemanticsで実行することが出来ます。
 
 TODO: elaborate more
 __vite_ssr_import__ -> fetchModule -> runInlineModule
@@ -1576,7 +1597,7 @@ packages: `@vitest/mocker`, `@vitest/spy`
 - Manual-mocking with factory `vi.mock("./add.js", () => ...)`
   - the original module is not imported but implementation is provided inline.
 
-```ts
+```ts {*|2,5,9}
 import { test, expect } from "vitest"
 import { add } from "./add"
 import { mul } from "./mul"
@@ -1593,6 +1614,12 @@ test("add", () => {
 ```
 
 <!--
+この vite_ssr_import runtime functionを通して、module mockingをVitestは実装しています。
+
+まずはVitestのmodule mockingのをお話しすると、vi.mockというAPIがあって、それによって、もとのmoduleのexportを書き換えるという機能です。
+
+ここにある例だと、add moduleがimportされつつも、それはvi.mockされているものなので、addの仕組みがundefinedを返すようになっています。
+
 https://vitest.dev/guide/mocking.html#automocking-algorithm
 -->
 
@@ -1624,6 +1651,14 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
   (0,__vite_ssr_import_0__.expect)(__vi_import_0__.add(1, 2)).toBe(42);
 })
 ```
+
+<!--
+このようなmodule evaluationの仕組みを書き換えるためには、Vitestはまず自身のtransform pluginによって、`vi.mock`をfileの一番上に持ってきます。
+
+それによって、test fileを実行した際にmockingの情報をimportが走る前にprocessすることができます。
+
+また、その後に、mockされたmoduleをimportする際にはVitest自身のvite_ssr_importの実装を元にmoduleをすり替えることになります。
+-->
 
 ---
 layout: two-cols
@@ -1839,5 +1874,11 @@ It only invalidates changed files.
   - Vite's transform pipeline and environment API provides a foundation
 
 <!--
-ここまでを
+最後にまとめです。
+
+このトークでは、Test lifecycleとして4つのstepの観点からVitesのtest frameworkの機能とimplementationを理解しました。
+
+後半では、VitestのTest runnerとVite environment APIの対応や、VitestがどのようにViteのfeatureをどのように利用しているかという例を見ました。
+
+トークはここまでです。ご清聴ありがとうございました。
 -->
