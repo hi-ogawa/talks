@@ -917,7 +917,7 @@ Here, we review how main process get notified about test collection and executio
 
 # Runtime communication
 
-- [birpc](https://github.com/antfu-collective/birpc) - runtime agnostic typed two-way rpc library
+- [birpc](https://github.com/antfu-collective/birpc) - Protocol agnostic typed two-way rpc library
 - `node:child_process / fork`: `process.send`, `process.on("message")`
 - `node:worker_threads / Worker`: `parentPort.postMessage`, `parentPort.on("message")`
 - Browser mode: `Websocket`
