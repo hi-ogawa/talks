@@ -96,7 +96,7 @@ Features
   - Vite builtin features available
 - Extensible via Vite plugin ecosystem
   - React, Vue, Svelte, ...
-- Runtime agnostics
+- Runtime agnostic
   - Node.js, Browser Mode, Cloudflare Workers
 - Advanced API and Programmatic API
   - Powerful customization to serve ecosystem
@@ -208,14 +208,14 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 
 # Vitest 4 is out!
 
-- [Annoucement Blog](https://vitest.dev/blog/vitest-4.html)
+- [Announcement Blog](https://vitest.dev/blog/vitest-4.html)
 - [State of Vitest (ViteConf 2025)](https://www.youtube.com/watch?v=AGmVjX_iilo) by Vladimir <a href="https://github.com/sheremet-va" target="_blank">@sheremet-va <ri-github-fill /></a>
 
 <img src="/vitest4.png" class="h-[65%] mt-10 mx-auto" />
 
 <!-- 
 - Vitest 4 is just released on 10/23
-- Browser mode stable with visual regresssion, tracing etc..
+- Browser mode stable with visual regression, tracing etc..
 - Pool system rewrite
 - Checkout the blog post and Vladimir's ViteConf talk on Youtube!
  -->
@@ -336,7 +336,7 @@ Find test files to run
 export default defineConfig({
   test: {
     include: ["**/*.test.ts"],
-    exlucde: ["**/e2e/**"],
+    exclude: ["**/e2e/**"],
     projects: [
       {
         name: "unit",
@@ -601,7 +601,7 @@ File(name: add.test.ts)
 
 <span class="text-sm">
 This phase often takes time since it involves executing import statements
-and evaluating dependencies modules.
+and evaluating dependency modules.
 </span>
 
 ```ansi
@@ -1442,7 +1442,7 @@ packages: `@vitest/coverage-istanbul`, `@vitest/coverage-v8`, `ast-v8-to-istanbu
 
 - Official coverage providers:
   - `v8`: [V8 engine](https://v8.dev/)'s built-in coverage tracking
-  - `istanbul`: custom transform injects code to count each function call and branche hit
+  - `istanbul`: custom transform injects code to count each function call and branch hit
 - Coverage aggregation / reporting is powered by Istanbul ecosystem tooling for both providers.
 - [Getting Started with Vitest Code Coverage (ViteConf 2024)](https://www.youtube.com/watch?v=UOdgx2Mm3X8) by Ari Perkkiö <a href="https://twitter.com/AriPerkkio" target="_blank">@AriPerkkio <ri-github-fill /></a>
 
