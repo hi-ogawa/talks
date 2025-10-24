@@ -1535,7 +1535,7 @@ test("add", () => {
 })
 ```
 
-```ts
+```ts {*|1-4|5-6|*}
 // register mocking state before import
 __vite_ssr_import_0__.vi.mock("./add.js", () => ({
   add: __vite_ssr_import_0__.vi.fn(() => 42)
