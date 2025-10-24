@@ -255,14 +255,11 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 This talk follows the **test lifecycle** to explore Vitest architecture:
 - Orchestration → Collection → Execution → Reporting
 
-<v-click>
+Along the way, we'll see how each package divide responsibilities:
+- `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
 
-Along the way, we'll explore:
-- How **Vite** powers test runtime (ModuleRunner, Browser mode, transform, etc.)
-- How each **package** divide responsibilities
-  - `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
-
-</v-click>
+And finally we learn how **Vite** powers Vitest as a foundation:
+- Environment API, Custom transform pipeline, ...
 
 <!--
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
@@ -1755,8 +1752,8 @@ It only invalidates changed files.
 
 # Key Takeaways
 
-- **Test lifecycle drives architecture:** Understanding orchestration, collection, execution, and reporting is fundamental to test framework design
-
-- **Client-server architecture:** Test runner (client) communicates with main process (server) to achieve runtime-agnostic execution (Node.js, Browser, etc.)
-
-- **Vite as a foundation:** Test runtime leverages the same transform pipeline and module runner as Vite's client and SSR application
+- Walked through test lifecycle to understand testing framework architecture
+  - Orchestration → Collection → Execution → Reporting
+- Reviewed how Vitest is powered Vite
+  - Test runner leverages the same runtime mechanism as Vite's client and SSR application
+  - Vite's transform pipeline and environment API provides a foundation
