@@ -410,6 +410,49 @@
 
 ## Speaker Notes
 
+### Practice Tips
+
+**Before the talk, practice with timing:**
+
+1. **Time each section separately** - Use the time markers to identify which sections run long/short:
+   - Introduction (0:00-4:00) - 4 min
+   - Overview (4:00-7:00) - 3 min
+   - Orchestration (7:00-13:15) - 6 min
+   - Collection (13:30-17:30) - 4 min
+   - Execution (17:45-21:45) - 4 min
+   - Reporting (22:00-25:00) - 3 min
+   - Vite Integration (25:00-33:00) - 8 min
+
+2. **Natural compression points to watch for:**
+   - Code examples - you might not need to read through all the code
+   - Diagrams - "show don't tell" can save time (especially pool architecture slides 12-15)
+   - Repeated concepts - once audience gets it, move faster
+   - Transitions between slides - these add up quickly
+
+3. **Common areas that often run shorter in practice:**
+   - Pool architecture slides (12-15) - diagrams are self-explanatory
+   - Reporter examples (30-32) - quick visual examples
+   - Module runner transform (38) - showing is faster than explaining
+   - Coverage details (43-44) - can compress if needed
+
+4. **Use checkpoints during practice:**
+   - At 10 min: Should be around slide 14-15 (isolation)
+   - At 20 min: Should be around slide 24-25 (Test API / expect)
+   - At 25 min: Should be around slide 33-34 (Where is Vite / Environment API)
+   - At 30 min: Should be at or past slide 44 (Coverage V8 or Key Takeaways)
+
+5. **Adjustment strategies if running long:**
+   - Skip coverage section entirely (slides 41-44) - saves 2.5 min
+   - Compress isolation example (slide 17) - saves 30 sec
+   - Speed through reporter examples (slides 30-32) - saves 30 sec
+   - Faster pool architecture explanation (slides 12-15) - saves 1 min
+
+6. **Adjustment strategies if running short:**
+   - Expand coverage with more details on Istanbul vs V8
+   - Dive deeper into Task tree structure during collection
+   - Elaborate on birpc and communication patterns
+   - Add more context on module mocking implementation
+
 ### Pacing Guidelines
 - **Total: 33 minutes** with Q&A at the end
 - Speak clearly and deliberately, not too fast
