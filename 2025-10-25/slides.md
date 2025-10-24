@@ -445,6 +445,7 @@ it's mostly globing.
 packages: `vitest`, ~~`tinypool`~~
 
 - Spawn isolated runtime from main process and assign test files
+- `pool: "forks"`, `"threads"`, `"vmThreads"`, ... + Browser mode
 - The default is `pool: "forks"`
 
 ```ts
@@ -550,7 +551,7 @@ layout: two-cols
 layoutClass: gap-4
 ---
 
-# Isolation example
+# `isolate: false`
 
 - Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
 
@@ -782,6 +783,12 @@ test('b', () => {      // --> skip ❌
 test('c', () => {      // --> run ✅
   expect(3).toBe(3)
 })
+```
+
+- Should filter by the test file as CLI argument:
+
+```sh
+$ vitest one.test.ts # => runs only 'a'
 ```
 
 ---
