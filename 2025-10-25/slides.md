@@ -1138,6 +1138,7 @@ Here, we review how main process get notified about test collection and executio
 # Reporter API
 
 - Conveniently normalized data structure `TestModule` is provided instead of raw `Task` tree structure.
+- Buildin reporters: `default`, `tree`, `dot`, `github-actions`, `json`, `junit`, `tap`, ...
 - https://vitest.dev/advanced/api/reporters.html
 
 <div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 1.4;">
@@ -1188,13 +1189,25 @@ Vitest normalizes them into more convenient form for reporter implementation.
 
 ---
 
-# Example: Github Action Reporter
+# Example: Github Actions Reporter
 
 <img src="/lifecycle-github-actions-reporter.png" class="w-[65%] mx-auto" />
 
 <!-- 
 https://github.com/hi-ogawa/talks/pull/1/commits/00618544d031f72ddc0f919b86730e2e26c9584e
  -->
+
+---
+
+# Test Lifecycle
+
+<div>
+
+Orchestration → Collection → Execution → Reporting
+
+**Done! ✅**
+
+</div>
 
 ---
 
