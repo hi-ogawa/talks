@@ -915,16 +915,14 @@ Here, we review how main process get notified about test collection and executio
 
 ---
 
-# Runtime communication (TODO)
+# Runtime communication
 
-packages: `birpc`
+- [birpc](https://github.com/antfu-collective/birpc) - runtime agnostic typed two-way rpc library
+- `node:child_process / fork`: `process.send`, `process.on("message")`
+- `node:worker_threads / Worker`: `parentPort.postMessage`, `parentPort.on("message")`
+- **Browser mode**: `Websocket`
 
-- birpc (runtime agnostic bidirectional rpc library)
-<!-- - `onCancel` -->
-- `child_process`: IPC (inter process communication)
-- `worker_threads:` MessageChannel?
-- Browser mode -> Websocket, BroadcastChannel
-<!-- - UI mode?  -->
+<img src="/birpc-on-cancel.png" class="w-[75%] mx-auto" />
 
 ---
 
