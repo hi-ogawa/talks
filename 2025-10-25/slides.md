@@ -503,7 +503,11 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 - No isolation (`vitest --no-isolate` or `isolate: false`)
 
+<v-click>
+
 <img src="/test-runner-orchestration-no-isolate.png" class="w-[90%] mx-auto" />
+
+</v-click>
 
 ---
 
@@ -513,8 +517,8 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
   - `forks` as default as it's closest to how the code is actually used.
 - `isolate: false` to opt-out from isolation
   - Reusing existing child process / worker thread can save time to spawn for each test file.
-    Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
   - This mode still allows splitting multiple test files into multiple pools for parallelization to benefit multiple CPUs.
+  - Cons: Each test file can affect each other and non deterministic behavior is easier to manifest.
 - Docs [Improving Performance](https://vitest.dev/guide/improving-performance.html)
 
 <div class="h-4" />
@@ -543,6 +547,10 @@ layoutClass: gap-4
 
 # Isolation example
 
+- Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
+
+<v-click>
+
 ```ts
 // [add.test.ts]
 import { test } from "vitest"
@@ -565,9 +573,15 @@ console.log("[shared.ts evaluated]")
 export const shared = "shared";
 ```
 
+</v-click>
+
 ::right::
 
+<v-click>
+
 ![alt text](/isolation-example.png)
+
+</v-click>
 
 <!-- 
 This also shows a trade off of `isolate: false`
@@ -591,6 +605,8 @@ Orchestration → 👉 **Collection** → Execution → Reporting
 - Main process only knows about test files.
 - Execute **test files** to discover **test cases**
 
+<v-click>
+
 ```sh
 $ vitest list --json
 [
@@ -613,11 +629,15 @@ $ vitest list --json
   ...
 ```
 
+</v-click>
+
 ---
 
 # Creating `Task` tree
 
 package: `@vitest/runner`
+
+- `describe()` → `Suite`, `test()` → `Test`
 
 <div>
 
@@ -664,7 +684,7 @@ File(name: add.test.ts)
 
 <div v-click="6">
 
-<span class="text-sm">
+<span class="text-[16px]">
 This phase often takes time since it involves executing import statements
 and evaluating dependency modules.
 </span>
