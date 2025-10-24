@@ -411,13 +411,16 @@ Not spawning new process for each test file, but limited based on available cpu.
 
 # Test orchestration
 
-- `pool: "threads"`
-
 ```js
+// [pool: "threads"]
 import { Worker } from 'node:worker_threads'
 ```
 
-<img src="/test-runner-orchestration-threads.png" class="w-[80%] mx-auto" />
+- Light weight compared to child process, however:
+  - "less stable" (e.g. Native module / Node-API library compatibility - [Common Errors](https://vitest.dev/guide/common-errors.html))
+  - `process.chdir(...)` is not available.
+
+<img src="/test-runner-orchestration-threads.png" class="w-[70%] mx-auto" />
 
 ---
 
@@ -441,8 +444,8 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 # About isolation and pool
 
-- `pool: "forks"`, `"threads"`, `"vmThreads"`
-  - `forks` as default for stability
+- Trade-off between `pool: "forks"`, `"threads"`, `"vmThreads"`
+  - `forks` as default as it's closest to how the code is actually used.
 - `isolate: false` to opt-out from isolation
   - Reusing existing child process / worker thread can save time to spawn for each test file.
     Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
