@@ -920,9 +920,15 @@ Here, we review how main process get notified about test collection and executio
 - [birpc](https://github.com/antfu-collective/birpc) - runtime agnostic typed two-way rpc library
 - `node:child_process / fork`: `process.send`, `process.on("message")`
 - `node:worker_threads / Worker`: `parentPort.postMessage`, `parentPort.on("message")`
-- **Browser mode**: `Websocket`
+- Browser mode: `Websocket`
 
-<img src="/birpc-on-cancel.png" class="w-[75%] mx-auto" />
+<v-click>
+
+- Support sending events from main process to test runner (e.g. gracefully abort tests on Control+C)
+
+<img src="/birpc-on-cancel.png" class="w-[70%] mx-auto" />
+
+</v-click>
 
 ---
 
