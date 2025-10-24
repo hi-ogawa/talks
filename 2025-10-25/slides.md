@@ -814,11 +814,11 @@ layout: two-cols
 layoutClass: gap-4
 ---
 
-# Executing `Test`
+# Test API
 
-- Comprehensive Test API to further control how tests are run
+- Comprehensive API to further control how tests are run
 
-```js
+```js {*|1,3,6|5|8,10|12|*}
 beforeAll(() => ...)
 
 afterEach(() => ...)
@@ -865,8 +865,6 @@ File
 ```
 
 ---
-hide: true
----
 
 # `expect` API
 
@@ -898,6 +896,14 @@ expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 
 <!-- TODO: sample chai extension system (next slide?) -->
 <!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
+
+---
+
+# `expect.soft`
+
+Test runner aware assertion
+
+- TODO
 
 ---
 hide: true
