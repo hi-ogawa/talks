@@ -465,16 +465,21 @@ Not spawning new process for each test file, but limited based on available cpu.
 
 # Test orchestration
 
+- `pool: "threads"`
+
 ```js
-// [pool: "threads"]
 import { Worker } from 'node:worker_threads'
 ```
 
+<v-click>
+
 - Light weight compared to child process, however:
-  - "less stable" (e.g. Native module / Node-API library compatibility - [Common Errors](https://vitest.dev/guide/common-errors.html))
   - `process.chdir(...)` is not available.
+  - "less stable" (e.g. Native module / Node-API library compatibility - [Common Errors](https://vitest.dev/guide/common-errors.html))
 
 <img src="/test-runner-orchestration-threads.png" class="w-[70%] mx-auto" />
+
+</v-click>
 
 ---
 
@@ -484,7 +489,11 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 - Browser Mode
 
+<v-click>
+
 <img src="/test-runner-orchestration-browser-mode.png" class="w-[90%] mx-auto" />
+
+</v-click>
 
 ---
 
