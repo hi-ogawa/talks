@@ -523,9 +523,30 @@ Orchestration → 👉 **Collection** → Execution → Reporting
 
 # Collecting tests
 
-- Execute **test files** to collect **test cases**
 - Main process only knows about test files.
-- Let test runner discover test cases as it executes each test file.
+- Execute **test files** to discover **test cases**
+
+```sh
+$ vitest list --json
+[
+  {
+    "name": "named exports overwrite export all",
+    "file": "/xxx/vite/packages/vite/src/node/ssr/__tests__/ssrLoadModule.spec.ts"
+  },
+  {
+    "name": "buildStart before transform",
+    "file": "/xxx/vite/packages/vite/src/node/ssr/__tests__/ssrLoadModule.spec.ts"
+  },
+  {
+    "name": "module runner initialization > correctly runs ssr code",
+    "file": "/xxx/vite/packages/vite/src/node/ssr/runtime/__tests__/server-runtime.spec.ts"
+  },
+  {
+    "name": "mergeConfig > handles configs with different alias schemas",
+    "file": "/xxx/vite/packages/vite/src/node/__tests__/config.spec.ts"
+  },
+  ...
+```
 
 ---
 
