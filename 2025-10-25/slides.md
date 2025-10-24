@@ -9,6 +9,12 @@ transition: slide-left
 # Inside Vitest <logos-vitest />
 ## Test Framework Architecture Deep Dive
 
+<!--
+こんにちは。
+Inside Vitest というタイトルで本日は、Vitestの内部構造について紹介していきます。
+よろしくお願いします。
+-->
+
 ---
 layout: two-cols
 ---
@@ -31,6 +37,14 @@ https://github.com/vitest-dev/vitest/pull/4396
 ::right::
 
 <img src="/avatar.jpeg" class="w-60 mx-auto mt-10 rounded-full" />
+
+<!--
+初めに、簡単な自己紹介です。
+おがわひろしと申します。hi-ogawaというusernameとこんなavatarでgithubでopen sourceの活動をしています。
+今はViteとVitestのcore team memberとしてvoidzeroで働いています。
+backgroundとしては、javascript fullstack developerでReact frontendを使ってたのですが、そこからSSRに興味があってViteのmeta frameworkを探りはじめたのがきっかけです。
+今では、若干その延長もあり、ViteでReact server componentを使うことが出来るようにするための、@vitejs/plugin-rscというViteのofficial packageを作ってmaintenanceしています。
+-->
 
 ---
 layout: two-cols
@@ -76,14 +90,10 @@ describe('optimizer-scan:script-test', () => {
 </v-click>
 
 <!--
-TODO: find a simpler more obvious example?
-
-This is one unit test case from Vite.
-https://github.com/vitejs/vite/blob/main/packages/vite/src/node/__tests__/scan.spec.ts.
-
-You see hopefully familiar Test API like `describe`, `test`, `expect`.
-(jasmine, mocha, jest, playwright, deno, bun).
-Output on the right is what you see when you run `vitest` command.
+簡単にVitestを何か、というイントロです。
+このtestは実はViteのrepositoryから持ってきたものなのですが、あんまり関係なくて、基本的に注目したいのは、まずjavascript ecosystemでは未慣れのある、describe, test, expectというAPIを元にtestを書いていますとうことですね。
+あと、もちろんvitestはcliを提供してて、testの結果をざらっと表示してくれます。
+これは、Vitestを使ってない方で、他のmocha, jest, playwrightまたはnode, bunのnative test runnerなどを使ってるかたでも同じ仕組みや流れですね。
 -->
 
 ---
@@ -148,22 +158,15 @@ test('Hello', () => {
 </v-click>
 
 <!--
-mention
-- same transform pipeline -> import("xxx?raw"), import.meta.glob
-- mention Vitest itself supports powerful customization and programmatic API e.g. Cloudflare pool, storybook, ...
-  vscode extension
+簡単にfeatureをlistしていくと、まず、Jestと互換性のあるAPIだったり、同等のtest frameworkとしての機能を提供しています。
 
-While there are certain Vite features Vitest relies on,
-there are other parts which are independent from Vite.
-The talk covers overall test framework feature implementation.
-Vite and Vitest unique features are explained as they come up.
+また、Jestと比べた利点としては、modern javascriptの標準であるESM / typescriptをzero configでsupportしています。
 
-Compared to others:
-- Jest
-  - fragmented transform configuration (babel)
+さらに、拡張性として、Vite plugin ecosystemをそのまま使いまわせることも利点です。
 
-https://github.com/vitest-dev/vitest-browser-vue 
-https://vuejs.org/guide/scaling-up/testing.html#mounting-libraries 
+そして、Vitest独自の特徴としては、runtime agnosticと言うのがあげられます。従来では "test file" は node や server runtime 自体で実行し、UI unit testingもjsdom/happy-domというnode上でのdomのsimulationが当然でしたが、Vitest browser modeはVite / Vitestのruntime agnosticな設計を発展させ、"test"自体をbrowserで実行することを可能にしました。
+
+また、もう一つ強調したい特徴として、Vite pluginをもとにした拡張性だけでなく、Vitest自体がlow levelなAPIを多く提供し、Vitestのdownstream projectのecosystemを構築してきています。例としては、StorybookやCloudflareが挙げられます。 Cloudflareはruntime agnosticの例として、Cloudflare workersというruntimeの上でtestを実行するpackageを提供しています。
 -->
 
 ---
