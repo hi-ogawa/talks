@@ -850,7 +850,7 @@ Orchestration → Collection → 👉 **Execution** → Reporting
 </div>
 
 <!--
-それでは3番目のstepとして、やっとtestを実行して、assertionをcheckします。
+それでは3番目のstepとして、やっとtest caseを実行して、assertionをcheckします。
 -->
 
 ---
