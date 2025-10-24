@@ -350,7 +350,7 @@ test("mul", () => {
 </v-click>
 
 <!--
-それでは、まず４stepsに分けてお話しする前提として、この様な簡単な二つのtest filesを用います。
+それでは、まずtest lifecycleを４stepsに分けてお話しする前提として、この様な簡単な二つのtest filesを用います。
 
 実際に実行して、最終的なreportはこの様になるという流れを見ていきましょう。
 -->
@@ -637,6 +637,10 @@ Orchestration → 👉 **Collection** → Execution → Reporting
 
 </div>
 
+<!--
+ここまでをもって、1つめのstep Orchestrationの説明として、次にcollectionのstepに移って行きます。
+-->
+
 ---
 
 # Collecting tests
@@ -669,6 +673,14 @@ $ vitest list --json
 ```
 
 </v-click>
+
+<!--
+この2番目のstepは何かと言うと、まずここまでではtest filesまでしか把握していません。
+
+ここから、実際にtest fileを実行してその中に書かれているtest casesは何かということを見つけて行きます。これをTest collection stepと呼びます。
+
+あまり知られてないかもしれませんが、この部分までを実行した結果のみを、vitest listというcommandは提供してます。
+-->
 
 ---
 
@@ -741,23 +753,19 @@ and evaluating dependency modules.
 
 </div>
 
-<!-- 
+<!--
+Test collectionで具体的に何をするのかというと、いわゆるTest APIといわれている`describe`や`test`というfunctionをもとに、`Task` tree structureを構築する事と考えられます。
 
-packages/runner/src/collect.ts
-packages/runner/src/run.ts
-interfaces packages/runner/src/types/tasks.ts
+実際に`@vitest/runner`という内部のpackageはこのdefinitionを受け持っていて、たとえば右にある、`Task`というunion typeが定義されています。
 
-Regardless of isolation mode, inside each worker test files are executed sequentially.
-Here we follow collecting test cases in `add.test.ts`.
+これがどのように構築されるかということを、この左側にある test fileを元に説明すると、describe/test functionが実行されるに連れて、右側のようなfile/suite/testのtree structureになります。
 
-`describe`, `test` also corresponding `Task` types are implemented in `@vitest/runner` package.
+このtreeのleafに当たる部分がtest caseに当たるわけで、重要なポイントとしては、このstepではexpectなどとTest assertionが書かれている、closureの部分は実行されてなく、testの結果もまだundefinedです。
 
-As the right, corresponding tree structure on test runner side after collection.
+しかし、ここまでtest fileを実行する時点で、test fileの上に書かれている、importなどを全部実行されているので、testで使われているdependencyが実行されるstepになります。
 
-While this is not the part test functions are executed,
-this is often the slow part since any top level import statements are executed 
-and thus entire module graph is evaluated during this phase.
- -->
+なので、test 結果が決まってないつつも、このstepがもっとも遅いstepとしてVitestの最後のduration statisticsに乗ることがよくあります。
+-->
 
 ---
 hide: true
