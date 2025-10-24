@@ -300,12 +300,14 @@ reference https://npmgraph.js.org/?q=vitest%40beta
 
 ---
 layout: two-cols
-layoutClass: gap-8
+layoutClass: gap-4
 ---
 
 # Test Lifecycle
 
 Example test run
+
+<v-click>
 
 ```ts
 // [add.test.ts]
@@ -334,11 +336,17 @@ test("mul", () => {
 })
 ```
 
+</v-click>
+
 ::right::
 
-<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
+<v-click>
+
+<div style="--slidev-code-font-size: 9px; --slidev-code-line-height: 0px;">
 <<< @/snippets/lifecycle.ansi
 </div>
+
+</v-click>
 
 ---
 
