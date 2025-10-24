@@ -817,6 +817,76 @@ TODO: go further. fixture, hooks, timeout, retry, concurrent.
 TODO: some `expect` example which is integrated with test runner `expect.poll/soft`?
 
 ---
+hide: true
+---
+
+# `expect` API
+
+packages: `@vitest/expect`, `@vitest/pretty-format`
+
+<!-- TODO: jest icon, chai icon -->
+
+- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
+  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
+  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
+  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
+  <!-- TODO: License from Jest, Jasmine, Underscore -->
+
+```ts
+import { expect } from 'vitest'
+expect("Vitest").to.be.a('string') // Chai API
+expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
+```
+
+- Usable as standalone pure assertion library: `toEqual`, ...
+- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
+  - `expect.soft(...)` (accumulate errors within a test case)
+  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
+  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
+  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
+  - `toMatchSnapshot` (snapshot testing)
+  <!--  -->
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+
+<!-- TODO: sample chai extension system (next slide?) -->
+<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
+
+---
+hide: true
+---
+
+# Snapshot testing
+
+`@vitest/snapshot`, `@vitest/pretty-format`
+
+- Test framework agnostic logic lives in `@vitest/snapshot` package
+  <!-- Used by webdriverio, rstest -->
+  - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
+  <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
+  - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
+  <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
+- Some logic is coupled to Vitest's test runner
+  - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
+  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+  - Coordinate `SnapshotClient` within test lifecycle, e.g.
+    <!-- packages/vitest/src/runtime/runners/test.ts -->
+    - `VitestRunner.onBeforeRunSuite` -> `SnapshotClient.setup`
+    - `VitestRunner.onAfterRunSuite` -> `SnapshotClient.finish`
+    <!-- also on each test retry, the previous snapshot failure needs to be reset -->
+    <!-- saving snapshot files needs to be done after all `toMatchInlineSnapshot` inside one test file are finished -->
+- Printing logic is implemented in `@vitest/pretty-format` package
+  - Customizable via `expect.addSnapshotSerializer`
+
+```ts
+import { expect } from 'vitest'
+expect({ name: 'Vitest' }).toMatchInlineSnapshot()
+```
+
+<!--
+TODO: sample snapshot inline / file
+-->
+
+---
 
 # Test Lifecycle
 
@@ -830,8 +900,6 @@ Orchestration → Collection → Execution → 👉 **Reporting**
 
 # Reporting results
 
-packages: `birpc`
-
 - `onCollected(files: File[])` notify collected `Task` tree
 - `onTaskUpdate(pack: { id, result }[], ...)` notify test status incrementally in batch
 - `onConsoleLog(log: ConsoleLog)` notify captured console logs during test run
@@ -844,6 +912,19 @@ but actually, main process is aware of the all those activities and reports the 
 As said previously, main process only knows about test files.
 Here, we review how main process get notified about test collection and execution progress from test runner side.
  -->
+
+---
+
+# Runtime communication (TODO)
+
+packages: `birpc`
+
+- birpc (runtime agnostic bidirectional rpc library)
+<!-- - `onCancel` -->
+- `child_process`: IPC (inter process communication)
+- `worker_threads:` MessageChannel?
+- Browser mode -> Websocket, BroadcastChannel
+<!-- - UI mode?  -->
 
 ---
 
@@ -1225,96 +1306,6 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
   (0,__vite_ssr_import_0__.expect)(__vi_import_0__.add(1, 2)).toBe(42);
 })
 ```
-
----
-hide: true
----
-
-# `expect` API
-
-packages: `@vitest/expect`, `@vitest/pretty-format`
-
-<!-- TODO: jest icon, chai icon -->
-
-- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
-  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
-  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
-  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
-  <!-- TODO: License from Jest, Jasmine, Underscore -->
-
-```ts
-import { expect } from 'vitest'
-expect("Vitest").to.be.a('string') // Chai API
-expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
-```
-
-- Usable as standalone pure assertion library: `toEqual`, ...
-- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
-  - `expect.soft(...)` (accumulate errors within a test case)
-  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
-  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
-  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
-  - `toMatchSnapshot` (snapshot testing)
-  <!--  -->
-  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
-
-<!-- TODO: sample chai extension system (next slide?) -->
-<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
-
----
-hide: true
----
-
-# Snapshot testing
-
-`@vitest/snapshot`, `@vitest/pretty-format`
-
-- Test framework agnostic logic lives in `@vitest/snapshot` package
-  <!-- Used by webdriverio, rstest -->
-  - `SnapshotClient.setup/assert/finish` (lower level API for snapshot assertion and state management)
-  <!-- e.g. finding where to update inline snapshot by parsing stacktrace with a hand coded regex -->
-  - `SnapshotEnvironment.readSnapshotFile/saveSnapshotFile` (interface to decouple runtime)
-  <!-- for example, this is implemented as RPC which works across Node.js and Browser -->
-- Some logic is coupled to Vitest's test runner
-  - `SnapshotClient.assert` as chai plugin `toMatchSnapshot`, `toMatchInlineSnapshot` 
-  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
-  - Coordinate `SnapshotClient` within test lifecycle, e.g.
-    <!-- packages/vitest/src/runtime/runners/test.ts -->
-    - `VitestRunner.onBeforeRunSuite` -> `SnapshotClient.setup`
-    - `VitestRunner.onAfterRunSuite` -> `SnapshotClient.finish`
-    <!-- also on each test retry, the previous snapshot failure needs to be reset -->
-    <!-- saving snapshot files needs to be done after all `toMatchInlineSnapshot` inside one test file are finished -->
-- Printing logic is implemented in `@vitest/pretty-format` package
-  - Customizable via `expect.addSnapshotSerializer`
-
-```ts
-import { expect } from 'vitest'
-expect({ name: 'Vitest' }).toMatchInlineSnapshot()
-```
-
-<!--
-TODO: sample snapshot inline / file
--->
-
----
-hide: true
----
-
-# Client-Server Communication
-
-- birpc (runtime agnostic bidirectional rpc library)
-- `child_process`: IPC (inter process communication)
-- `worker_threads:` MessageChannel?
-- Browser mode -> Websocket, BroadcastChannel
-<!-- - UI mode?  -->
-
----
-hide: true
----
-
-# Reporter API
-
-TODO
 
 ---
 layout: two-cols
