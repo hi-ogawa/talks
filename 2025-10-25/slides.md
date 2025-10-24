@@ -241,12 +241,10 @@ Code自体はtesting-libraryで提供されたものと似たAPIがあり、そ�
 
 <img src="/vitest4.png" class="h-[65%] mt-10 mx-auto" />
 
-<!-- 
-- Vitest 4 is just released on 10/23
-- Browser mode stable with visual regression, tracing etc..
-- Pool system rewrite
-- Checkout the blog post and Vladimir's ViteConf talk on Youtube!
- -->
+<!--
+ここで本題に入る前に、お伝えしたい事があって、Vitest 4がちょうど今週releaseされましたので、Vitestを使っている方はupgradeしてみたいくださいというお知らせです。
+このtalkではVitest 4でのchangeやfeatureについてはお話ししませんが、興味ある方は、Blog, documentation, そしてVladimirのViteConfのtalkをご覧ください。
+-->
 
 ---
 
