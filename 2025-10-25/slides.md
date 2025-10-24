@@ -41,10 +41,11 @@ layoutClass: gap-8
 
 Testing framework
 
-```tsx {1,3,6,9,14-15,19-20}
+
+```tsx {1|1,3,6,9,14-15,19-20}
 // packages/vite/src/node/__tests__/scan.spec.ts
 import path from 'node:path'
-import { describe, expect, test } from 'vitest'
+import { describe, test, expect } from 'vitest'
 import { commentRE, } from '../optimizer/scan'
 
 describe('optimizer-scan:script-test', () => {
@@ -66,9 +67,13 @@ describe('optimizer-scan:script-test', () => {
 
 ::right::
 
+<v-click>
+
 <div style="--slidev-code-font-size: 9px; --slidev-code-line-height: 0px;">
 <<< @/snippets/vite-unit-test.ansi
 </div>
+
+</v-click>
 
 <!--
 TODO: find a simpler more obvious example?
@@ -89,6 +94,8 @@ layout: two-cols
 
 Features
 
+<v-clicks>
+
 - Jest-compatible API and feature set
   - `describe`, `test`, `expect`, ...
   - mocking, snapshot, coverage, ...
@@ -100,10 +107,15 @@ Features
   - Node.js, Browser Mode, Cloudflare Workers
 - Advanced API and Programmatic API
   - Powerful customization to serve ecosystem
+    (Storybook, VSCode extension, Cloudflare, ...)
+
+</v-clicks>
 
 ::right::
 
 <div class="h-8" />
+
+<v-click at="1">
 
 ```ts
 // [add.test.ts]
@@ -115,7 +127,11 @@ test('add', () => {
 })
 ```
 
+</v-click>
+
 <div class="h-2" />
+
+<v-click at="3">
 
 ```ts
 // [Hello.test.ts]
@@ -128,6 +144,8 @@ test('Hello', () => {
   expect(wrapper.text()).toContain('Hello')
 })
 ```
+
+</v-click>
 
 <!--
 mention
@@ -157,7 +175,9 @@ layoutClass: gap-4
 
 Runtime agnostic ⟶ Browser Mode
 
-<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
+<div style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0px;">
+
+<v-click>
 
 ```ts
 // [Hello.test.ts]
@@ -190,13 +210,19 @@ export default defineConfig({
 })
 ```
 
+</v-click>
+
 </div>
 
 ::right::
 
 <div class="h-8" />
 
+<v-click>
+
 ![alt text](/browser-mode-ui.png)
+
+</v-click>
 
 <!-- 
 The same code from previous slide.
@@ -229,11 +255,14 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 This talk follows the **test lifecycle** to explore Vitest architecture:
 - Orchestration → Collection → Execution → Reporting
 
+<v-click>
+
 Along the way, we'll explore:
-- Which parts are **general test framework** implementation
 - How **Vite** powers test runtime (ModuleRunner, Browser mode, transform, etc.)
 - How each **package** divide responsibilities
   - `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
+
+</v-click>
 
 <!--
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)

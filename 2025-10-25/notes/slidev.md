@@ -4,3 +4,6 @@
 - output terminal recording
   - `script -q -c "your-command" snippets/output.ansi`
   - `script -q -c "pnpm test" test.ansi`
+- presenter mode https://sli.dev/guide/ui#presenter-mode
+  - http://localhost:3030 fullscreen F11
+  - http://localhost:3030/presenter
