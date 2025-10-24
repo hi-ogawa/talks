@@ -367,9 +367,12 @@ layoutClass: gap-4
 
 Find test files to run
 
-- Configuration
+<v-click>
 
-```ts
+- Configuration
+  - `vite.config.ts`, `vitest.config.ts`
+
+```ts [vitest.config.ts]
 export default defineConfig({
   test: {
     include: ["**/*.test.ts"],
@@ -387,9 +390,13 @@ export default defineConfig({
 })
 ```
 
+</v-click>
+
 ::right::
 
 <div class="h-14" />
+
+<v-click>
 
 - CLI arguments to overrides
 
@@ -398,6 +405,10 @@ vitest src/add.test.ts src/dir/ # glob file pattern
 vitest --project=unit # filter projects
 vitest --shard=1/3 # parallelize across multiple machines
 ```
+
+</v-click>
+
+<v-click>
 
 <div class="text-center my-2">↓</div>
 
@@ -413,6 +424,8 @@ pool.runTests([
   }
 ])
 ```
+
+</v-click>
 
 <!-- 
 First Vitest needs to search for test files.
@@ -433,7 +446,11 @@ packages: `vitest`, ~~`tinypool`~~
 import { fork } from "node:child_process"
 ```
 
+<v-click>
+
 <img src="/test-runner-orchestration.png" class="w-[70%] mx-auto" />
+
+</v-click>
 
 <!-- 
 This is the default mode `pool: "forks"`.
