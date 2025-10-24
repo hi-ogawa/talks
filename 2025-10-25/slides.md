@@ -579,6 +579,7 @@ export default defineConfig({
 ---
 layout: two-cols
 layoutClass: gap-4
+hide: true
 ---
 
 # `isolate: false`
@@ -801,6 +802,8 @@ $ vitest --fileParallelism=false
 ```
 
 ---
+hide: true
+---
 
 # Filtering `Task` to run
 
@@ -957,6 +960,7 @@ File(name: add.test.ts)
 ---
 layout: two-cols
 layoutClass: gap-4
+hide: true
 ---
 
 # Test API
@@ -1013,6 +1017,8 @@ File
 簡単な例の他にも、実際には, before/after hooksだったり複数のtest functionをPromise.allで実行するdescribe.concurrentだったりと、もっと詳細にtest実行の過程を設定するAPIがあります。でこういった情報が同じようにtree structureに記録されています。
 -->
 
+---
+hide: true
 ---
 
 # `expect` API
@@ -1074,6 +1080,8 @@ AssertionError {
 ...
 -->
 
+---
+hide: true
 ---
 
 # Test runner aware assertions
@@ -1381,6 +1389,7 @@ VitestがVite environment APIをずっと使ってかのように話しました
 ---
 layout: two-cols
 layoutClass: gap-4
+hide: true
 ---
 
 # SSR / Client environment
@@ -1451,6 +1460,7 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
 ---
 layout: two-cols
 layoutClass: gap-4
+hide: true
 ---
 
 # Test runner
