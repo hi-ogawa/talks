@@ -524,6 +524,11 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 </v-click>
 
+<!--
+それでは、Browser modeはどうなのかというと、まずplaywrightなどを利用して、browserを立ち上げます。
+そしてtest fileごとのruntimeとしては、iframeを利用し、browserのpageを立ち上げるoverheadを最小限にするようにしています。
+-->
+
 ---
 
 # Test orchestration
