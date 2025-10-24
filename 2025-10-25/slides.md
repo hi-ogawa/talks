@@ -270,17 +270,13 @@ And finally we learn how **Vite** powers Vitest as a foundation:
 </v-click>
 
 <!--
-@vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
-@vitest/runner -> managing test case hierarchy and execution (`describe`, `test`, timeout, retry)
-vitest, tinypool, birpc -> test orchestration, reporter, etc.
-vite, vite/module-runner -> Javascript runtime with custom transform
-@vitest/mocker -> Module mocking `vi.mock("", () => {})`
-@vitest/coverage-v8, @vitest/coverage-istanbul -> coverage collection and reporting
-@vitest/browser
-@vitest/spy
+それでは本題です。
 
-mention:
-  Vite environment API
+このトークでは、前半に、一般のTest lifecycleを四つのstep, orchestration, collection, execution, reportingに分けて、紹介していきます。
+
+またこれを追っていく中で、どのようにVitestのmonorepo packagesが責任分担をしているのかもお話ししていきます。
+
+前半では、Viteに関わる部分に言及しませんが、後半では、実際にtestに関わる部分で、どのようにVitestがViteの機能を利用しているのかを説明していきます。
 -->
 
 ---
