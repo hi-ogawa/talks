@@ -878,8 +878,8 @@ expect("Vitest").to.be.a('string') // Chai API
 expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 ```
 
-- `@vitest/expect`: usable as standalone assertion library (TODO: verify)
-- Error message formatting is implemented by post processing caught errors.
+- `@vitest/expect`: usable as standalone assertion library
+- Error message formatting is implemented by post processing caught errors on test runner.
 
 <div class="flex gap-4" style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0;">
 

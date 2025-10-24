@@ -1,11 +1,14 @@
 {
-  "name": "@vitest/example-basic",
+  "name": "@vitest/example-expect",
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "vitest"
+    "test": "node example.js"
   },
   "devDependencies": {
-    "@vitest/expect": "beta"
+    "@types/chai": "^5.2.3",
+    "@types/node": "^24.9.1",
+    "@vitest/expect": "beta",
+    "chai": "^6.2.0"
   }
 }
