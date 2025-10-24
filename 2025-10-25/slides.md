@@ -541,6 +541,14 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 </v-click>
 
+<!--
+ここまでtest fileが隔離されたruntimeという設定でしたが、実はVitestは"isolate"というoptionからこれを変更することが実は出来ます。
+
+diagramだとこの様になって、child processを一つで済ませて、そこで複数のtest filesを実行することできるようになっています。
+
+このdiagramだとこのisolate: falseでparallelismを失ってしまうかの用に見えるんですが、実際にこれは嘘で、cpuがあればあるだけのchild processを使います。違いは、一つのtest fileが実行し終わった後、そのchild processをkillすることなく、それを次のtest fileに使いまわすということです。
+-->
+
 ---
 
 # About isolation and pool
@@ -564,13 +572,9 @@ export default defineConfig({
 })
 ```
 
-<!-- 
-Initially `threads` was the default.
-However, we continued to receive issue of worker threads, which often resolved by switching to `forks`.
-process.chdir is available only with child_process.
-While `isolate: false` is considered faster, test files execution order can affect each other and non deterministic behavior can manifest.
-Test execution is always isolated from main process.
- -->
+<!--
+ここまでで、poolやisolateの設定の違いを話しましたが、vitestの思いとしては、project case by caseで一番適したものを選択して欲しいと思っています。Vitestのdefaultとしては、forks + isolationを一番stableな設定としていますが、他のoptionsのlimitationをprojectやtestの対象によっては気にする必要がないこともあります。是非defaultではないoptionも試してtest performanceの改善するか見てみてください。この事については、documentationでも言及しています。
+-->
 
 ---
 layout: two-cols
@@ -615,10 +619,13 @@ export const shared = "shared";
 
 </v-click>
 
-<!-- 
-This also shows a trade off of `isolate: false`
-where it doesn't execute `add.test.ts` and `mul.test.ts` in parallel.
- -->
+<!--
+ここで、さらに (isolate: false)について、module evalutionという観点から説明すると、trade offがより見えて来ると思います。
+
+ここでは、二つのtest filesが同じmoduleをimportしています。
+
+(isolate: true) の場合、このshared moduleもそれぞれのruntimeで別々に実行されるますが、(isolate: false)では複数のtest filesがmodule graphを共有することで、shared moduleの実行を最小限にすることが可能です。
+-->
 
 ---
 
