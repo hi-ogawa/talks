@@ -1586,7 +1586,6 @@ packages: `@vitest/coverage-istanbul`, `@vitest/coverage-v8`, `ast-v8-to-istanbu
 - Official coverage providers:
   - `v8`: [V8 engine](https://v8.dev/)'s built-in coverage tracking
   - `istanbul`: custom transform injects code to count each function call and branch hit
-- Coverage aggregation / reporting is powered by Istanbul ecosystem tooling for both providers.
 - [Getting Started with Vitest Code Coverage (ViteConf 2024)](https://www.youtube.com/watch?v=UOdgx2Mm3X8) by Ari Perkkiö <a href="https://twitter.com/AriPerkkio" target="_blank">@AriPerkkio <ri-github-fill /></a>
 
 <div class="h-2" />
@@ -1670,6 +1669,7 @@ globalThis.__VITEST_COVERAGE__[filename] = __cov_xyz
 - **V8**: Coverage raw data provided by the V8 runtime. No custom transform is needed.
   However, the post processing requires accurate source map through the whole Vite transform pipeline.
   - `DevEnvironment.transformRequest(file) -> { code: string; map: SourceMap }`
+- Coverage aggregation / reporting is powered by Istanbul ecosystem tooling.
 
 <div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0;">
 
@@ -1696,7 +1696,7 @@ const coverage = await session.post('Profiler.takePreciseCoverage')
         "ranges": [
           { "startOffset": 0, "endOffset": 150, "count": 1 },
           { "startOffset": 20, "endOffset": 50, "count": 1 },
-          ...i
+          ...
         ],
       }
     ]
