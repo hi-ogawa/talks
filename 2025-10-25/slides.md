@@ -1306,9 +1306,8 @@ const msg = ref('Hello World!')
 
 <div style="--slidev-code-font-size: 12px; --slidev-code-line-height: 0px;">
 
-```js {1,5-14}
+```js {1,4-13}
 // [client transform]
-...
 const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } }
 ...
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
@@ -1324,9 +1323,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 ...
 ```
 
-```js {1,5-12}
+```js {1,4-11}
 // [ssr transform]
-...
 const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } };
 ...
 function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $options) {
