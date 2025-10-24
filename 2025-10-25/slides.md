@@ -255,11 +255,19 @@ instead of simulated jsdom/happy-dom environment on NodeJs.
 This talk follows the **test lifecycle** to explore Vitest architecture:
 - Orchestration → Collection → Execution → Reporting
 
+<v-click>
+
 Along the way, we'll see how each package divide responsibilities:
 - `vitest`, `@vitest/runner`, `@vitest/browser`, `@vitest/expect`, ...
 
+</v-click>
+
+<v-click>
+
 And finally we learn how **Vite** powers Vitest as a foundation:
 - Environment API, Custom transform pipeline, ...
+
+</v-click>
 
 <!--
 @vitest/expect, @vitest/snapshot -> assertion API (`expect`, `toEqual`, `toMatchSnapshot`)
