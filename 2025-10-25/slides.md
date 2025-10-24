@@ -362,6 +362,20 @@ vitest --project=unit # filter projects
 vitest --shard=1/3 # parallelize across multiple machines
 ```
 
+<div class="text-center my-2">↓</div>
+
+```js
+pool.runTests([
+  {
+    project: ...,
+    moduleId: "/xxx/add.test.ts"
+  },
+  {
+    project: ...,
+    moduleId: "/xxx/mul.test.ts"
+  }
+])
+```
 
 <!-- 
 First Vitest needs to search for test files.
