@@ -1505,11 +1505,13 @@ import { add } from "./add"
 import { mul } from "./mul"
 
 vi.mock("./add.js") // auto-mocking
-vi.mock("./mul.js", () => ({ add: vi.fn(() => 42) })) // manual-mocking
+vi.mock("./mul.js", () => ({ mul: vi.fn(() => 42) })) // manual-mocking
 
 test("add", () => {
   expect(add(1, 2)).toBeUndefined()
+  expect(add).toHaveBeenCalled()
   expect(mul(2, 3)).toBe(42)
+  expect(mul).toHaveBeenCalled()
 })
 ```
 
