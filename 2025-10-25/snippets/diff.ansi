@@ -1,0 +1,6 @@
+[32m- Expected[39m
+[31m+ Received[39m
+[2m  {[22m
+[32m-   "name": "Jest",[39m
+[31m+   "name": "Vitest",[39m
+[2m  }[22m

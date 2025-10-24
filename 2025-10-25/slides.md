@@ -870,13 +870,7 @@ File
 
 packages: `@vitest/expect`, `@vitest/pretty-format`
 
-<!-- TODO: jest icon, chai icon -->
-
-- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system
-  - `toBe`, `toEqual`, `expect.extend`, `expect.any` ...
-  <!-- Including Jest's own extension system `expect.extend` (e.g. `expect.extend({ toBeFoo: ... })`) -->
-  <!-- Port of Jest `toEqual` implementation, which in turn is from [Jasmine](https://jasmine.github.io/) -->
-  <!-- TODO: License from Jest, Jasmine, Underscore -->
+- Jest's `expect` implemented as [Chai](https://www.chaijs.com) plugin system: `toEqual`, `expect.extend`, `expect.any` ...
 
 ```ts
 import { expect } from 'vitest'
@@ -884,26 +878,72 @@ expect("Vitest").to.be.a('string') // Chai API
 expect({ name: 'Vitest' }).not.toEqual({ name: 'Jest' }) // Jest API
 ```
 
-- Usable as standalone pure assertion library: `toEqual`, ...
-- Some `expect` methods API are coupled to Vitest runner/runtime and implemented outside of `@vitest/expect` package
-  - `expect.soft(...)` (accumulate errors within a test case)
-  - `expect.poll(() => ...)`, `expect().resolves/rejects` (async assertion)
-  <!-- Vitest can detect when assertion are not awaited (`.then` is called or not) at the end of test to provide a warning -->
-  <!-- packages/vitest/src/integrations/chai/pol.ts  -->
-  - `toMatchSnapshot` (snapshot testing)
-  <!--  -->
-  <!-- packages/vitest/src/integrations/snapshot/chai.ts -->
+- `@vitest/expect`: usable as standalone assertion library (TODO: verify)
+- Error message formatting is implemented by post processing caught errors.
 
-<!-- TODO: sample chai extension system (next slide?) -->
-<!-- TODO: object formatting and error diff. @vitest/pretty-format, (next slide?) -->
+<div class="flex gap-4" style="--slidev-code-font-size: 11px; --slidev-code-line-height: 0;">
+
+<div class="flex-1">
+
+```js [raw error object]
+AssertionError {
+  message: "expected { name: 'Vitest' } to deeply equal { name: 'Jest' }",
+  actual: { name: 'Vitest' },
+  expected: { name: 'Jest' },
+  ...
+}
+```
+
+</div>
+
+<div class="w-[40%]">
+
+```ansi [format actual/expected and generate diff]
+[32m- Expected[39m
+[31m+ Received[39m
+[2m  {[22m
+[32m-   "name": "Jest",[39m
+[31m+   "name": "Vitest",[39m
+[2m  }[22m
+```
+
+</div>
+
+</div>
 
 ---
 
-# `expect.soft`
+# Test runner aware assertions
 
-Test runner aware assertion
+- Some APIs are coupled to Vitest's test runner implementation
+  - `expect.soft`, `expect.poll`, `toMatchSnapshot`, ...
+- `expect.soft`: accumulate assertion errors until the test end without stopping execution
 
-- TODO
+```js
+test("...", () => {
+  // both errors are surfaced at the end of the test
+  expect.soft(1 + 1).toBe(3) // -> ❌ expected 2 to be 3
+  expect.soft(1 + 2).toBe(4) // -> ❌ expected 3 to be 4
+})
+```
+
+
+<!-- 
+
+packages/vitest/src/integrations/chai/poll.ts
+
+- toMatchSnapshot : snapshot
+
+- `expect.poll`: detect non `await`ed calls to provide a warning at the end of test
+
+```js
+test("...", async () => {
+  // this test can pass which is likely unintended
+  expect(new Promise(r => setTimeout(() => r(3), 1000))).resolves.toBe(4)
+})
+```
+
+ -->
 
 ---
 hide: true

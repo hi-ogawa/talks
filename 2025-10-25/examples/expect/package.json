@@ -1,0 +1,11 @@
+{
+  "name": "@vitest/example-basic",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest"
+  },
+  "devDependencies": {
+    "@vitest/expect": "beta"
+  }
+}
