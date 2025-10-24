@@ -496,7 +496,7 @@ packages: `@vitest/browser-playwright`, `@vitest/browser-webdriverio`
 
 <v-click>
 
-- Using a single browser instance and a tab to reduce overhead
+- Using a single browser instance and a single page to reduce overhead
 
 <img src="/test-runner-orchestration-browser-mode.png" class="w-[85%] mx-auto" />
 
