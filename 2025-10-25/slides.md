@@ -754,9 +754,9 @@ and evaluating dependency modules.
 </div>
 
 <!--
-Test collectionで具体的に何をするのかというと、いわゆるTest APIといわれている`describe`や`test`というfunctionをもとに、`Task` tree structureを構築する事と考えられます。
+Test collectionで具体的に何をするのかというと、いわゆるTest APIといわれている`describe`や`test`というfunctionをもとに、tree structureを構築する事と考えられます。
 
-実際に`@vitest/runner`という内部のpackageはこのdefinitionを受け持っていて、たとえば右にある、`Task`というunion typeが定義されています。
+実際に`@vitest/runner`という内部のpackageはこういったことを受け持っていて、たとえば右にある、`Task`というunion typeが定義されています。
 
 これがどのように構築されるかということを、この左側にある test fileを元に説明すると、describe/test functionが実行されるに連れて、右側のようなfile/suite/testのtree structureになります。
 
@@ -764,7 +764,7 @@ Test collectionで具体的に何をするのかというと、いわゆるTest 
 
 しかし、ここまでtest fileを実行する時点で、test fileの上に書かれている、importなどを全部実行されているので、testで使われているdependencyが実行されるstepになります。
 
-なので、test 結果が決まってないつつも、このstepがもっとも遅いstepとしてVitestの最後のduration statisticsに乗ることがよくあります。
+なので、test 結果が決まってないつつも、このstepがもっとも遅いstepとしてVitestの最後のduration outputに乗ることがよくあります。
 -->
 
 ---
@@ -832,6 +832,10 @@ test('c', () => {      // --> run ✅
 $ vitest one.test.ts # => runs only 'a'
 ```
 
+<!--
+ここまででtest casesは見つけ出してきたのですが、この段階でtest fileの中でどれをskipするのがという`skip/only`やtestの名前でCLIからfilteringされたものを処理します。
+-->
+
 ---
 
 # Test Lifecycle
@@ -841,6 +845,10 @@ $ vitest one.test.ts # => runs only 'a'
 Orchestration → Collection → 👉 **Execution** → Reporting
 
 </div>
+
+<!--
+それでは3番目のstepとして、やっとtestを実行して、assertionをcheckします。
+-->
 
 ---
 
@@ -938,14 +946,13 @@ File(name: add.test.ts)
 
 </v-clicks>
 
-<!-- 
-Here, finally we execute each tests and see the results.
-By default, they are sequentially executed. 
-@vitest/runner provides `describe/test.current` to allow multiple asynchronous tests in parallel.
+<!--
+さっきの例の続きをみると、ここに残っていたfunctionを実行するわけです。
 
-In the reporter duration, "test XXXms" shows the duration and as you can see for this trivial tests,
-it's a way faster than collecting phase.
- -->
+このfunctionを実行した際に、errorが出なかったら、statusをpassにして、また何かerrorが出たら、statusをfailにして、またerrorの詳細な情報を(例えばerror diff)をtest runnerをerrorをcatchした後に作ります。
+
+このstepのdurationが"tests"としてCLI outputに出ます。Testによっては2番目のcollection stepと比べて、このstepが早いということがよくあります。
+-->
 
 ---
 layout: two-cols
@@ -1002,6 +1009,10 @@ File
       fn: () => ...
 ```
 
+<!--
+簡単な例の他にも、実際には, before/after hooksだったり複数のtest functionをPromise.allで実行するdescribe.concurrentだったりと、もっと詳細にtest実行の過程を設定するAPIがあります。でこういった情報が同じようにtree structureに記録されています。
+-->
+
 ---
 
 # `expect` API
@@ -1057,6 +1068,11 @@ AssertionError {
 
 
 </div>
+
+<!--
+ここで、expect APIについて説明すると、`@vitest/expect`というmonorepo packageが提供しています。
+...
+-->
 
 ---
 
@@ -1266,6 +1282,10 @@ Orchestration → Collection → Execution → Reporting
 
 </div>
 
+<!--
+ここまでで、Test lifecycleとして定義した４つのstepsを終えました。
+-->
+
 ---
 
 # Where is Vite?
@@ -1285,9 +1305,10 @@ Orchestration → Collection → Execution → Reporting
 
 </v-click>
 
-<!-- 
-So, it looks like we've followed entire test lifecycle from test file selection, orchestration, collection, execution, and reporting.
-but, how and when did Vitest actually utilize Vite?
+<!--
+それでは、ここからが後半で、ここまでViteについて話してきませんでしたが、実際にVitestがViteをどのように利用しているのかを見ていきたいと思います。
+
+reporterのoutputがtransformのdurationを示している通り先ほどの4つのstepの中でどこかでViteがもちろん使われています。
 -->
 
 ---
@@ -1306,16 +1327,36 @@ Client-server architecture
 </v-click>
 
 <!--
-We talked about test files being executed on test runner side.
-But how is that actually done?
+まず最初に Orchestrationのstepで話した、poolやruntimeの仕組みとVite environment APIの対応を考えて行きます。
 
-Node test works like Vite SSR app.
-Browser mode works like Vite client app.
+実際に右側のmain processでは、Vite development serverが使われていて、その中にVite pluginを実行してcode transformなどをするAPIがClientまたはSSR environmentとして提供されています。
 
-mention
-  - Vite environment API https://vite.dev/guide/api-environment.html
-  - historically speacking vite-node/client <-> vite-node/server
-  - Vue client transform / ssr transform comparison?
+左上のforks poolのchild processではtest fileをもらってから、それを実行するという話でしたが、それは実は、Vite environment APIの一部であるModuleRunnerという仕組みを利用しています。
+
+先ほどのReportの話であった通り、child processとmain processの間では、rpcが用意されているので、それを媒体として、file transformをchild process側からrequestしてmain processがjavascriptにtranformしたものを返し、child processがtest fileを実行します。
+
+そして左下のbrowser modeの場合をどうかというと、これはVite client applicationとanalogyと一致してて、基本的にはbrowser/iframeがtest fileを直接importしてそれをvite development serverがresponseするという形です。
+-->
+
+---
+
+# `vite-node` → Vite environment API
+
+- Historically, `vite-node` has been used to achieve the same architecture before Vitest 4.
+
+<v-click>
+
+- `import { ViteNodeRunner } from "vite-node/client"` on test runner
+- `import { ViteNodeServer } from "vite-node/server"` on main process
+
+<img src="/vite-node.png" class="w-[75%] mx-auto" />
+
+</v-click>
+
+<!--
+VitestがVite environment APIをずっと使ってかのように話しましたが、そうではなくて、もとは`vite-node`というpackageをもとに同じようなarchitectureを実現していました。
+
+ストーリーとしては、このvite-nodeの仕組みが、Vite environment APIとしてViteに組み込まれたので、Vitestと同じようなserver runtime agnosticなjavascriptの実行がViteで可能になったと言えます。
 -->
 
 ---
@@ -1382,29 +1423,11 @@ function _sfc_ssrRender(_ctx, _push, _parent, _attrs, $props, $setup, $data, $op
 
 </v-click>
 
-<!-- 
-TODO: animation to highlight difference
-compare Vue SFC client / ssr transform
-mention:
-  - vue playground
-    - https://play.vuejs.org/#eNp9kUFLwzAUx7/KM5cqzBXR0+gGKgP1oKKCl1xG99ZlpklIXuag9Lv7krK5w9it7//7v/SXthP3zo23EcVEVKH2yhEEpOhm0qjWWU/QgccV9LDytoWCq4U00tTWBII2NDBN/LJ4Qq0tfFuvlxfFlTRVORzHB/FA2Dq9IOQJoFrfzLouL/d9VfKUU2VcJNhet3aJeioFcymgZFiVR/tiJCjw61eqGW+CNWzepX0pats6pdG/OVKsJ8UEMklswXa/LzkjH3G0z+s11j8n8k3YpUyKd48B/RalODBa+AZpwPPPV9zx8wGyfdTcPgM/MFgdk+NQe4hmydpHvWz7nL+/Ms1XmO8ITdhfKommZp/7UvA/eTxz9X/d2/Fd3pOmF/0fEx+nNQ==
-  - @vitejs/plugin-rsc?
- -->
+<!--
+ここでSSR / Client environmentを区別することを、plugin側がどのように利用できるかということの例を出すと、例えば、Vue pluginはtransformがclientのためかssrのためかによって違うtransformをします。
 
----
-
-# `vite-node` → Vite environment API
-
-- Historically, `vite-node` has been used to achieve the same architecture before Vitest 4.
-
-<v-click>
-
-- `import { ViteNodeRunner } from "vite-node/client"` on test runner
-- `import { ViteNodeServer } from "vite-node/server"` on main process
-
-<img src="/vite-node.png" class="w-[75%] mx-auto" />
-
-</v-click>
+右上がVue SFCのtemplateがclientようにtransformされたもので、右下がssrようにtransformしたものです。
+-->
 
 ---
 layout: two-cols
@@ -1522,11 +1545,13 @@ const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", ...);
 </v-click>
 
 <!--
-This allows Vite/Vitest to implement module evaluation mechanism.
+ここからVite module runnerの仕組みとそれをVitestがどのように利用しているのかという例を見ていきます。
 
-VITE_NODE_DEBUG_DUMP=true vitest
-VITEST_DEBUG_DUMP=.vitest-dump vitest
-since Vite 4 beta https://github.com/vitest-dev/vitest/pull/8711
+まずModule runnerは何を前提としているかというと、Vite module runner tansformというものを通して、javascriptのimport / exportを書き換えます。
+
+この様子をVitestはdebugの手助けの一分として、簡単に見れるように、DEBUG_DUMP environment variableでfileに書き出すようになっています。ここにあるのが一つの例です。
+
+一行目にある named importのvitest が vite_ssr_import functionになるのが見えます。
 
 TODO: elaborate more
 __vite_ssr_import__ -> fetchModule -> runInlineModule
@@ -1812,3 +1837,7 @@ It only invalidates changed files.
 - Reviewed how Vitest is powered Vite
   - Test runner leverages the same runtime mechanism as Vite's client and SSR application
   - Vite's transform pipeline and environment API provides a foundation
+
+<!--
+ここまでを
+-->
