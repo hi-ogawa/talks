@@ -810,11 +810,59 @@ it's a way faster than collecting phase.
  -->
 
 ---
+layout: two-cols
+layoutClass: gap-4
+---
 
 # Executing `Test`
 
-TODO: go further. fixture, hooks, timeout, retry, concurrent.
-TODO: some `expect` example which is integrated with test runner `expect.poll/soft`?
+- Comprehensive Test API to further control how tests are run
+
+```js
+beforeAll(() => ...)
+
+afterEach(() => ...)
+
+describe.concurrent("...", () => {
+  beforeEach(() => ...)
+
+  test("test 1", { retry: 2 }, () => ...)
+
+  test("test 2", { timeout: 5000 }, () => ...)
+
+  test.for(["a", "b"])("test %s", (val) => ...)
+})
+```
+
+::right::
+
+<div class="h-10" />
+
+```js {0|*}
+File
+  hooks: [
+    beforeAll(() => ...),
+    afterEach(() => ...),
+  ]
+
+  Suite
+    hooks: [beforeEach(() => ...)]
+    concurrent: true
+
+    Test(name: "test 1")
+      retry: 2
+      fn: () => ...
+
+    Test(name: "test 2")
+      timeout: 5000
+      fn: () => ...
+
+    Test(name: "test a")
+      fn: () => ...
+
+    Test(name: "test b")
+      fn: () => ...
+```
 
 ---
 hide: true
