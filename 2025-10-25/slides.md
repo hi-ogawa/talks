@@ -289,12 +289,12 @@ And finally we learn how **Vite** powers Vitest as a foundation:
 
 <img src="/monorepo-packages.png" class="mx-auto w-[85%]" />
 
-<!-- 
-TODO:
-categorize better
-- vitest: main cli entry, test orchestration, reporter, various exports from vitest/xxx
-- @vitest/runner: `describe`, `test`, `TestRunner`
-- @vitest/expect, @vitest/snapshot, @vitest/spy: independent utilities
+<!--
+そして、ちなみに、これがVitestのmonorepo packagesのdependency graphです。実際にはuserは主にvitestのみをinstallして使えるのですが、内部ではstandalone libraryで使えるようなpackageも存在しています。
+
+左側にはCore packages (つまり、vitestをinstallしたときに一緒についてくるもの)、右側にはoptional packagesです。
+
+ここについてはおいおい出てきます。
 
 reference https://npmgraph.js.org/?q=vitest%40beta
 -->
