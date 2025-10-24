@@ -227,11 +227,10 @@ export default defineConfig({
 
 </v-click>
 
-<!-- 
-The same code from previous slide.
-It now runs on browser, which provides a genuine runtime like how your application runs
-instead of simulated jsdom/happy-dom environment on NodeJs.
- -->
+<!--
+Vitest browser modeの例を見せますと、こんな感じです。
+Code自体はtesting-libraryで提供されたものと似たAPIがあり、それをbrowser上で実行し、実際にUIがrenderingがされます。
+-->
 
 ---
 
