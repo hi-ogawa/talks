@@ -1239,7 +1239,14 @@ but, how and when did Vitest actually utilize Vite?
 
 Client-server architecture
 
-<img src="/test-runner-and-vite-environment-api.png" class="w-[85%] mx-auto" />
+- Node test → SSR environment
+- Browser mode → Client environment
+
+<v-click>
+
+<img src="/test-runner-and-vite-environment-api.png" class="w-[80%] mx-auto" />
+
+</v-click>
 
 <!--
 We talked about test files being executed on test runner side.
@@ -1262,7 +1269,7 @@ layoutClass: gap-4
 # SSR / Client environment
 
 - Vue SFC transform by `@vitejs/plugin-vue`
-- Vite module runner transform is additionally applied for SSR
+<!-- - Vite module runner transform is additionally applied for SSR -->
 - [Vue SFC Playground](https://play.vuejs.org/#eNp9kUFLwzAUx7/KM5cqzBXR0+gGKgP1oKKCl1xG99ZlpklIXuag9Lv7krK5w9it7//7v/SXthP3zo23EcVEVKH2yhEEpOhm0qjWWU/QgccV9LDytoWCq4U00tTWBII2NDBN/LJ4Qq0tfFuvlxfFlTRVORzHB/FA2Dq9IOQJoFrfzLouL/d9VfKUU2VcJNhet3aJeioFcymgZFiVR/tiJCjw61eqGW+CNWzepX0pats6pdG/OVKsJ8UEMklswXa/LzkjH3G0z+s11j8n8k3YpUyKd48B/RalODBa+AZpwPPPV9zx8wGyfdTcPgM/MFgdk+NQe4hmydpHvWz7nL+/Ms1XmO8ITdhfKommZp/7UvA/eTxz9X/d2/Fd3pOmF/0fEx+nNQ==)
 
 ```vue
@@ -1279,10 +1286,11 @@ const msg = ref('Hello World!')
 
 ::right::
 
-<div style="--slidev-code-font-size: 8px; --slidev-code-line-height: 0px;">
+<v-click>
 
-```js
-// [clientEnvironment.transformRequest(...)]
+<div style="--slidev-code-font-size: 10px; --slidev-code-line-height: 0px;">
+
+```js {5-14}
 import { ref } from "/xxx/vue.js?v=7756971e"
 ...
 const _sfc_main = { __name: 'Hello', setup(__props, { expose: __expose }) { ... } }
@@ -1301,8 +1309,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
 export default /*#__PURE__*/_export_sfc(_sfc_main, [['render',_sfc_render],['__file',"/home/hiroshi/code/personal/talks/2025-10-25/examples/vue-browser-mode/src/Hello.vue"]])
 ```
 
-```js
-// [ssrEnvironment.transformRequest(...)]
+```js {6-12}
 __vite_ssr_exportName__("default", () => { try { return __vite_ssr_export_default__ } catch {} });
 const __vite_ssr_import_0__ = await __vite_ssr_import__("/xxx/node_modules/vue/index.mjs", {"importedNames":["ref"]});
 ...
@@ -1321,6 +1328,8 @@ const __vite_ssr_export_default__ = /*#__PURE__*/(0,__vite_ssr_import_3__.defaul
 
 </div>
 
+</v-click>
+
 <!-- 
 TODO: animation to highlight difference
 compare Vue SFC client / ssr transform
@@ -1332,13 +1341,18 @@ mention:
 
 ---
 
-# `vite-node` ⟶ Vite environment API
+# `vite-node` → Vite environment API
 
 - Historically, `vite-node` has been used to achieve the same architecture before Vitest 4.
+
+<v-click>
+
 - `import { ViteNodeRunner } from "vite-node/client"` on test runner
 - `import { ViteNodeServer } from "vite-node/server"` on main process
 
 <img src="/vite-node.png" class="w-[75%] mx-auto" />
+
+</v-click>
 
 ---
 layout: two-cols
