@@ -368,7 +368,8 @@ test("mul", () => {
 </div>
 
 <!--
-まず最初のstepは
+まず最初のstepはorchestrationです。
+このstepは特に明確に定義できるものでもないのですが、このtalkでは簡単に、CLIを実行してから、実際にtest filesを見付けて、どのようにscheduleするのか、というstepというお話しします。
 -->
 
 ---
@@ -376,7 +377,7 @@ layout: two-cols
 layoutClass: gap-4
 ---
 
-# Test Orchestration
+# Test orchestration
 
 Find test files to run
 
@@ -440,15 +441,16 @@ pool.runTests([
 
 </v-click>
 
-<!-- 
-First Vitest needs to search for test files.
-Config file is optional.
-it's mostly globing.
- -->
+<!--
+まず、test filesを見つけるには、configurationを元に、globをつかってfile systemをsearchするだけです。
+また、CLIからさらにfilterがかかることもあります。
+
+最終的に、内部としては、"pool"というconceptがあって、そこに見つかったfilesを一緒くたに投げるという仕組みです。
+-->
 
 ---
 
-# Test orchestration
+# Test orchestration / Pool
 
 packages: `vitest`, ~~`tinypool`~~
 
@@ -460,19 +462,22 @@ packages: `vitest`, ~~`tinypool`~~
 import { fork } from "node:child_process"
 ```
 
-<v-click>
-
 <img src="/test-runner-orchestration.png" class="w-[70%] mx-auto" />
 
-</v-click>
+<!--
+そして、このpoolというconceptはなにかという説明です。
 
-<!-- 
-This is the default mode `pool: "forks"`.
-The unit of isolation is by test fie.
-Allow cpu based parallelization.
-there is a wrapper entrypoint file. the test file itself is not executed directly).
-multiple projects case.
-Not spawning new process for each test file, but limited based on available cpu.
+このconceptはtest filesをどのように、どのruntimeで実行するかという仕組みを決めるところになります。
+
+基本設計として、VitestはVitest自身が起動されたCLIのmain process自体では、test filesを実行しません。
+
+Vitestの"pool"というconfigurationがありまして、指定できるoptionとしてはforks, threads, vmThreads,などがあります。"browser mode"は実はこのoptionを通してuserが指定できるものではないのですが、conceptとしてはこの一貫としてくくられるべきなので、この流れで説明します。
+
+まず、このdiagramで表しているのは、"forks" poolです。この時には、nodeのchild process fork APIを使って、test fileごと専用のchild processを作って、そこでtestを実行します。
+
+これによって、test fileのparallelizationを可能にします。
+
+さらに、それぞれのtest fileが他のtest fileの実行を影響されることがruntimeの観点からはなく、このようにtest fileそれぞれを隔離することを、isolationと呼びます。
 -->
 
 ---
@@ -494,6 +499,14 @@ import { Worker } from 'node:worker_threads'
 <img src="/test-runner-orchestration-threads.png" class="w-[70%] mx-auto" />
 
 </v-click>
+
+<!--
+そして、つぎに"threads" pool optionを指定した時には、node worker threads APIをしようして、child processの代わりにthreadを利用した、paralellizationとisolationを提供します。
+
+このpoolの売り文句としては、child processを作るよりthreadの方が、早いと考えられているのですが、実際には、完全にchild processのmini versionではなく、例えば、`process.chdir`がworker内では使えなかったり、またはNode native module packageによってはworker内で使うとcrashするものがあったりと、debugするのがuserとしてもvitest側でも大変というちょっとしたedge caseが欠点です。
+
+実は、昔は"threads"がVitestのdefault poolだったのですが、stabilityをもとめて、Vitest version 2から"forks"をdefaultにしたという経緯があります。
+-->
 
 ---
 
