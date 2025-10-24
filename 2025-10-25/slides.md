@@ -1442,6 +1442,9 @@ export default defineConfig({
 - "Vite module runner transform" rewrites original `import` and `export` into runtime functions.
   - `import` ⟶ `__vite_ssr_import__`, `__vite_ssr_dynamic_import__`
   - `export` ⟶ `__vite_ssr_exportName__`, `__vite_ssr_exportAll__`
+
+<v-click>
+
 - Run `VITE_NODE_DEBUG_DUMP=true vitest` (`VITEST_DEBUG_DUMP=.vitest-dump vitest` for Vitest 4)
 
 ```js
@@ -1463,6 +1466,8 @@ const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/add.ts", ...);
   (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.add)(1, 2)).toBe(3);
 });
 ```
+
+</v-click>
 
 <!--
 This allows Vite/Vitest to implement module evaluation mechanism.
