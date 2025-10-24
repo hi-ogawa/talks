@@ -349,6 +349,12 @@ test("mul", () => {
 
 </v-click>
 
+<!--
+それでは、まず４stepsに分けてお話しする前提として、この様な簡単な二つのtest filesを用います。
+
+実際に実行して、最終的なreportはこの様になるという流れを見ていきましょう。
+-->
+
 ---
 
 # Test Lifecycle
@@ -360,6 +366,10 @@ test("mul", () => {
 - Test files scheduling
 
 </div>
+
+<!--
+まず最初のstepは
+-->
 
 ---
 layout: two-cols
