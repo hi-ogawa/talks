@@ -1333,7 +1333,7 @@ Orchestration → Collection → Execution → Reporting
 </v-click>
 
 <!--
-それでは、ここからが後半で、ここまでViteについて話してきませんでしたが、実際にVitestがViteをどのように利用しているのかを見ていきたいと思います。
+それでは、ここからが後半です。ここまでViteについて話してきませんでしたが、実際にVitestがViteをどのように利用しているのかを見ていきたいと思います。
 
 reporterのoutputがtransformのdurationを示している通り先ほどの4つのstepの中でどこかでViteがもちろん使われています。
 -->
