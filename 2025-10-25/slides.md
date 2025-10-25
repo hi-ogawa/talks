@@ -164,7 +164,7 @@ test('Hello', () => {
 
 さらに、拡張性として、Vite plugin ecosystemをそのまま使いまわせることも利点です。
 
-そして、Vitest独自の特徴としては、runtime agnosticと言うのがあげられます。従来では "test file" は node や server runtime 自体で実行し、UI unit testingもjsdom/happy-domというnode上でのdomのsimulationが当然でしたが、Vitest browser modeはVite / Vitestのruntime agnosticな設計を発展させ、"test"自体をbrowserで実行することを可能にしました。
+そして、Vitest独自の特徴としては、runtime agnosticと言うのがあげられます。従来では "test file" をUI unit testingもjsdom/happy-domというnode上でのdomのsimulationが当然でしたが、Vitest browser modeはVite / Vitestのruntime agnosticな設計を発展させ、"test"自体をbrowserで実行することを可能にしました。
 
 また、もう一つ強調したい特徴として、Vite pluginをもとにした拡張性だけでなく、Vitest自体がlow levelなAPIを多く提供し、Vitestのdownstream projectのecosystemを構築してきています。例としては、StorybookやCloudflareが挙げられます。 Cloudflareはruntime agnosticの例として、Cloudflare workersというruntimeの上でtestを実行するpackageを提供しています。
 -->
@@ -229,7 +229,7 @@ export default defineConfig({
 
 <!--
 Vitest browser modeの例を見せますと、こんな感じです。
-Code自体はtesting-libraryで提供されたものと似たAPIがあり、それをbrowser上で実行し、実際にUIがrenderingがされます。
+APIとしてplaywrightのpageAPIやtesting-libraryに似たAPIがあります。それをbrowser上で実行し、実際にUIがrenderingとinteractionがunit testとして実行がされる状況をtest UIで見ることが出来ます。
 -->
 
 ---
@@ -243,7 +243,7 @@ Code自体はtesting-libraryで提供されたものと似たAPIがあり、そ�
 
 <!--
 ここで本題に入る前に、お伝えしたい事があって、Vitest 4がちょうど今週releaseされましたので、Vitestを使っている方はupgradeしてみたいくださいというお知らせです。
-このtalkではVitest 4でのchangeやfeatureについてはお話ししませんが、興味ある方は、Blog, documentation, そしてVladimirのViteConfのtalkをご覧ください。
+このtalkではVitest 4でのchangeやfeatureについてはお話ししませんがbrowser modeのstable releaseなど、興味ある方は、Blog, documentation, そしてVladimirのViteConfのtalkをご覧ください。
 -->
 
 ---
@@ -272,9 +272,9 @@ And finally we learn how **Vite** powers Vitest as a foundation:
 <!--
 それでは本題です。
 
-このトークでは、前半に、一般のTest lifecycleを四つのstep, orchestration, collection, execution, reportingに分けて、紹介していきます。
+このトークでは、前半に、Test lifecycleを四つのstep, orchestration, collection, execution, reportingに分けて、紹介していきます。
 
-またこれを追っていく中で、どのようにVitestのmonorepo packagesが責任分担をしているのかもお話ししていきます。
+またこれを追っていく中で、どのようにVitestのmonorepo packagesが機能を分担をしているのかもお話ししていきます。
 
 前半では、Viteに関わる部分に言及しませんが、後半では、実際にtestに関わる部分で、どのようにVitestがViteの機能を利用しているのかを説明していきます。
 -->
@@ -350,9 +350,9 @@ test("mul", () => {
 </v-click>
 
 <!--
-それでは、まずtest lifecycleを４stepsに分けてお話しする前提として、この様な簡単な二つのtest filesを用います。
+それでは、まずtest lifecycleを４stepsに分けてお話しする前提として、この左側にある表示した二つのtest filesを用います。
 
-実際に実行して、最終的なreportはこの様になるという流れを見ていきましょう。
+実際に実行して、最終的なreportは右側に表示されるまでの流れを見ていくのがゴールです。
 -->
 
 ---
@@ -550,39 +550,11 @@ diagramだとこの様になって、child processを一つで済ませて、そ
 -->
 
 ---
-
-# About isolation and pool
-
-- Trade-off between `pool: "forks"`, `"threads"`, `"vmThreads"`
-  - `forks` as default as it's closest to how the code is actually used.
-- `isolate: false` to opt-out from isolation
-  - Reusing existing child process / worker thread can save time to spawn for each test file.
-  - This mode still allows splitting multiple test files into multiple pools for parallelization to benefit multiple CPUs.
-  - Cons: Each test file can affect each other and non deterministic behavior is easier to manifest.
-- Docs [Improving Performance](https://vitest.dev/guide/improving-performance.html)
-
-<div class="h-4" />
-
-```ts
-export default defineConfig({
-  test: {
-    pool: 'threads', // default is 'forks'
-    isolate: false, // default is true
-  },
-})
-```
-
-<!--
-ここまでで、poolやisolateの設定の違いを話しましたが、vitestの思いとしては、project case by caseで一番適したものを選択して欲しいと思っています。Vitestのdefaultとしては、forks + isolationを一番stableな設定としていますが、他のoptionsのlimitationをprojectやtestの対象によっては気にする必要がないこともあります。是非defaultではないoptionも試してtest performanceの改善するか見てみてください。この事については、documentationでも言及しています。
--->
-
----
 layout: two-cols
 layoutClass: gap-4
-hide: true
 ---
 
-# `isolate: false`
+# Module graph
 
 - Runtime's module graph is also reused, so it avoids evaluating same modules multiple times when shared by multiple test files.
 
@@ -621,12 +593,40 @@ export const shared = "shared";
 </v-click>
 
 <!--
-ここで、さらに (isolate: false)について、module evalutionという観点から説明すると、trade offがより見えて来ると思います。
+ここで、さらに (isolate: false)について、module evalutionという観点から説明するします。
 
 ここでは、二つのtest filesが同じmoduleをimportしています。
 
 (isolate: true) の場合、このshared moduleもそれぞれのruntimeで別々に実行されるますが、(isolate: false)では複数のtest filesがmodule graphを共有することで、shared moduleの実行を最小限にすることが可能です。
 -->
+
+---
+
+# About isolation and pool
+
+- Trade-off between `pool: "forks"`, `"threads"`, `"vmThreads"`
+  - `forks` as default as it's closest to how the code is actually used.
+- `isolate: false` to opt-out from isolation
+  - Reusing existing child process / worker thread can save time to spawn for each test file.
+  - This mode still allows splitting multiple test files into multiple pools for parallelization to benefit multiple CPUs.
+  - Cons: Each test file can affect each other and non deterministic behavior is easier to manifest.
+- Docs [Improving Performance](https://vitest.dev/guide/improving-performance.html)
+
+<div class="h-4" />
+
+```ts
+export default defineConfig({
+  test: {
+    pool: 'threads', // default is 'forks'
+    isolate: false, // default is true
+  },
+})
+```
+
+<!--
+ここまでで、poolやisolateの設定の違いを話しましたが、vitestの思いとしては、project case by caseで一番適したものを選択して欲しいと思っています。Vitestのdefaultとしては、forks + isolationを一番stableな設定としていますが、他のoptionsのlimitationをprojectやtestの対象によっては気にする必要がないこともあります。是非defaultではないoptionも試してtest performanceの改善するか見てみてください。この事については、documentationでも言及しています。
+-->
+
 
 ---
 
@@ -1673,6 +1673,7 @@ const __vi_import_0__ = await __vite_ssr_dynamic_import__("/src/add.ts");
 ---
 layout: two-cols
 layoutClass: gap-8
+hide: true
 ---
 
 # Coverage
@@ -1699,6 +1700,8 @@ Vitest's feature is powered by Vite.
 Let's take a look at coverage system.
  -->
 
+---
+hide: true
 ---
 
 # Coverage
@@ -1737,6 +1740,7 @@ export default defineConfig({
 ---
 layout: two-cols
 layoutClass: gap-4
+hide: true
 ---
 
 # Coverage / Istanbul
@@ -1784,6 +1788,8 @@ globalThis.__VITEST_COVERAGE__ ||= {}
 globalThis.__VITEST_COVERAGE__[filename] = __cov_xyz
 ```
 
+---
+hide: true
 ---
 
 # Coverage / V8
