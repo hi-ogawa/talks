@@ -2,3 +2,5 @@ node_modules
 dist
 .slidev
 .vitest-dump
+slides-export
+slides-export.pdf
