@@ -23,6 +23,9 @@ importers:
       playwright-chromium:
         specifier: ^1.56.1
         version: 1.56.1
+      vite:
+        specifier: ^7.1.12
+        version: 7.1.12(@types/node@24.9.1)(jiti@2.6.1)(tsx@4.20.6)(yaml@2.8.1)
 
   examples/basic:
     devDependencies:
