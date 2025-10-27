@@ -11,12 +11,10 @@ export default defineConfig({
       },
       transformIndexHtml() {
         // https://vercel.com/docs/environment-variables/system-environment-variables#VERCEL_URL
+        // https://github.com/vercel/next.js/blob/498349c375e2602f526f64e8366992066cfa872c/packages/next/src/lib/metadata/resolvers/resolve-url.ts#L10-L55
         if (process.env.VERCEL_URL) {
-          const base = new URL(
-            resolvedConfig.base,
-            "https://" + process.env.VERCEL_URL,
-          );
-          const ogImageUrl = new URL("./og-image.png", base).href;
+          const origin = process.env.VERCEL_ENV === 'preview' ? (process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL) : process.env.VERCEL_PROJECT_PRODUCTION_URL;
+          const ogImageUrl = new URL("./og-image.png", new URL(resolvedConfig.base, `https://${origin}`)).href;
           return [
             {
               tag: "meta",
