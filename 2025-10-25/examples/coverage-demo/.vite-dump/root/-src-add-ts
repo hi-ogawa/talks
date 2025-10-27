@@ -1,0 +1,12 @@
+__vite_ssr_exportName__("add", () => { try { return add } catch {} });
+__vite_ssr_exportName__("sub", () => { try { return sub } catch {} });
+function add(x, y) {
+  return x + y;
+};
+function sub(x, y) {
+  return x - y;
+}
+//# sourceMappingSource=vite-generated
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBQUEsQ0FBQTs7QUFBTyxTQUFTLElBQUksR0FBVyxHQUFtQjtBQUNoRCxTQUFPLElBQUk7QUFDYjtBQUVPLFNBQVMsSUFBSSxHQUFXLEdBQW1CO0FBQ2hELFNBQU8sSUFBSTtBQUNiIiwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJhZGQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGZ1bmN0aW9uIGFkZCh4OiBudW1iZXIsIHk6IG51bWJlcik6IG51bWJlciB7XG4gIHJldHVybiB4ICsgeVxufVxuXG5leHBvcnQgZnVuY3Rpb24gc3ViKHg6IG51bWJlciwgeTogbnVtYmVyKTogbnVtYmVyIHtcbiAgcmV0dXJuIHggLSB5XG59XG4iXSwiZmlsZSI6Ii9zcmMvYWRkLnRzIn0=
+
+// {"id":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-demo/src/add.ts","file":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-demo/src/add.ts"}

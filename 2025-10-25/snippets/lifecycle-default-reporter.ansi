@@ -1,0 +1,25 @@
+[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/add.test.ts[2m > [22madd[2m > [22msecond
+[31m[1mAssertionError[22m: expected 5 to be 4 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 4[39m
+[31m+ 5[39m
+
+[36m [2m❯[22m src/add.test.ts:[2m9:23[22m[39m
+    [90m  7| [39m  })
+    [90m  8| [39m  [34mtest[39m([32m'second'[39m[33m,[39m () [33m=>[39m {
+    [90m  9| [39m    [34mexpect[39m([34madd[39m([34m2[39m[33m,[39m [34m3[39m))[33m.[39m[34mtoBe[39m([34m4[39m)
+    [90m   | [39m                      [31m^[39m
+    [90m 10| [39m  })
+    [90m 11| [39m})
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m2 passed[39m[22m[90m (3)[39m
+[2m   Start at [22m 23:39:27
+[2m   Duration [22m 154ms[2m (transform 27ms, setup 0ms, collect 46ms, tests 6ms, environment 0ms, prepare 8ms)[22m

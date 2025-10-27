@@ -1,0 +1,13 @@
+const __vite_ssr_import_0__ = await __vite_ssr_import__("/@fs/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/vitest@4.0.0-beta.19_@types+debug@4.1.12_@types+node@22.18.11_happy-dom@20.0.7_jiti@2.6.1_tsx@4.20.6_yaml@2.8.1/node_modules/vitest/dist/index.js", {"importedNames":["expect","test"]});
+const __vite_ssr_import_1__ = await __vite_ssr_import__("/src/demo.ts", {"importedNames":["prime"]});
+
+
+(0,__vite_ssr_import_0__.test)("demo", async () => {
+  (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.prime)(1)).toBe(2);
+  (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.prime)(3)).toBe(5);
+  (0,__vite_ssr_import_0__.expect)((0,__vite_ssr_import_1__.prime)(5)).toBe(11);
+});
+//# sourceMappingSource=vite-generated
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBQUE7QUFDQTs7O0dBRUEsNEJBQUssUUFBUSxZQUFZO0FBQ3ZCLHNDQUFPLDZCQUFNLENBQUMsQ0FBQyxFQUFFLEtBQUssQ0FBQztBQUN2QixzQ0FBTyw2QkFBTSxDQUFDLENBQUMsRUFBRSxLQUFLLENBQUM7QUFDdkIsc0NBQU8sNkJBQU0sQ0FBQyxDQUFDLEVBQUUsS0FBSyxFQUFFO0FBQzFCLENBQUMiLCJuYW1lcyI6W10sImlnbm9yZUxpc3QiOltdLCJzb3VyY2VzIjpbImRlbW8udGVzdC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyBleHBlY3QsIHRlc3QgfSBmcm9tIFwidml0ZXN0XCJcbmltcG9ydCB7IHByaW1lIH0gZnJvbSBcIi4vZGVtb1wiXG5cbnRlc3QoXCJkZW1vXCIsIGFzeW5jICgpID0+IHtcbiAgZXhwZWN0KHByaW1lKDEpKS50b0JlKDIpO1xuICBleHBlY3QocHJpbWUoMykpLnRvQmUoNSk7XG4gIGV4cGVjdChwcmltZSg1KSkudG9CZSgxMSk7XG59KVxuIl0sImZpbGUiOiIvc3JjL2RlbW8udGVzdC50cyJ9
+
+// {"id":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.test.ts","file":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-istanbul/src/demo.test.ts"}

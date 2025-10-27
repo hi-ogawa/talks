@@ -1,0 +1,34 @@
+> vitest run --reporter=verbose
+
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90m/xxx/vite[39m
+
+...
+     [32m✓[39m should throw error when warning contains UNRESOLVED_IMPORT[32m 2[2mms[22m[39m
+     [32m✓[39m should ignore dynamic import warnings (Unsupported expression)[32m 1[2mms[22m[39m
+     [32m✓[39m should ignore dynamic import warnings (statically analyzed)[32m 1[2mms[22m[39m
+     [32m✓[39m should ignore some warnings (CIRCULAR_DEPENDENCY)[32m 1[2mms[22m[39m
+     [32m✓[39m should ignore some warnings (THIS_IS_UNDEFINED)[32m 1[2mms[22m[39m
+   [32m✓[39m watch rebuild manifest[32m 25[2mms[22m[39m
+ [32m✓[39m packages/vite/src/node/__tests__/plugins/index.spec.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 71[2mms[22m[39m
+   [32m✓[39m hook filter with plugin container [2m(3)[22m
+     [32m✓[39m resolveId[32m 2[2mms[22m[39m
+     [32m✓[39m load[32m 1[2mms[22m[39m
+     [32m✓[39m transform[32m 63[2mms[22m[39m
+   [32m✓[39m hook filter with build [2m(3)[22m
+     [32m✓[39m resolveId[32m 0[2mms[22m[39m
+     [32m✓[39m load[32m 0[2mms[22m[39m
+     [32m✓[39m transform[32m 0[2mms[22m[39m
+[?2026l[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m packages/vite/src/node/__tests__/scan.spec.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1014[2mms[22m[39m
+   [32m✓[39m optimizer-scan:script-test [2m(6)[22m
+     [32m✓[39m component return value test[32m 3[2mms[22m[39m
+     [32m✓[39m include comments test[32m 0[2mms[22m[39m
+     [32m✓[39m components with script keyword test[32m 0[2mms[22m[39m
+     [32m✓[39m ordinary script tag test[32m 0[2mms[22m[39m
+     [32m✓[39m imports regex should work[32m 1[2mms[22m[39m
+     [32m✓[39m script comments test[32m 1[2mms[22m[39m
+   [33m[2m✓[22m[39m scan jsx-runtime [33m 1007[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m46 passed[39m[22m[90m (46)[39m
+[2m      Tests [22m [1m[32m660 passed[39m[22m[90m (660)[39m
+[2m   Start at [22m 12:58:28
+[2m   Duration [22m 2.48s[2m (transform 2.32s, setup 0ms, collect 17.44s, tests 9.23s, environment 4ms, prepare 1.56s)[22m

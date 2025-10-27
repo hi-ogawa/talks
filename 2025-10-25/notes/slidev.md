@@ -1,0 +1,9 @@
+- https://claude.ai/chat/9530a8c4-14e6-4ba6-805e-68379876e19e
+- changing code block font size
+  - https://github.com/slidevjs/slidev/issues/1449#issuecomment-2668308876
+- output terminal recording
+  - `script -q -c "your-command" snippets/output.ansi`
+  - `script -q -c "pnpm test" test.ansi`
+- presenter mode https://sli.dev/guide/ui#presenter-mode
+  - http://localhost:3030 fullscreen F11
+  - http://localhost:3030/presenter

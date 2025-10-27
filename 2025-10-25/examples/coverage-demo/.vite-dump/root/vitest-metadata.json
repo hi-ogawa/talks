@@ -1,0 +1,38 @@
+{
+  "externalized": {
+    "/@fs/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/@vitest+coverage-v8@4.0.0-beta.19_vitest@4.0.0-beta.19_@types+debug@4.1.12_@types+node@_b92c2f82974b7efb83240fe5895d97ef/node_modules/@vitest/coverage-v8/dist/index.js": "/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/@vitest+coverage-v8@4.0.0-beta.19_vitest@4.0.0-beta.19_@types+debug@4.1.12_@types+node@_b92c2f82974b7efb83240fe5895d97ef/node_modules/@vitest/coverage-v8/dist/index.js"
+  },
+  "duration": {
+    "/@fs/home/hiroshi/code/personal/talks/2025-10-25/node_modules/.pnpm/@vitest+coverage-v8@4.0.0-beta.19_vitest@4.0.0-beta.19_@types+debug@4.1.12_@types+node@_b92c2f82974b7efb83240fe5895d97ef/node_modules/@vitest/coverage-v8/dist/index.js": [
+      0.18196899999998095,
+      0.015264000000001943,
+      0.016289000000028864,
+      0.008944999999982883,
+      0.016100999999991927,
+      0.012009999999975207
+    ],
+    "/src/prime.test.ts": [
+      17.96552600000001
+    ],
+    "/src/add.test.ts": [
+      19.318066999999985
+    ],
+    "/src/add.ts": [
+      4.922844999999995
+    ],
+    "/src/prime.ts": [
+      4.836328999999978
+    ]
+  },
+  "tmps": {
+    "/src/prime.test.ts": "/tmp/EFDqsAx0HbTSQCcIUNkOz/ssr/b8e99babf87dc56bada61f83c1d700fd837e9051",
+    "/src/add.test.ts": "/tmp/EFDqsAx0HbTSQCcIUNkOz/ssr/3f2668e95fc6b8b21983d018ae5a73349c9ab604",
+    "/src/add.ts": "/tmp/EFDqsAx0HbTSQCcIUNkOz/ssr/1cc81a3b312217c7ec03ef14336fce63a1190ed1",
+    "/src/prime.ts": "/tmp/EFDqsAx0HbTSQCcIUNkOz/ssr/0e8ea6ebd0f2f7f061408ac25c93fe2fc44900be"
+  },
+  "dumpDir": "/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-demo/.vite-dump/root",
+  "outline": {
+    "externalized": 1,
+    "inlined": 4
+  }
+}

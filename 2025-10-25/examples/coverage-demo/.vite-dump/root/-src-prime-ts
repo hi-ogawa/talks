@@ -1,0 +1,21 @@
+__vite_ssr_exportName__("prime", () => { try { return prime } catch {} });
+function prime(x) {
+  switch (x) {
+    case 1:
+      return 2;
+    case 2:
+      return 3;
+    case 3:
+      return 5;
+    case 4:
+      return 7;
+    case 5:
+      return 11;
+    default:
+      return -1;
+  }
+}
+//# sourceMappingSource=vite-generated
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJtYXBwaW5ncyI6IkFBQUEsQ0FBQTtBQUFPLFNBQVMsTUFBTSxHQUFtQjtBQUN2QyxVQUFRLEdBQUc7QUFBQSxJQUNULEtBQUs7QUFDSCxhQUFPO0FBQUEsSUFDVCxLQUFLO0FBQ0gsYUFBTztBQUFBLElBQ1QsS0FBSztBQUNILGFBQU87QUFBQSxJQUNULEtBQUs7QUFDSCxhQUFPO0FBQUEsSUFDVCxLQUFLO0FBQ0gsYUFBTztBQUFBLElBQ1Q7QUFDRSxhQUFPO0FBQUEsRUFDWDtBQUNGIiwibmFtZXMiOltdLCJpZ25vcmVMaXN0IjpbXSwic291cmNlcyI6WyJwcmltZS50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgZnVuY3Rpb24gcHJpbWUoeDogbnVtYmVyKTogbnVtYmVyIHtcbiAgc3dpdGNoICh4KSB7XG4gICAgY2FzZSAxOlxuICAgICAgcmV0dXJuIDI7XG4gICAgY2FzZSAyOlxuICAgICAgcmV0dXJuIDM7XG4gICAgY2FzZSAzOiBcbiAgICAgIHJldHVybiA1O1xuICAgIGNhc2UgNDpcbiAgICAgIHJldHVybiA3O1xuICAgIGNhc2UgNTpcbiAgICAgIHJldHVybiAxMTsgXG4gICAgZGVmYXVsdDpcbiAgICAgIHJldHVybiAtMTtcbiAgfVxufVxuIl0sImZpbGUiOiIvc3JjL3ByaW1lLnRzIn0=
+
+// {"id":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-demo/src/prime.ts","file":"/home/hiroshi/code/personal/talks/2025-10-25/examples/coverage-demo/src/prime.ts"}
