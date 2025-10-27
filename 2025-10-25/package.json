@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "slidev",
     "build": "slidev build",
+    "export-og": "slidev export --format=png --per-slide --range=1 && cp ./slides-export/01.png ./public/og-image.png",
     "export": "slidev export"
   },
   "devDependencies": {
