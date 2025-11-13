@@ -22,6 +22,81 @@ General poster preparation plan. See [plan-topics.md](./plan-topics.md) for topi
 - [ ] Print test
 - [ ] Submit proposal
 
+## Timeline & Time Estimates
+
+**Proposal deadline**: 11/18 (title & abstract only)
+**Fes date**: 2026 (exact date TBD)
+**Total active work time**: ~30-40 hours spread over months
+
+### Before Proposal (by 11/18)
+- **Choose final topic**: 1-2 hours
+- **Write title & abstract**: 2-3 hours (iterate on wording, translate to Japanese)
+
+### Research Phase (ongoing, casual pace)
+- **Deep dive into Next.js implementation**: 5-10 hours spread over days/weeks
+  - Reading Next.js source code
+  - Testing differences
+  - Taking notes on findings
+
+### Content Creation (1-2 months before fes)
+- **Create visual diagrams/flow charts**: 4-6 hours
+  - Architecture diagrams
+  - Flow comparisons
+  - Code visualization
+- **Write content sections (English draft)**: 4-6 hours
+  - Problem, approach, results sections
+  - Code examples with explanations
+- **Design layout**: 3-5 hours
+  - Refining the HTML/CSS
+  - Adjusting typography, spacing, colors
+  - Multiple iteration rounds
+
+### Translation & Polish (1-2 months before fes)
+- **Translate to Japanese**: 3-4 hours
+  - Content translation
+  - Font size/layout adjustments for Japanese text
+  - Review for natural Japanese phrasing
+- **Review from 2m distance**: 1 hour
+  - Print preview or actual-size viewing
+  - Readability checks
+  - Iterate on font sizes
+
+### Technical Prep (1-2 months before fes)
+- **Prepare laptop demo and materials**: 3-5 hours
+  - Set up side-by-side comparison
+  - Code comments and explanations
+  - Test offline functionality
+
+### Final Steps (2-3 weeks before fes)
+- **Print test**: 2-3 hours (+ waiting time)
+  - Print at smaller scale first (A3/A4)
+  - Check colors, readability
+  - Fix any issues
+  - Final A0 print
+- **Submit poster**: 30 minutes
+
+### Suggested Approach
+
+**This week (by 11/18)**:
+- Commit to "use cache" topic
+- Write compelling title & abstract
+- Submit proposal
+
+**Next 2-4 weeks** (casual pace):
+- Deep dive into Next.js implementation
+- Document findings as you go
+
+**1-2 months before fes**:
+- Create diagrams and content
+- Build laptop demo
+- Design poster layout
+- Translate to Japanese
+
+**2-3 weeks before fes**:
+- Print test
+- Final adjustments
+- Submit final poster
+
 ## Poster Design Principles
 
 ### Understanding Physical Size
