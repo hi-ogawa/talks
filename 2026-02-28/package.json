@@ -1,0 +1,20 @@
+{
+  "name": "react-tokyo-fes",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "slidev",
+    "build": "slidev build",
+    "export-og": "slidev export --format=png --per-slide --range=1 && magick ./slides-export/01.png -resize 1200x630^ -gravity center -extent 1200x630 ./public/og-image.png",
+    "export": "slidev export"
+  },
+  "devDependencies": {
+    "@iconify-json/logos": "^1.2.9",
+    "@iconify-json/ri": "^1.2.6",
+    "@slidev/cli": "^52.2.5",
+    "@slidev/theme-default": "^0.25.0",
+    "playwright-chromium": "^1.56.1",
+    "vite": "^7.1.12"
+  }
+}
