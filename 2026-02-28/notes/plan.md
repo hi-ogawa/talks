@@ -7,6 +7,19 @@ Notes from brainstorming discussion.
 - **Format**: A0 poster (841mm × 1189mm)
 - **Presentation**: 3× 30-minute discussion sessions with attendees
 - **Setup**: Poster displayed throughout the event
+- **Language**: Draft in English, final version in Japanese
+
+## Next Steps
+
+- [ ] Choose final topic
+- [ ] Deep dive into implementation details
+- [ ] Create visual diagrams/flow charts
+- [ ] Write content sections (English draft → Japanese final)
+- [ ] Prepare laptop demo and materials
+- [ ] Design layout (use design tool or code)
+- [ ] Review from 2m distance
+- [ ] Print test
+- [ ] Submit proposal
 
 ## Topic Ideas
 
@@ -110,16 +123,30 @@ Notes from brainstorming discussion.
 4. Build minimal example in Vite setup
 5. Create visual diagrams showing the flow
 
-## Next Steps
+## Materials to Prepare (Beyond Poster)
 
-- [ ] Choose final topic
-- [ ] Deep dive into implementation details
-- [ ] Create visual diagrams/flow charts
-- [ ] Write content sections
-- [ ] Design layout (use design tool or code)
-- [ ] Review from 2m distance
-- [ ] Print test
-- [ ] Submit proposal
+### Laptop Demo
+- Live running example of key concept
+- Side-by-side comparison (Next.js vs Vite)
+- Code ready in VS Code with comments
+- Backup: video recording
+
+### Digital Resources
+- QR codes → GitHub repo, deployed demo, documentation
+- One-page handout (A4) with key takeaways
+- Optional: slide deck for deeper dives
+
+### Technical Assets
+- Well-organized code repo with README
+- Runnable examples (`npm install && npm dev`)
+- Architecture diagrams (digital, zoomable)
+- Performance metrics if relevant
+
+### Day-of Materials
+- Business cards / digital contact
+- Water bottle (3×30min talking!)
+- Phone charger
+- Tested offline demo
 
 ## Notes
 
@@ -127,3 +154,4 @@ Notes from brainstorming discussion.
 - Focus on what's portable vs framework-specific
 - Make it relatable to audience who wonder the same things
 - Use 30-minute sessions for deeper technical discussions
+- Speaker is Japanese, will present in Japanese
