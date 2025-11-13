@@ -7,17 +7,18 @@ Notes from brainstorming discussion.
 - **Format**: A0 poster (841mm × 1189mm)
 - **Presentation**: 3× 30-minute discussion sessions with attendees
 - **Setup**: Poster displayed throughout the event
-- **Language**: Draft in English, final version in Japanese
+- **Language**: Draft in English (easier to iterate), translate to Japanese as final step
 
 ## Next Steps
 
 - [ ] Choose final topic
 - [ ] Deep dive into implementation details
 - [ ] Create visual diagrams/flow charts
-- [ ] Write content sections (English draft → Japanese final)
+- [ ] Write content sections (English draft)
 - [ ] Prepare laptop demo and materials
 - [ ] Design layout (use design tool or code)
 - [ ] Review from 2m distance
+- [ ] Translate to Japanese (may require font size/layout adjustments)
 - [ ] Print test
 - [ ] Submit proposal
 

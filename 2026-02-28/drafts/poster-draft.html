@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Is "use cache" a React feature?</title>
+  <style>
+    @page {
+      size: 841mm 1189mm; /* A0 portrait */
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40mm;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      width: 841mm;
+      height: 1189mm;
+      display: flex;
+      flex-direction: column;
+      gap: 30mm;
+    }
+
+    /* Title Section */
+    .title {
+      text-align: center;
+      border-bottom: 5px solid #2563eb;
+      padding-bottom: 20mm;
+    }
+
+    .title h1 {
+      font-size: 80pt;
+      margin: 0 0 10mm 0;
+      color: #1e40af;
+    }
+
+    .title .subtitle {
+      font-size: 48pt;
+      color: #64748b;
+      margin: 10mm 0;
+    }
+
+    .title .author {
+      font-size: 36pt;
+      color: #334155;
+      margin-top: 15mm;
+    }
+
+    /* Hook Section */
+    .hook {
+      background: #dbeafe;
+      padding: 20mm;
+      border-radius: 10mm;
+      border-left: 10mm solid #2563eb;
+    }
+
+    .hook p {
+      font-size: 36pt;
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    /* Main Content - 3 columns */
+    .content {
+      display: flex;
+      gap: 20mm;
+      flex: 1;
+    }
+
+    .column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 15mm;
+    }
+
+    .section {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8mm;
+      padding: 15mm;
+    }
+
+    .section h2 {
+      font-size: 48pt;
+      margin: 0 0 10mm 0;
+      color: #1e40af;
+      border-bottom: 3px solid #93c5fd;
+      padding-bottom: 5mm;
+    }
+
+    .section p {
+      font-size: 28pt;
+      line-height: 1.6;
+      margin: 8mm 0;
+    }
+
+    .section ul {
+      font-size: 28pt;
+      line-height: 1.8;
+      padding-left: 15mm;
+    }
+
+    /* Code blocks */
+    .code {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 10mm;
+      border-radius: 5mm;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 24pt;
+      overflow-x: auto;
+      margin: 10mm 0;
+    }
+
+    /* Diagram placeholder */
+    .diagram {
+      background: #f1f5f9;
+      border: 3px dashed #cbd5e1;
+      border-radius: 5mm;
+      padding: 20mm;
+      text-align: center;
+      font-size: 32pt;
+      color: #64748b;
+      min-height: 200mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Footer */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 5px solid #2563eb;
+      padding-top: 15mm;
+    }
+
+    .footer .takeaways {
+      flex: 1;
+    }
+
+    .footer h3 {
+      font-size: 42pt;
+      margin: 0 0 8mm 0;
+      color: #1e40af;
+    }
+
+    .footer ul {
+      font-size: 30pt;
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .footer .qr-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8mm;
+    }
+
+    .qr-placeholder {
+      width: 80mm;
+      height: 80mm;
+      background: #e2e8f0;
+      border: 3px solid #94a3b8;
+      border-radius: 5mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24pt;
+      color: #64748b;
+    }
+
+    .footer .contact {
+      font-size: 26pt;
+      text-align: center;
+      color: #475569;
+    }
+  </style>
+</head>
+<body>
+  <!-- Title Section -->
+  <div class="title">
+    <h1>Is "use cache" a React feature?</h1>
+    <div class="subtitle">Understanding the boundaries between React and Next.js</div>
+    <div class="author">Your Name | @vitejs/plugin-rsc maintainer</div>
+  </div>
+
+  <!-- Hook -->
+  <div class="hook">
+    <p>💡 You're using "use cache" in Next.js—but is it a React feature or a Next.js feature?</p>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Column 1: Problem -->
+    <div class="column">
+      <div class="section">
+        <h2>🤔 The Problem</h2>
+        <p>Many developers don't understand where React ends and Next.js begins</p>
+        <ul>
+          <li>What's portable?</li>
+          <li>Can I use it in other frameworks?</li>
+          <li>How does it work internally?</li>
+        </ul>
+      </div>
+
+      <div class="section">
+        <h2>📦 What React Provides</h2>
+        <ul>
+          <li>Cache boundaries</li>
+          <li>Serialization hooks</li>
+          <li>Primitive APIs</li>
+        </ul>
+        <div class="code">// React primitives
+const cached = cache(async () => {
+  // ...
+});</div>
+      </div>
+    </div>
+
+    <!-- Column 2: Approach -->
+    <div class="column">
+      <div class="section">
+        <h2>🔍 The Approach</h2>
+        <p>Implement in Vite to understand the internals</p>
+      </div>
+
+      <div class="diagram">
+        [Flow Diagram]
+        React Primitives
+        ↓
+        Bundler Integration
+        ↓
+        Framework Features
+      </div>
+    </div>
+
+    <!-- Column 3: Results -->
+    <div class="column">
+      <div class="section">
+        <h2>⚡ What Next.js Adds</h2>
+        <ul>
+          <li>Fetch caching</li>
+          <li>Revalidation strategies</li>
+          <li>Dev tools integration</li>
+        </ul>
+        <div class="code">// Next.js specific
+export const revalidate = 3600;</div>
+      </div>
+
+      <div class="section">
+        <h2>🔧 Implementation in Vite</h2>
+        <p>Based on jacob-ebey/vite-plugin-react-use-cache</p>
+        <ul>
+          <li>Portable parts</li>
+          <li>Framework-specific parts</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="takeaways">
+      <h3>🎯 Key Takeaways</h3>
+      <ul>
+        <li>"use cache" is built on React primitives</li>
+        <li>Next.js adds features and DX improvements</li>
+        <li>Can be implemented in other frameworks</li>
+      </ul>
+    </div>
+
+    <div class="qr-section">
+      <div class="qr-placeholder">QR Code</div>
+      <div class="contact">
+        github.com/your-repo<br>
+        @your-twitter
+      </div>
+    </div>
+  </div>
+</body>
+</html>
