@@ -47,7 +47,8 @@ General poster preparation plan. See [plan-topics.md](./plan-topics.md) for topi
   - Problem, approach, results sections
   - Code examples with explanations
 - **Design layout**: 3-5 hours
-  - Refining the HTML/CSS
+  - Choose final tool (HTML/CSS, Figma, PowerPoint, etc.)
+  - Create actual poster design
   - Adjusting typography, spacing, colors
   - Multiple iteration rounds
 
@@ -163,17 +164,21 @@ A0 (841mm × 1189mm) is **very large** - important to keep in mind during design
 
 ## Tooling Decision
 
-### Chosen: HTML/CSS ✅
-- **Why**: Comfortable with web tech, version controllable, easy iteration
+### Current: HTML/CSS (for prototyping/visualization)
+- **Purpose**: Rough visualization and layout testing
+- **Why**: Quick iteration, version control, easy to experiment
+- **Current draft**: `drafts/poster-draft.html` (prototype only)
+- **Note**: Final tool decision to be made later when creating actual poster
+
+### Options for Final Poster
+
+**HTML/CSS**
+- **Pros**: Git-friendly, no special software, precise control over layout
+- **Cons**: Need to handle print CSS carefully, less visual/intuitive
 - **Workflow**: Edit HTML/CSS → browser print → PDF (A0 size)
 - **Resources**:
   - [academic-poster-template](https://github.com/cpitclaudel/academic-poster-template) - Modern, accessible
   - [SciPosterHTML](https://github.com/martinlicht/SciPosterHTML) - Minimal, flexbox-based
-- **Pros**: Git-friendly, no special software, precise control over layout
-- **Cons**: Need to handle print CSS carefully
-- **Current draft**: `drafts/poster-draft.html`
-
-### Alternative Options Considered
 
 **Slidev** ❌ (Not ideal for posters)
 - Possible with custom canvas size in config:
