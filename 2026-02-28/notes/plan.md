@@ -55,10 +55,21 @@ Notes from brainstorming discussion.
 **Your background**:
 - Author/maintainer of `@vitejs/plugin-rsc`
 - Waku contributor
-- Not a Next.js heavy user (opportunity to learn!)
+- Helped create/contributed to vite-plugin-react-use-cache (understand the core implementation well)
+- Not a Next.js heavy user (gap: Next.js-specific features)
+
+**What you know**:
+- Core "use cache" implementation in Vite
+- React primitives and how they work
+- Portable parts of the implementation
+
+**What to research**:
+- Next.js-specific additions/differences
+- How Next.js wraps or extends the core primitives
+- DX features and tooling Next.js provides on top
 
 **References**:
-- https://github.com/jacob-ebey/vite-plugin-react-use-cache/
+- https://github.com/jacob-ebey/vite-plugin-react-use-cache/ (your work)
 - https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc
 - https://github.com/wakujs/waku
 
@@ -116,13 +127,57 @@ Notes from brainstorming discussion.
 - Middle: React implementation
 - Right: Next.js + Vite comparison
 
+## Tooling Decision
+
+### Chosen: HTML/CSS ✅
+- **Why**: Comfortable with web tech, version controllable, easy iteration
+- **Workflow**: Edit HTML/CSS → browser print → PDF (A0 size)
+- **Resources**:
+  - [academic-poster-template](https://github.com/cpitclaudel/academic-poster-template) - Modern, accessible
+  - [SciPosterHTML](https://github.com/martinlicht/SciPosterHTML) - Minimal, flexbox-based
+- **Pros**: Git-friendly, no special software, precise control over layout
+- **Cons**: Need to handle print CSS carefully
+- **Current draft**: `drafts/poster-draft.html`
+
+### Alternative Options Considered
+
+**Slidev** ❌ (Not ideal for posters)
+- Possible with custom canvas size in config:
+  ```ts
+  export default {
+    canvasWidth: 841,
+    aspectRatio: 1189/841, // A0 portrait
+  }
+  ```
+- Issue: Optimized for slides, not posters
+- Better use: Separate slide deck to accompany poster
+
+**PowerPoint/Keynote/Google Slides** (Common approach)
+- Custom size: 84.1cm × 118.9cm
+- Easy for beginners, harder to version control
+- Good templates available
+
+**Figma/Canva** (Design-focused)
+- Good for design-heavy posters
+- Collaborative editing
+- Export to PDF for printing
+- Frame size in Figma: 8410 × 11890 px (at 10px/mm)
+
 ## Research Path (if pursuing "use cache")
 
-1. Study jacob-ebey's vite-plugin-react-use-cache (clearest reference)
-2. Identify React primitives (react/cache, serialization)
-3. Document Next.js approach (high-level only)
-4. Build minimal example in Vite setup
-5. Create visual diagrams showing the flow
+Starting point: You already understand the Vite implementation well
+
+1. Document what you already know (Vite/portable implementation)
+2. Research Next.js-specific implementation:
+   - How Next.js uses the same React primitives
+   - What additional features Next.js adds (fetch integration, revalidation, etc.)
+   - DX/tooling differences
+3. Create comparison showing:
+   - What's React (core primitives)
+   - What's portable (works in any framework)
+   - What's Next.js-specific
+4. Build visual diagrams showing the architecture layers
+5. Prepare side-by-side code examples
 
 ## Materials to Prepare (Beyond Poster)
 
