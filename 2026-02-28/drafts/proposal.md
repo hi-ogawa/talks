@@ -41,7 +41,7 @@ VoidZero Inc.のOSS開発者。`@vitejs/plugin-rsc`の作者。Vite、Vitest、W
 
 ## 発表タイトル
 
-"use cache"はReactの機能なのか？
+フレームワーク非依存な"use cache"の仕組みとViteでの実装
 
 ## 概要
 
@@ -49,7 +49,7 @@ Next.jsが導入した"use cache"ディレクティブはNext.jsの独自の機�
 
 ## アピールポイント
 
-ポスターで扱う具体的なAPIは以下の通りです：
-- `renderToReadableStream` / `createFromReadableStream`: クライアントとサーバーの2つの世界でクライアント/サーバー参照を変換するRSCシリアライズAPI。
-- `encodeReply` / `decodeReply`: サーバー関数の引数のエンコード/デコード。
-- `createTemporaryReferenceSet`: 静的シェル（`use cache`コンポーネント）と動的な子要素のドーナツパターンを可能にする一時参照API。
+具体的なAPIは以下の通りです：
+- `renderToReadableStream` / `createFromReadableStream`: encoding / decoding for server component and client compoennt
+- `encodeReply` / `decodeReply`: encoding / decoding of server function arguments (this is used to create cache key for "use cache" function/component arguments)
+- `createTemporaryReferenceSet`: temporary reference APIがどのように "use cache" componentとdynamic childrenのドーナツパターンを可能にするか。
