@@ -20,5 +20,6 @@
 ## Context
 
 - author / maintainer of `@vitejs/plugin-rsc` https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc
+- https://github.com/vitejs/vite-plugin-react/blob/87557115710b060ee9f534300a7209ddc62be9cf/packages/plugin-rsc/examples/basic/src/framework/use-cache-runtime.tsx
 - https://github.com/wakujs/waku
 - https://github.com/jacob-ebey/vite-plugin-react-use-cache/
