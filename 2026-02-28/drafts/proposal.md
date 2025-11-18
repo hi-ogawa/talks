@@ -12,8 +12,8 @@ In English
 
 ## 自己紹介文
 
-`@vitejs/plugin-rsc`
-Waku
+`@vitejs/plugin-rsc` author
+Vite and Waku team members.
 
 ## 発表タイトル
 
@@ -23,7 +23,7 @@ Is "use cache" a React feature?
 
 Next.js has introduced "use cache" directive. While it appears as a Next.js feature, the core functionality is built on React primitives and fundamental RSC concepts, which are bundler/framework-agnostic.
 
-This session explores how "use cache" works using React's serialization and deserialization APIs. Through a demo implementation with `@vitejs/plugin-rsc`, we'll see that the fundamental mechanism is a React feature, while Next.js adds framework-specific features like fetch caching and revalidation on top. The focus is on understanding the underlying React APIs and how they relate to familiar RSC concepts like client components and server functions.
+This session explores how "use cache" works using React's serialization and deserialization APIs. Through a demo implementation for `@vitejs/plugin-rsc`, we'll see that the fundamental mechanism is a React feature, while Next.js adds framework-specific features like fetch caching and revalidation on top. The focus is on understanding the underlying React APIs and how they relate to familiar RSC concepts like client components and server functions.
 
 ## アピールポイント
 
