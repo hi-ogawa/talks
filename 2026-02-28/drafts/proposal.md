@@ -17,7 +17,9 @@ Is "use cache" a React feature?
 
 ## 概要
 
-Next.js has introduced "use cache" directive. While Next.js provides more high level features, API, and route level integrations, the core "use cache" functionality is built on top of React primitives and fundamental RSC concepts. This session shows how React primitives (`react-server-dom` API) are utilized for implementation and how it relates to basic RSC concepts, such as client component and server functions. The demo is implemented for `@vitejs/plugin-rsc` to illustrate how "use cache" can be implemented outside of Next.js.
+Next.js has introduced "use cache" directive. While it appears as a Next.js feature, the core functionality is built on React primitives from `react-server-dom` - the same APIs underlying client components and server functions that RSC developers are already familiar with.
+
+This session shows how "use cache" works using React's serialization APIs. The demo (using @vitejs/plugin-rsc) demonstrates that the fundamental mechanism is a React feature - Next.js adds framework-specific features like fetch caching and revalidation on top. We'll explore how the React APIs work and how they relate to client component and server function concepts.
 
 ## アピールポイント
 
