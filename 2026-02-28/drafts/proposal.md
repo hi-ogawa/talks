@@ -41,13 +41,11 @@ VoidZero Inc.のOSS開発者。`@vitejs/plugin-rsc`の作者。Vite、Vitest、W
 
 ## 発表タイトル
 
-「"use cache"はReactの機能なのか？」
+"use cache"はReactの機能なのか？
 
 ## 概要
 
-Next.jsは「use cache」ディレクティブを導入しました。一見Next.jsの機能に見えますが、コア機能はReactのプリミティブと基本的なRSCコンセプトで構築されており、バンドラー/フレームワークに依存しません。
-
-このセッションでは、Reactのシリアライズ・デシリアライズAPIを使って「use cache」がどのように動作するかを探ります。焦点は、ReactのAPIがクライアントコンポーネントやサーバー関数といった馴染みのあるRSCコンセプトとどのように関連しているかを理解することです。`@vitejs/plugin-rsc`のデモ実装を通じて、基本的なメカニズムはReactの機能であり、Next.jsがfetchキャッシュやrevalidationといったフレームワーク固有の機能を追加していることがわかります。
+Next.jsが導入した"use cache"ディレクティブはNext.jsの独自の機能に見えますが、そのコア機能はReactが提供するAPIと基本的なRSCコンセプトで構築されており、バンドラー/フレームワークに依存しません。このセッションでは、ReactのRSC APIを使って"use cache"がどのように作られているか、そしてclient component / server functionなどで使われているAPIとどのように対応するのかを紹介します。また`@vitejs/plugin-rsc`のために作られた`vite-plugin-react-use-cache`の実装を通して、フレームワークに依存しない形での"use cache"の機能が理解できます。
 
 ## アピールポイント
 
