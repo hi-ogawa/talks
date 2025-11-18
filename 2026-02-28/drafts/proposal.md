@@ -12,8 +12,7 @@ In English
 
 ## 自己紹介文
 
-`@vitejs/plugin-rsc` author
-Vite and Waku team members.
+OSS developer at VoidZero Inc. `@vitejs/plugin-rsc` author. Vite, Vitest and Waku team member.
 
 ## 発表タイトル
 
