@@ -10,21 +10,26 @@ Discord: hiroshi18181
 
 In English
 
-## 自己紹介文
+## 自己紹介文 / self introduction
 
 OSS developer at VoidZero Inc. `@vitejs/plugin-rsc` author. Vite, Vitest and Waku team member.
 
-## 発表タイトル
+## 発表タイトル / title
 
 Is "use cache" a React feature?
 
-## 概要
+## 概要 / abstract
 
 Next.js has introduced "use cache" directive. While it appears as a Next.js feature, the core functionality is built on React primitives and fundamental RSC concepts, which are bundler/framework-agnostic.
 
-This session explores how "use cache" works using React's serialization and deserialization APIs. Through a demo implementation for `@vitejs/plugin-rsc`, we'll see that the fundamental mechanism is a React feature, while Next.js adds framework-specific features like fetch caching and revalidation on top. The focus is on understanding the underlying React APIs and how they relate to familiar RSC concepts like client components and server functions.
+This session explores how "use cache" works using React's serialization and deserialization APIs. The focus is on understanding the underlying React APIs and how they relate to familiar RSC concepts like client components and server functions. Through a demo implementation for `@vitejs/plugin-rsc`, we'll see that the fundamental mechanism is a React feature, while Next.js adds framework-specific features like fetch caching and revalidation on top.
 
-## アピールポイント
+## アピールポイント / appeal points
+
+Concrete API covered in the poster will be:
+- `renderToReadableStream` / `createFromReadableStream`: RSC serialization API to convert client/server references in two worlds (client and server).
+- `encodeReply` / `decodeReply`: encoding / decoding of server function arguments.
+- `createTemporaryReferenceSet`: temporary reference API enables donut pattern of static shell (`use cache` component) and dynamic children.
 
 ---
 
