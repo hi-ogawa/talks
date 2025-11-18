@@ -50,6 +50,6 @@ Next.jsが導入した"use cache"ディレクティブはNext.jsの独自の機�
 ## アピールポイント
 
 具体的なAPIは以下の通りです：
-- `renderToReadableStream` / `createFromReadableStream`: encoding / decoding for server component and client compoennt
-- `encodeReply` / `decodeReply`: encoding / decoding of server function arguments (this is used to create cache key for "use cache" function/component arguments)
+- `renderToReadableStream` / `createFromReadableStream`: server componentとclient compoentのencoding/decoding
+- `encodeReply` / `decodeReply`: server functionの引数のencoding/decoding (これが"use cache" function/componentの引数をcache keyにするのに使われてる。)
 - `createTemporaryReferenceSet`: temporary reference APIがどのように "use cache" componentとdynamic childrenのドーナツパターンを可能にするか。
