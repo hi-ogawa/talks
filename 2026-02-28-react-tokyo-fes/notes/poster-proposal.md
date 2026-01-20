@@ -27,6 +27,7 @@ This session explores how "use cache" works using React's serialization and dese
 ## アピールポイント / appeal points
 
 Concrete API covered in the poster will be:
+
 - `renderToReadableStream` / `createFromReadableStream`: RSC serialization API to convert client/server references in two worlds (client and server).
 - `encodeReply` / `decodeReply`: encoding / decoding of server function arguments.
 - `createTemporaryReferenceSet`: temporary reference API enables donut pattern of static shell (`use cache` component) and dynamic children.
@@ -50,6 +51,7 @@ Next.jsが導入した"use cache"ディレクティブはNext.jsの独自の機�
 ## アピールポイント
 
 具体的なAPIは以下の通りです：
+
 - `renderToReadableStream` / `createFromReadableStream`: server componentとclient compoentのencoding/decoding
 - `encodeReply` / `decodeReply`: server functionの引数のencoding/decoding (これが"use cache" function/componentの引数をcache keyにするのに使われてる。)
 - `createTemporaryReferenceSet`: temporary reference APIがどのように "use cache" componentとdynamic childrenのドーナツパターンを可能にするか。

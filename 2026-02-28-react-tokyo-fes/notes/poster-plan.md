@@ -42,6 +42,7 @@ Three categories of APIs to cover:
 ### Connection to Familiar Concepts
 
 Show how these APIs relate to what RSC developers already know:
+
 - Client component serialization/deserialization
 - Server function argument encoding
 - Two worlds concept

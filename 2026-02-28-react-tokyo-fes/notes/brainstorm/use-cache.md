@@ -12,17 +12,17 @@
 ### Deserialize on react client
 
 VDOM (Server component, client component reference)
-  ⇓  (evaluate server compoment: `renderToReadableStream`)
-RSC Stream 
-  ⇓  (revive client component reference: `createFromReadableStream`)
+⇓ (evaluate server compoment: `renderToReadableStream`)
+RSC Stream
+⇓ (revive client component reference: `createFromReadableStream`)
 VDOM (client component)
 
 ### Deserialize back on react server
 
 VDOM (Server component, client component reference)
-  ⇓  (evaluate server compoment `renderToReadableStream`)
-RSC Stream 
-  ⇓  (revive client component reference: `createFromReadableStream`)
+⇓ (evaluate server compoment `renderToReadableStream`)
+RSC Stream
+⇓ (revive client component reference: `createFromReadableStream`)
 VDOM (client component _reference_)
 
 This is achieved by passing different "bundler map" for `createFromReadableStream`.
@@ -33,8 +33,8 @@ This is achieved by passing different "bundler map" for `createFromReadableStrea
 - `decodeReply(args, { temporaryReferences })`
 
 ```js
-const encoded = await encodeReply(args, { temporaryReferences })
-const decoded = await encodeReply(args, { temporaryReferences })
+const encoded = await encodeReply(args, { temporaryReferences });
+const decoded = await encodeReply(args, { temporaryReferences });
 ```
 
 ### Why "temporary references"?

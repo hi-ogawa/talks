@@ -14,6 +14,7 @@
 ## Printing to PDF
 
 ### Chrome/Edge
+
 1. Open the HTML file
 2. Press `Cmd/Ctrl + P`
 3. Settings:
@@ -24,6 +25,7 @@
 4. Save
 
 ### Firefox
+
 1. Open the HTML file
 2. Press `Cmd/Ctrl + P`
 3. Settings:
@@ -34,6 +36,7 @@
 ## Editing
 
 The HTML file is fully editable:
+
 - Change colors in the `<style>` section
 - Modify text content in the `<body>`
 - Add images: `<img src="diagram.png" style="width: 100%;">`
@@ -67,6 +70,7 @@ The HTML file is fully editable:
 ## Tool Alternatives
 
 If HTML isn't working for you:
+
 - **PowerPoint**: Custom size → 84.1cm × 118.9cm
 - **Figma**: Frame size → 8410 × 11890 px (at 10px/mm)
 - **Canva**: Search "A0 poster template"
