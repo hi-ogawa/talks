@@ -9,7 +9,7 @@
 ## Submission Method
 Submit to the shared Google Drive: https://drive.google.com/drive/folders/1jKkk87P61rTnkU8fG4iXxRVGT7YhoAre
 
-1. **Poster (Google Slides)** → `1. ポスター提出用/`
+1. **Poster (Google Slides)** → `ポスター提出用/`
 2. **Images used in poster** → `ポスター用画像提出用/`
 3. **Profile icon** → `プロフィール画像提出用/`
 
