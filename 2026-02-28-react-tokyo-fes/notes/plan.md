@@ -70,3 +70,25 @@ Submit to the shared Google Drive: https://drive.google.com/drive/folders/1jKkk8
 
 - Name & bio: Include in the Google Slides
 - Icon image: Submit separately (high-res preferred, printed as 10cm circle)
+
+## Font Size Guidelines
+
+- 48pt ≈ 3cm height (titles)
+- 24pt ≈ 1cm height (body text)
+- 16pt minimum (readable from distance)
+- Gothic/sans-serif recommended for visibility
+
+## Content Capacity Estimate
+
+A0 = 84.1cm × 118.9cm
+
+Rough layout:
+- Title/header: ~10-15cm
+- Main content: ~85cm (3 columns × ~25cm wide)
+- Profile/footer: ~15cm
+
+Estimate for technical poster:
+- **Slides**: 4-6 logical chunks → condense to 3 columns
+- **Code blocks**: 3-4 total (5-8 lines each, 16-20pt mono)
+- **Diagrams**: 2-3 (each ~15-20cm tall)
+- **Text**: Bullet points, minimal prose

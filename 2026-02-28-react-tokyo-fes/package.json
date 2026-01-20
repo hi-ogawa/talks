@@ -3,6 +3,11 @@
   "private": true,
   "license": "MIT",
   "type": "module",
-  "scripts": {},
-  "devDependencies": {}
+  "scripts": {
+    "dev": "slidev"
+  },
+  "devDependencies": {
+    "@slidev/cli": "^52.2.5",
+    "@slidev/theme-default": "^0.25.0"
+  }
 }
