@@ -1,6 +1,6 @@
-# Action Plan: Poster Submission
+# Poster Plan
 
-Deadline: **2026-01-26** (6 days from Jan 20)
+Deadline: **2026-01-26**
 
 ## Deliverables
 
@@ -8,39 +8,39 @@ Deadline: **2026-01-26** (6 days from Jan 20)
 - [ ] High-res images for poster
 - [ ] Profile icon (high-res, 10cm circle)
 
-## Phase 1: Content Prep (Jan 20-22)
+## Approach
 
-- [ ] Review `vite-plugin-react-use-cache` implementation
-- [ ] Extract key code snippets for each API:
-  - [ ] `renderToReadableStream` / `createFromReadableStream`
-  - [ ] `encodeReply` / `decodeReply`
-  - [ ] `createTemporaryReferenceSet`
-- [ ] Draft text content for each section
+**Key principle**: Start fresh. Old drafts (`poster-plan.md`, `brainstorm/`) are raw material only — not fixed structure or flow.
 
-## Phase 2: Visuals (Jan 22-24)
+### Stage 1: Narrative Flow (Slides Draft)
 
-- [ ] Create diagrams:
-  - [ ] RSC serialization flow
-  - [ ] Two worlds (client/server bundler maps)
-  - [ ] Donut pattern (static shell + dynamic children)
-- [ ] Prepare code snippet images (syntax highlighted)
+Build content as a slide deck first:
+- Each slide = one logical chunk
+- Focus on flow and story, not layout
+- Easy to reorder and iterate
+- Questions to answer:
+  - What should someone walk away understanding?
+  - What's the hook that makes them stop?
 
-## Phase 3: Poster Assembly (Jan 24-25)
+### Stage 2: Content + Visuals
 
-- [ ] Copy template to own Google Slides
-- [ ] Layout three API columns
-- [ ] Add title, hook, diagrams
-- [ ] Add profile section (name, bio)
-- [ ] Review and polish
+Once flow is solid:
+- Write actual text for each chunk
+- Create diagrams where needed
+- Extract code snippets from implementation
 
-## Phase 4: Submit (Jan 25-26)
+### Stage 3: Condense to Poster
 
-- [ ] Export high-res images from poster
-- [ ] Prepare profile icon
-- [ ] Upload to Drive:
-  - `ポスター提出用/`
-  - `ポスター用画像提出用/`
-  - `プロフィール画像提出用/`
+Map slides to poster layout:
+- Slides → poster sections
+- Adjust for A0 density (less text, bigger visuals)
+- Use Google Slides template
+
+### Stage 4: Polish + Submit
+
+- Review from distance
+- Add profile section
+- Export images, upload to Drive
 
 # Poster Submission Details
 

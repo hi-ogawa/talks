@@ -155,6 +155,7 @@ Show how these APIs relate to what RSC developers already know:
 
 - Your notes: `notes/brainstorm/use-cache.md`
 - https://github.com/vitejs/vite-plugin-react
+  - https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-rsc/examples/basic/src/framework/use-cache-runtime.tsx
   - `~/code/others/vite-plugin-react/packages/plugin-rsc`
 - https://github.com/jacob-ebey/vite-plugin-react-use-cache
   - `~/code/others/vite-plugin-react-use-cache`
