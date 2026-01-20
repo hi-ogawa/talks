@@ -152,7 +152,8 @@ Show how these APIs relate to what RSC developers already know:
 
 ## References
 
-- https://github.com/jacob-ebey/vite-plugin-react-use-cache/
-- https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-rsc
-- React `react-server-dom` documentation
-- Your notes: `notes/use-cache.md`
+- Your notes: `notes/brainstorm/use-cache.md`
+- https://github.com/vitejs/vite-plugin-react
+  - `~/code/others/vite-plugin-react/packages/plugin-rsc`
+- https://github.com/jacob-ebey/vite-plugin-react-use-cache
+  - `~/code/others/vite-plugin-react-use-cache`
