@@ -1,0 +1,4 @@
+- https://github.com/vitejs/vite-plugin-react
+  - `~/code/others/vite-plugin-react/packages/plugin-rsc`
+- https://github.com/jacob-ebey/vite-plugin-react-use-cache
+  - `~/code/others/vite-plugin-react-use-cache`
