@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "runner": "node run.ts",
+    "vite-run": "node vite-run.ts",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"

@@ -135,13 +135,146 @@ function serializeNumber(number: number): string | number {
 Returns either:
 
 - **JSON string** - For simple values without binary data
-- **FormData** - When binary data (Blobs, Streams, TypedArrays) is present
+- **FormData** - When complex types are present
 
-Field naming in FormData:
+#### FormData Switch Mechanism
+
+The `processReply` function (`ReactFlightReplyClient.js:178`) starts with `formData = null` and "upgrades" to FormData when certain types are encountered:
+
+```javascript
+let formData: null | FormData = null;  // :187
+```
+
+During `JSON.stringify` traversal, these trigger the upgrade:
+
+| Type                 | Line       | Reference Marker       |
+| -------------------- | ---------- | ---------------------- |
+| `FormData`           | `:561`     | `$K{id}`               |
+| `Blob`               | `:656`     | `$B{id}`               |
+| `Map`                | `:579`     | `$Q{id}`               |
+| `Set`                | `:588`     | `$W{id}`               |
+| `ReadableStream`     | `:685`     | `$R{id}` / `$r{id}`    |
+| `TypedArray`         | `:607-654` | `$A`, `$O`, `$o`, etc. |
+| `Promise` (thenable) | `:494`     | `$@{id}`               |
+
+Decision at the end (`:868-880`):
+
+```javascript
+const json = serializeModel(root, 0); // :868
+
+if (formData === null) {
+  resolve(json); // :872 - Simple case: just JSON string
+} else {
+  formData.set("0", json); // :875 - Complex case: JSON + binary in FormData
+  resolve(formData); // :878
+}
+```
+
+#### Input Type
+
+`encodeReply` accepts `ReactServerValue` (`:73-94`), not just arrays:
+
+```javascript
+export type ReactServerValue =
+  | ServerReference<any>
+  | string | boolean | number | null | void | bigint
+  | Iterable<...> | Iterator<...> | AsyncIterable<...> | AsyncIterator<...>
+  | Array<ReactServerValue>    // ← Array is just one option
+  | Map<...> | Set<...>
+  | FormData | Date
+  | ReactServerObject          // ← Plain objects
+  | Promise<ReactServerValue>;
+```
+
+However, the **actual server action flow guarantees array input**:
+
+```javascript
+// ReactFlightReplyClient.js:1273-1290
+let action = function (): Promise<T> {
+  const args = Array.prototype.slice.call(arguments);  // :1275 - Always array!
+  if (!bound) {
+    return callServer(id, args);                        // :1278
+  }
+  return callServer(id, boundArgs.concat(args));        // :1282, :1288
+};
+```
+
+So in your framework's `callServer` callback:
+
+```javascript
+// entry.browser.tsx
+setServerCallback(async (id, args) => {
+  // args is ALWAYS an array - guaranteed by createBoundServerReference
+  body: await encodeReply(args, { temporaryReferences });
+});
+```
+
+The broad `ReactServerValue` type is for API flexibility (direct `encodeReply` calls), but the server action flow always passes an array via `callServer(id, args)`.
+
+#### Example: Server action with FormData argument
+
+```javascript
+// Input: encodeReply(['foo', 'bar', formData])
+// where formData = { greeting: 'hello', timestamp: '123' }
+
+// Output: FormData (not JSON string!)
+FormData {
+  '0': '["foo","bar","$K1"]',    // Root JSON, FormData → $K1 reference
+  '1_greeting': 'hello',         // Inner FormData fields copied with prefix
+  '1_timestamp': '123'
+}
+```
+
+**Note**: For the common server action case `<form action={serverAction}>`, the input is always `FormData`, so the JSON-only path is effectively unused.
+
+#### Field Naming in FormData
 
 - `{prefix}0` - Root JSON value
 - `{prefix}N` - Outlined chunk N
-- `{prefix}N_fieldName` - FormData sub-fields
+- `{prefix}N_fieldName` - FormData sub-fields (inner FormData flattened)
+
+#### Server Action Call Flow
+
+How `callServer` connects to server function invocations:
+
+```
+SERVER
+  async function myAction(a, b) { "use server"; ... }
+                    ↓
+  ReactFlightServer.js:2799 → serializeServerReferenceID(id)
+                    ↓
+  RSC Payload: ... "$h{id}" ...
+                    ↓ stream
+CLIENT
+  createFromReadableStream(stream, { callServer })
+    └─ Response._callServer = callServer                    // :2642
+                    ↓
+  parseModelString encounters "$h{id}"                      // :2371-2380
+    └─ getOutlinedModel(..., loadServerReference)
+                    ↓
+  loadServerReference(response, metaData, ...)              // :1785-1793
+    └─ createBoundServerReference(metaData, response._callServer, ...)
+                    ↓
+  createBoundServerReference         // ReactFlightReplyClient.js:1259-1313
+    └─ Returns: function action(...args) {
+         return callServer(id, boundArgs.concat(args));     // :1278, :1282
+       }
+                    ↓ user invokes action
+USER CODE
+  <button onClick={() => myAction("foo", "bar")}>
+                    ↓
+  callServer(id, ["foo", "bar"])   ← Your callback
+    └─ encodeReply(args, { temporaryReferences })
+    └─ fetch to server with encoded body
+```
+
+| Step                         | File                        | Line         |
+| ---------------------------- | --------------------------- | ------------ |
+| Store callServer in Response | `ReactFlightClient.js`      | `:2642`      |
+| Parse `$h` reference         | `ReactFlightClient.js`      | `:2371-2380` |
+| Load server reference        | `ReactFlightClient.js`      | `:1785-1793` |
+| Create callable function     | `ReactFlightReplyClient.js` | `:1259-1313` |
+| Call callServer with args    | `ReactFlightReplyClient.js` | `:1278`      |
 
 #### Serialization Functions (ReactFlightReplyClient.js:98+)
 
@@ -260,6 +393,53 @@ react-server/src/ReactFlightServerTemporaryReferences.js
   - Proxy-based with error throwing on property access
   - Used to create opaque references on server
 ```
+
+#### Server-side Temporary Reference Placeholder
+
+When `decodeReply` encounters `$T`, it creates an **opaque Proxy placeholder** (`:95-114`):
+
+```javascript
+export function createTemporaryReference(temporaryReferences, id) {
+  const reference = Object.defineProperties(
+    function () {
+      throw new Error("Attempted to call a temporary Client Reference from the server...");
+    },
+    { $$typeof: { value: TEMPORARY_REFERENCE_TAG } },
+  );
+  const wrapper = new Proxy(reference, proxyHandlers);
+  registerTemporaryReference(temporaryReferences, wrapper, id); // WeakMap: proxy → id
+  return wrapper;
+}
+```
+
+The Proxy traps (`:35-93`) make it **intentionally restrictive**:
+
+| Access                                        | Result                                                  |
+| --------------------------------------------- | ------------------------------------------------------- |
+| `$$typeof`                                    | Returns `TEMPORARY_REFERENCE_TAG` (React recognizes it) |
+| `name`, `displayName`, `defaultProps`, `then` | Returns `undefined` (safe defaults)                     |
+| **Call it** `fn()`                            | **Throws** "cannot call"                                |
+| **Any other property** `fn.foo`               | **Throws** "cannot dot into"                            |
+| **Set property** `fn.x = 1`                   | **Throws** "cannot assign"                              |
+
+#### Temporary Reference Round-trip Flow
+
+```
+encodeReply:  <DynamicChild />  →  clientTempRefs.set(element, "$0:0:children")
+                                   returns "$T"
+
+decodeReply:  "$T"  →  Proxy placeholder
+                       serverTempRefs.set(proxy, "$0:0:children")
+
+renderToReadableStream:  sees Proxy with $$typeof=TEMPORARY_REFERENCE_TAG
+                         looks up serverTempRefs.get(proxy) → "$0:0:children"
+                         outputs "$T0:0:children"
+
+createFromReadableStream:  "$T0:0:children"  →  clientTempRefs.get("$0:0:children")
+                                                → original <DynamicChild />
+```
+
+The Proxy is a **black box** - you can only pass it through as props. Any attempt to inspect or call it throws. This ensures dynamic content punches through the cache without server-side evaluation.
 
 ### Why No Code Sharing?
 
