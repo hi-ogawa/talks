@@ -1,0 +1,1 @@
+{"root":["./vite.config.ts","./src/action.tsx","./src/client.tsx","./src/root.tsx","./src/framework/entry.browser.tsx","./src/framework/entry.rsc.tsx","./src/framework/entry.ssr.tsx","./src/framework/error-boundary.tsx","./src/framework/request.tsx"],"version":"5.9.3"}

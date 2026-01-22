@@ -1,13 +1,4 @@
----
-theme: default
-transition: slide-left
----
-
-React RSC API and `use cache` mechanism
-
----
-
-Basic concepts of RSC: Server component rendering
+# Basic concepts of RSC: Server component rendering
 
 - `react-server` conditioned environment: React VDOM tree -> RSC stream
   - `renderToReadableStream from react-server-dom/server`
@@ -40,9 +31,34 @@ example: jsx -> rsc payload (string)
 
 -->
 
+React tree -> RSC stream -> React tree (without client components)
+(TODO: also with client components?)
+
+```tsx
+// React Server
+function ServerComponent() {
+  return <div>
+    <span>Hello server</span>
+    <span>{Math.random()}</span>
+  </div>
+}
+
+const rootNode == <ServerComponent />
+// { $$type: ServerComponentt, ... }
+
+const rscStream = renderToReadableStream(...)
+// rscStream = [...]
+```
+
+```tsx
+// React Client
+const rootNode = await createFromReadableStream(rscStream)
+// rootNode = { $$type: "div", ... }
+```
+
 ---
 
-Basic concepts of RSC: Server action/function
+# Basic concepts of RSC: Server action/function
 
 (might skip?)
 - On browser (server function caller)
@@ -66,9 +82,9 @@ With createTemporaryReferenceSet
 
 ---
 
-(First twist)
+# Using `createFromReadableStream` in `react-server` environment
 
-Using `createFromReadableStream` in `react-server` environment
+(First twist)
 
 - React VDOM tree -> RSC stream -> React VDOM tree
 - `renderToReadableStream from react-server-dom/server`
@@ -90,15 +106,16 @@ TODO: example
 
 ---
 
+## using `encodeReply(args, { temporaryReferences })` as cache function key
+
 (Second twist)
 
-using `encodeReply(args, { temporaryReferences })` to serialize "cached" function arguments,
-and use it as cache key. What does this allows? TODO
+use `encodeReply` to serialize "cached" function arguments and use it as cache key. What does this allows? TODO
 
 - there's a fucntion (component) to cache by function argument
   - function argument as cache key
 
-```js
+<!-- ```js
 function cachedFunction(arg) {
   "use cache";
   return {
@@ -108,19 +125,20 @@ function cachedFunction(arg) {
 }
 
 cachedFunction({ arg: Date.now })
-```
+``` -->
 
-```js
+
+```tsx
 function CachedParent({ children }) {
   "use cache";
   return <>
-    static: {Date.now()}
-    dynamic: {children}
+    <span>static: {Date.now()}</span>
+    {children}
   </>
 }
 
 function DynamicChild() {
-  return <>{Date.now()}</>
+  return <span>dynamic: {Date.now()}</span>
 }
 
 <CachedParent>

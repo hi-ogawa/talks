@@ -159,3 +159,9 @@ Show how these APIs relate to what RSC developers already know:
   - `~/code/others/vite-plugin-react/packages/plugin-rsc`
 - https://github.com/jacob-ebey/vite-plugin-react-use-cache
   - `~/code/others/vite-plugin-react-use-cache`
+- https://github.com/gaearon/rscexplorer/
+  - https://rscexplorer.dev
+  - visualization of RSC stream (renderToReadableStream) and action payload (encodeReply)
+- demo Vite RSC app
+	- visualize `encodeReply`
+	- visualize `renderToReadableStream`
