@@ -8,28 +8,76 @@ Deadline: **2026-01-26**
 - [ ] High-res images for poster
 - [ ] Profile icon (high-res, 10cm circle)
 
+## Working Documents
+
+| Document                               | Purpose                           | Status                           |
+| -------------------------------------- | --------------------------------- | -------------------------------- |
+| `draft-v2.md`                          | Main poster content flow          | **Active** - Stage 1 in progress |
+| `react-internal.md`                    | React RSC API research notes      | Reference                        |
+| `diagrams.md`                          | Mermaid diagram candidates        | Reference                        |
+| `draft.md`                             | Original draft (superseded by v2) | Archive                          |
+| `poster-plan.md`, `poster-proposal.md` | Old brainstorm material           | Archive                          |
+
+## Demo Code
+
+- `examples/starter/src/demo.tsx` - demo1-4 showing RSC/cache flows
+- `examples/starter/src/use-cache-runtime.tsx` - Reference implementation
+
+Run demos:
+
+```bash
+NODE_ENV=production pnpm -C examples/starter vite-run src/demo.tsx demo4
+```
+
+## Key Research Findings (see `react-internal.md`)
+
+- `renderToReadableStream` / `createFromReadableStream` share `$` marker conventions with `encodeReply` / `decodeReply`
+- Serialization functions are **duplicated** (not shared) between packages
+- `$T` marker creates "holes" for dynamic content via `temporaryReferences` WeakMap
+- Server-side placeholder is an opaque Proxy that throws on access
+
 ## Approach
 
 **Key principle**: Start fresh. Old drafts (`poster-plan.md`, `brainstorm/`) are raw material only — not fixed structure or flow.
 
-### Stage 1: Narrative Flow
+### Stage 1: Narrative Flow ✅ In Progress
 
-Build content as a single markdown document:
+Build content as a single markdown document (`draft-v2.md`):
 
 - Each section = one logical chunk
 - Focus on flow and story, not layout
 - Easy to reorder and iterate
-- Questions to answer:
-  - What should someone walk away understanding?
-  - What's the hook that makes them stop?
+
+**Poster Layout** (decided):
+
+- **Left side (smaller)**: PART 1 - RSC Basics
+  - 1.1 RSC Rendering Flow
+  - 1.2 Server Action Flow (encodeReply/decodeReply)
+  - 1.3 React package structure note
+- **Right side (larger)**: PART 2 - `use cache` Application
+  - 2.1 First Twist: Round-trip within RSC environment
+  - 2.2 Second Twist: $T marker
+  - 2.3 Punch line: use cache = APIs stitched together
+  - 2.4 Full round-trip diagram (5 steps)
+  - Takeaway table
+
+**Key message**: `use cache` isn't magic — it's four RSC APIs working together.
 
 ### Stage 2: Content + Visuals
 
 Once flow is solid:
 
 - Write actual text for each chunk
-- Create diagrams where needed
-- Extract code snippets from implementation
+- Create diagrams where needed (see `diagrams.md` for mermaid candidates)
+- Extract code snippets from demo code
+- Separate **Code** blocks from **Data transformation** visuals
+
+**Diagrams needed**:
+
+- [ ] Basic RSC flow (diagrams.md "basic flow")
+- [ ] RSC environment self-loop (diagrams.md)
+- [ ] $T marker transformation
+- [ ] Full 5-step round-trip (merged from 2.4 + Visual Summary)
 
 ### Stage 3: Condense to Poster
 

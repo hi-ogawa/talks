@@ -1,5 +1,11 @@
 # React RSC Serialization Internals
 
+> Research notes for poster. See also:
+>
+> - `draft-v2.md` - Poster content flow
+> - `examples/starter/src/demo.tsx` - Demo code (demo1-4)
+> - React repo: `~/code/others/react`
+
 ## Overview
 
 This document analyzes the serialization/deserialization mechanisms in React Server Components:

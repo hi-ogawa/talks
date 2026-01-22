@@ -1,3 +1,7 @@
+# Diagram Candidates
+
+> Mermaid diagrams for poster. Referenced in `draft-v2.md` and `plan.md`.
+
 ## basic flow
 
 cf. https://github.com/reactwg/server-components/discussions/4

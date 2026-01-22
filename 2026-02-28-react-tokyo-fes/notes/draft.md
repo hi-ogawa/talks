@@ -1,3 +1,5 @@
+> **Note**: This draft has been superseded by `draft-v2.md`. Kept for reference.
+
 # Basic concepts of RSC: Server component rendering
 
 - `react-server` conditioned environment: React VDOM tree -> RSC stream
