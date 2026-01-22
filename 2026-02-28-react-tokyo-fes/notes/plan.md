@@ -15,6 +15,7 @@ Deadline: **2026-01-26**
 ### Stage 1: Narrative Flow (Slides Draft)
 
 Build content as a slide deck first:
+
 - Each slide = one logical chunk
 - Focus on flow and story, not layout
 - Easy to reorder and iterate
@@ -25,6 +26,7 @@ Build content as a slide deck first:
 ### Stage 2: Content + Visuals
 
 Once flow is solid:
+
 - Write actual text for each chunk
 - Create diagrams where needed
 - Extract code snippets from implementation
@@ -32,6 +34,7 @@ Once flow is solid:
 ### Stage 3: Condense to Poster
 
 Map slides to poster layout:
+
 - Slides → poster sections
 - Adjust for A0 density (less text, bigger visuals)
 - Use Google Slides template
@@ -83,11 +86,13 @@ Submit to the shared Google Drive: https://drive.google.com/drive/folders/1jKkk8
 A0 = 84.1cm × 118.9cm
 
 Rough layout:
+
 - Title/header: ~10-15cm
 - Main content: ~85cm (3 columns × ~25cm wide)
 - Profile/footer: ~15cm
 
 Estimate for technical poster:
+
 - **Slides**: 4-6 logical chunks → condense to 3 columns
 - **Code blocks**: 3-4 total (5-8 lines each, 16-20pt mono)
 - **Diagrams**: 2-3 (each ~15-20cm tall)

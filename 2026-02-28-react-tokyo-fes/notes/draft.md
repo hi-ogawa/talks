@@ -52,7 +52,7 @@ const rscStream = renderToReadableStream(...)
 
 ```tsx
 // React Client
-const rootNode = await createFromReadableStream(rscStream)
+const rootNode = await createFromReadableStream(rscStream);
 // rootNode = { $$type: "div", ... }
 ```
 
@@ -61,6 +61,7 @@ const rootNode = await createFromReadableStream(rscStream)
 # Basic concepts of RSC: Server action/function
 
 (might skip?)
+
 - On browser (server function caller)
   - `encodeReply(args, { temporaryReferences }))` (encode server function call arguments)
   - `createTemporaryReferenceSet` (secret source)
@@ -91,6 +92,7 @@ With createTemporaryReferenceSet
 - `createFromReadableStream from react-server-dom/client`
 
 This allows a way to:
+
 - serialize React tree into RSC stream
   (here Server component is evaluated and becomes "dom primitive")
 - serialized RSC stream can be saved anywhere
@@ -115,35 +117,27 @@ use `encodeReply` to serialize "cached" function arguments and use it as cache k
 - there's a fucntion (component) to cache by function argument
   - function argument as cache key
 
-<!-- ```js
-function cachedFunction(arg) {
-  "use cache";
-  return {
-    static: Date.now()
-    dynamic: arg
-  }
-}
-
-cachedFunction({ arg: Date.now })
-``` -->
-
-
 ```tsx
-function CachedParent({ children }) {
+// `message` can contribute to a new cache entry
+// `children` is dynamically replaced
+function CachedParent({ children, message }: { children: React.ReactNode; message: string }) {
   "use cache";
-  return <>
-    <span>static: {Date.now()}</span>
-    {children}
-  </>
+  return (
+    <>
+      <span>static: {Date.now()}</span>
+      <span>message: {message}</span>
+      {children}
+    </>
+  );
 }
 
 function DynamicChild() {
-  return <span>dynamic: {Date.now()}</span>
+  return <span>dynamic: {Date.now()}</span>;
 }
 
 <CachedParent>
   <DynamicChild />
-</CachedParent>
+</CachedParent>;
 ```
 
 ---

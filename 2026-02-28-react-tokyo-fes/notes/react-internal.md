@@ -3,6 +3,7 @@
 ## Overview
 
 This document analyzes the serialization/deserialization mechanisms in React Server Components:
+
 1. **Server→Client**: `renderToReadableStream` → `createFromReadableStream`
 2. **Client→Server**: `encodeReply` → `decodeReply`
 
@@ -66,11 +67,13 @@ This document analyzes the serialization/deserialization mechanisms in React Ser
 #### Wire Format
 
 Each row follows the pattern:
+
 ```
 <HEX_ID>:<TAG>[PAYLOAD]\n
 ```
 
 Example rows:
+
 ```
 0:{"name":"John","children":"$1"}
 1:I{"id":"./ClientComponent.js","name":"default"}
@@ -80,19 +83,19 @@ Example rows:
 
 #### Row Tags (Single Character)
 
-| Tag | Purpose | Handler |
-|-----|---------|---------|
-| (none) | Default JSON model | `resolveModel()` |
-| `I` | Client module import | `resolveModule()` |
-| `H` | Resource hint (preload, etc.) | `resolveHint()` |
-| `E` | Error | `resolveErrorModel()` |
-| `T` | Text chunk | `resolveText()` |
-| `R` | ReadableStream | `startReadableStream()` |
-| `r` | ReadableStream (bytes) | `startReadableStream()` |
-| `X` | AsyncIterable | `startAsyncIterable()` |
-| `x` | AsyncIterator | `startAsyncIterable()` |
-| `C` | Stream close signal | `stopStream()` |
-| `A`, `O`, `o`, `U`, `S`, `s`, `L`, `l`, `G`, `g`, `M`, `m`, `V` | TypedArray variants | `resolveTypedArray()` |
+| Tag                                                             | Purpose                       | Handler                 |
+| --------------------------------------------------------------- | ----------------------------- | ----------------------- |
+| (none)                                                          | Default JSON model            | `resolveModel()`        |
+| `I`                                                             | Client module import          | `resolveModule()`       |
+| `H`                                                             | Resource hint (preload, etc.) | `resolveHint()`         |
+| `E`                                                             | Error                         | `resolveErrorModel()`   |
+| `T`                                                             | Text chunk                    | `resolveText()`         |
+| `R`                                                             | ReadableStream                | `startReadableStream()` |
+| `r`                                                             | ReadableStream (bytes)        | `startReadableStream()` |
+| `X`                                                             | AsyncIterable                 | `startAsyncIterable()`  |
+| `x`                                                             | AsyncIterator                 | `startAsyncIterable()`  |
+| `C`                                                             | Stream close signal           | `stopStream()`          |
+| `A`, `O`, `o`, `U`, `S`, `s`, `L`, `l`, `G`, `g`, `M`, `m`, `V` | TypedArray variants           | `resolveTypedArray()`   |
 
 #### Serialization Functions (ReactFlightServer.js:2787+)
 
@@ -130,10 +133,12 @@ function serializeNumber(number: number): string | number {
 #### Wire Format
 
 Returns either:
+
 - **JSON string** - For simple values without binary data
 - **FormData** - When binary data (Blobs, Streams, TypedArrays) is present
 
 Field naming in FormData:
+
 - `{prefix}0` - Root JSON value
 - `{prefix}N` - Outlined chunk N
 - `{prefix}N_fieldName` - FormData sub-fields
@@ -201,11 +206,11 @@ function parseModelString(response, obj, key, value): any {
 
 ## Key Files Reference
 
-| File | Package | Purpose |
-|------|---------|---------|
-| `ReactFlightServer.js` | react-server | Server→Client serialization |
-| `ReactFlightClient.js` | react-client | Server→Client deserialization |
-| `ReactFlightReplyClient.js` | react-client | Client→Server serialization |
+| File                        | Package      | Purpose                       |
+| --------------------------- | ------------ | ----------------------------- |
+| `ReactFlightServer.js`      | react-server | Server→Client serialization   |
+| `ReactFlightClient.js`      | react-client | Server→Client deserialization |
+| `ReactFlightReplyClient.js` | react-client | Client→Server serialization   |
 | `ReactFlightReplyServer.js` | react-server | Client→Server deserialization |
 
 ## Code Reuse Analysis
@@ -214,16 +219,17 @@ function parseModelString(response, obj, key, value): any {
 
 The `serialize*` functions are **duplicated**, not shared:
 
-| Function | `ReactFlightServer.js` | `ReactFlightReplyClient.js` |
-|----------|------------------------|----------------------------|
-| `serializeByValueID` | Line 2787 | Line 98 |
-| `serializePromiseID` | Line 2795 | Line 102 |
-| `serializeServerReferenceID` | Line 2799 | Line 106 |
-| `serializeNumber` | Line 2825 | Line 118 |
-| `serializeBigInt` | Line 2859 | Line 146 |
-| `serializeDateFromDateJSON` | Line 2853 | Line 140 |
+| Function                     | `ReactFlightServer.js` | `ReactFlightReplyClient.js` |
+| ---------------------------- | ---------------------- | --------------------------- |
+| `serializeByValueID`         | Line 2787              | Line 98                     |
+| `serializePromiseID`         | Line 2795              | Line 102                    |
+| `serializeServerReferenceID` | Line 2799              | Line 106                    |
+| `serializeNumber`            | Line 2825              | Line 118                    |
+| `serializeBigInt`            | Line 2859              | Line 146                    |
+| `serializeDateFromDateJSON`  | Line 2853              | Line 140                    |
 
 Similarly, `parseModelString` is duplicated between:
+
 - `ReactFlightClient.js` (server→client parsing)
 - `ReactFlightReplyServer.js` (client→server parsing)
 
@@ -231,13 +237,13 @@ Similarly, `parseModelString` is duplicated between:
 
 Only utility/helper code is shared:
 
-| Module | Purpose |
-|--------|---------|
+| Module                        | Purpose                                                                      |
+| ----------------------------- | ---------------------------------------------------------------------------- |
 | `ReactSerializationErrors.js` | Error message formatting (`describeObjectForErrorMessage`, `isSimpleObject`) |
-| `ReactSymbols.js` | Symbol constants (`REACT_ELEMENT_TYPE`, `ASYNC_ITERATOR`) |
-| `isArray.js` | Array check utility |
-| `getPrototypeOf.js` | Prototype access utility |
-| `hasOwnProperty.js` | Property check utility |
+| `ReactSymbols.js`             | Symbol constants (`REACT_ELEMENT_TYPE`, `ASYNC_ITERATOR`)                    |
+| `isArray.js`                  | Array check utility                                                          |
+| `getPrototypeOf.js`           | Prototype access utility                                                     |
+| `hasOwnProperty.js`           | Property check utility                                                       |
 
 ### TemporaryReferences - Similar API, Different Implementations
 
@@ -258,6 +264,7 @@ react-server/src/ReactFlightServerTemporaryReferences.js
 ### Why No Code Sharing?
 
 Likely reasons:
+
 1. **Different build targets**: react-server vs react-client have separate bundle configurations
 2. **Tree-shaking**: Keeping code separate allows dead code elimination per environment
 3. **Flexibility**: Each direction can evolve independently if needed
@@ -267,11 +274,13 @@ A potential refactor could extract a shared `ReactFlightSerializationFormat.js`,
 ## Conclusion
 
 ### Shared (Convention Only)
+
 - **JSON value reference markers** (`$` prefix system) - same convention, duplicated code
 - **parseModelString pattern** - same logic, duplicated implementation
 - **Type support** (Date, BigInt, Map, Set, TypedArrays, Streams) - symmetric but separate
 
 ### Not Shared
+
 - **Serialization functions** - duplicated in each file
 - **Wire format handling** - completely different implementations
 - **TemporaryReferences** - similar API, different implementations
@@ -279,11 +288,13 @@ A potential refactor could extract a shared `ReactFlightSerializationFormat.js`,
 ### Symmetry Design
 
 This design enables the "use cache" pattern described in draft.md:
+
 - `encodeReply` can serialize React elements (with temporaryReferences)
 - The same markers used in RSC payloads work for cache key serialization
 - `createFromReadableStream` can be used in react-server environment to restore cached RSC
 
 The shared marker **convention** (not code) allows seamless round-trip serialization:
+
 ```
 React Tree → encodeReply (cache key) → stored
            → renderToReadableStream (cache value) → stored

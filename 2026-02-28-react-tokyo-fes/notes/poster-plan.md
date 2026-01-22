@@ -163,5 +163,5 @@ Show how these APIs relate to what RSC developers already know:
   - https://rscexplorer.dev
   - visualization of RSC stream (renderToReadableStream) and action payload (encodeReply)
 - demo Vite RSC app
-	- visualize `encodeReply`
-	- visualize `renderToReadableStream`
+  - visualize `encodeReply`
+  - visualize `renderToReadableStream`
