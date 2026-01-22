@@ -85,12 +85,17 @@ Map section to poster layout:
 
 - Adjust for A0 density (less text, bigger visuals)
 - Use Google Slides template
+- Rewrite in Japanese here?
 
 ### Stage 4: Polish + Submit
 
 - Review from distance
 - Add profile section
 - Export images, upload to Drive
+
+### Stage 5: Follow up
+
+- Deploy playable demo
 
 # Poster Submission Details
 

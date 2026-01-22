@@ -180,7 +180,15 @@ The `$T` marker creates a "hole" — dynamic content is excluded from serializat
 
 TODO: drop `message` prop for simplicity?
 
-TODO: add brief `"use cache"` transform?
+TODO: add brief `"use cache"` transform? (too simplified but better than nothing)
+
+```tsx
+import __cache_wrapper from "virtual:cache-wrapper"
+
+export const CachedParent = __cache_wrapper(function ({ children }) {
+  ...
+})
+```
 
 Now combine the two twists:
 
