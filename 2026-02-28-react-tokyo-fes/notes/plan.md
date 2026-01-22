@@ -12,11 +12,11 @@ Deadline: **2026-01-26**
 
 **Key principle**: Start fresh. Old drafts (`poster-plan.md`, `brainstorm/`) are raw material only — not fixed structure or flow.
 
-### Stage 1: Narrative Flow (Slides Draft)
+### Stage 1: Narrative Flow
 
-Build content as a slide deck first:
+Build content as a single markdown document:
 
-- Each slide = one logical chunk
+- Each section = one logical chunk
 - Focus on flow and story, not layout
 - Easy to reorder and iterate
 - Questions to answer:
@@ -33,9 +33,8 @@ Once flow is solid:
 
 ### Stage 3: Condense to Poster
 
-Map slides to poster layout:
+Map section to poster layout:
 
-- Slides → poster sections
 - Adjust for A0 density (less text, bigger visuals)
 - Use Google Slides template
 
@@ -49,7 +48,7 @@ Map slides to poster layout:
 
 ## Deadline
 
-- **2026-01-26** (Sunday)
+- **2026-01-26** (Monday)
 
 ## Template
 
@@ -97,3 +96,15 @@ Estimate for technical poster:
 - **Code blocks**: 3-4 total (5-8 lines each, 16-20pt mono)
 - **Diagrams**: 2-3 (each ~15-20cm tall)
 - **Text**: Bullet points, minimal prose
+
+Compared to common monitors:
+
+┌─────────────┬──────────────────┬─────────────────────────────────┐
+│ Monitor │ Approximate Size │ A0 Comparison │
+├─────────────┼──────────────────┼─────────────────────────────────┤
+│ 24" monitor │ ~53cm × 30cm │ A0 is ~1.6× wider, ~4× taller │
+├─────────────┼──────────────────┼─────────────────────────────────┤
+│ 27" monitor │ ~60cm × 34cm │ A0 is ~1.4× wider, ~3.5× taller │
+├─────────────┼──────────────────┼─────────────────────────────────┤
+│ 32" monitor │ ~71cm × 40cm │ A0 is ~1.2× wider, ~3× taller │
+└─────────────┴──────────────────┴─────────────────────────────────┘
