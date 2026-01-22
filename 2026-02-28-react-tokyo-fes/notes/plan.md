@@ -10,13 +10,15 @@ Deadline: **2026-01-26**
 
 ## Working Documents
 
-| Document                               | Purpose                           | Status                           |
-| -------------------------------------- | --------------------------------- | -------------------------------- |
-| `draft-v2.md`                          | Main poster content flow          | **Active** - Stage 1 in progress |
-| `react-internal.md`                    | React RSC API research notes      | Reference                        |
-| `diagrams.md`                          | Mermaid diagram candidates        | Reference                        |
-| `draft.md`                             | Original draft (superseded by v2) | Archive                          |
-| `poster-plan.md`, `poster-proposal.md` | Old brainstorm material           | Archive                          |
+| Document             | Purpose                            | Status                           |
+| -------------------- | ---------------------------------- | -------------------------------- |
+| `draft-v2.md`        | Main poster content flow           | **Active** - Stage 1 in progress |
+| `workflow.md`        | Google Slides workflow & tips      | Reference                        |
+| `react-internal.md`  | React RSC API research notes       | Reference                        |
+| `diagrams.md`        | Mermaid diagram candidates         | Reference                        |
+| `poster-proposal.md` | Original proposal (title/abstract) | Reference                        |
+| `draft.md`           | Original draft (superseded by v2)  | Archive                          |
+| `poster-plan.md`     | Old brainstorm material            | Archive                          |
 
 ## Demo Code
 

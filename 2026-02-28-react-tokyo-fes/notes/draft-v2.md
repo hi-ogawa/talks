@@ -15,11 +15,16 @@ The fundamental RSC flow most developers know:
 **Code:**
 
 ```tsx
+// React Server environment
 function ServerComponent() {
   return <div>{Math.random()}</div>;
 }
 
 const stream = renderToReadableStream(<ServerComponent />);
+
+// stream can be sent through different environments
+
+// React Client environment
 const restored = await createFromReadableStream(stream);
 ```
 
@@ -337,6 +342,7 @@ const cachedFn = cacheWrapper(async (props) => {
 ```
 
 **What Next.js adds on top**:
+
 - `fetch()` caching integration
 - `revalidateTag()` / `revalidatePath()`
 - Build-time cache persistence
