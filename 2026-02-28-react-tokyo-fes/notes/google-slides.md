@@ -73,6 +73,37 @@ Access menu items directly with `Alt + underlined letter`:
 
 **Tip**: After `Alt+I, S` (Insert Shape), use arrow keys to navigate shape categories, then Enter to select.
 
+## Selecting Multiple Elements
+
+### Box/Marquee Selection
+
+1. Click on empty slide background (ensure nothing is selected)
+2. Click and drag to draw a selection rectangle
+3. All objects **fully contained** within the rectangle get selected
+
+**Other methods:**
+- **Shift + Click** — Add/remove individual items to selection
+- **Ctrl + A** — Select all objects on slide (ensure you're not focused in a text box)
+
+### Locking Template Elements (for Marquee Selection)
+
+If the template has a frame/border that interferes with marquee selection, move it to the Master Slide:
+
+1. **Copy the frame** from your current slide
+2. Go to **Slide → Edit Theme** (opens Master editor)
+3. Select the layout your slide uses
+4. **Paste the frame** there and position it
+5. **Delete the frame** from the regular slide
+6. Close the Master editor
+
+Now the frame is "baked in" — visible but not selectable. Marquee selection works freely.
+
+**Alternative (for image frames):** Slide → Change background → Choose image
+
+Sources:
+- [How to lock content to avoid moving/deleting - SlidesMania](https://slidesmania.com/how-to-add-content-on-the-master-to-avoid-moving-or-deleting-it-by-mistake-in-google-slides/)
+- [How to Select Multiple Objects - Bricks](https://www.thebricks.com/resources/how-to-select-multiple-objects-in-google-slides)
+
 ## Alignment & Layout
 
 - **Guides**: View → Guides → Show guides (drag from rulers to create)
