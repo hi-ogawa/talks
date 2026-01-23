@@ -15,17 +15,67 @@ The fundamental RSC flow most developers know:
 **Code:**
 
 ```tsx
-// React Server environment
+// == "React Server" environment ==
+import { renderToReadableStream } from "react-server-dom-xxx/server";
+
 function ServerComponent() {
   return <div>{Math.random()}</div>;
 }
+const reactNode = <ServerComponent />;
 
-const stream = renderToReadableStream(<ServerComponent />);
+// once serialized, the stream can be sent to anywhere
+const rscStream = renderToReadableStream(reactNode);
+```
 
-// stream can be sent through different environments
+```tsx
+// == CSR / SSR (aka "React Client" environment) ==
+import { createFromReadableStream } from "react-server-dom-xxx/client";
 
-// React Client environment
-const restored = await createFromReadableStream(stream);
+const reactNode = await createFromReadableStream(rscStream);
+
+// == CSR ==
+import { createRoot, hydrateRoot } from "react-dom/client";
+hydrateRoot(document, reactNode);
+
+// == SSR ==
+import { renderToReadableStream } from "react-dom/server";
+const htmlStream = await renderToReadableStream(reactNode);
+```
+
+```js
+// == ReactNode tree on react-server environment ==
+{
+  '$$typeof': Symbol(react.transitional.element),
+  type: [AsyncFunction: ServerComponent],
+  key: null,
+  ref: null,
+  props: {}
+}
+
+// ==== RSC stream ====
+// `ServerComponent` function is executed
+0:["$","div",null,{"children":["$","span",null,{"children":0.8033}]}]
+
+
+// ==== ReactNode tree for CSR / SSR ====
+// equivalent to <div>{0.8033}</div>
+// same react node is shared between SSR and CSR (hydration)
+// thus no hydration mismatch is guaranteed.
+{
+  '$$typeof': Symbol(react.transitional.element),
+  type: 'div',
+  key: null,
+  ref: null,
+  props: {
+    children: {
+      '$$typeof': Symbol(react.transitional.element),
+      type: 'span',
+      key: null,
+      ref: null,
+      props: { children: 0.8033 }
+    }
+  }
+}
 ```
 
 **Data transformation:**

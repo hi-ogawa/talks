@@ -56,20 +56,20 @@
 
 Access menu items directly with `Alt + underlined letter`:
 
-| Action           | Shortcut        |
-| ---------------- | --------------- |
-| **Insert menu**  | `Alt+I`         |
-| → Text box       | `Alt+I, T`      |
-| → Image          | `Alt+I, I`      |
-| → Shape          | `Alt+I, S`      |
-| → Line           | `Alt+I, N`      |
-| → Table          | `Alt+I, B`      |
-| → Chart          | `Alt+I, H`      |
-| **Format menu**  | `Alt+O`         |
-| → Align          | `Alt+O, A`      |
-| **Arrange menu** | `Alt+A`         |
-| → Align          | `Alt+A, A`      |
-| → Distribute     | `Alt+A, D`      |
+| Action           | Shortcut   |
+| ---------------- | ---------- |
+| **Insert menu**  | `Alt+I`    |
+| → Text box       | `Alt+I, T` |
+| → Image          | `Alt+I, I` |
+| → Shape          | `Alt+I, S` |
+| → Line           | `Alt+I, N` |
+| → Table          | `Alt+I, B` |
+| → Chart          | `Alt+I, H` |
+| **Format menu**  | `Alt+O`    |
+| → Align          | `Alt+O, A` |
+| **Arrange menu** | `Alt+A`    |
+| → Align          | `Alt+A, A` |
+| → Distribute     | `Alt+A, D` |
 
 **Tip**: After `Alt+I, S` (Insert Shape), use arrow keys to navigate shape categories, then Enter to select.
 
@@ -105,6 +105,7 @@ Google Slides has no container/nesting concept. Use this manual pattern:
 6. When layout is final: select all → `Ctrl+G` to group
 
 **Layer order** (bottom to top):
+
 - Background rectangle
 - Text boxes
 - Images/diagrams
