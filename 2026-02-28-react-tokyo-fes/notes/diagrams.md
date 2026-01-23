@@ -38,19 +38,19 @@ This illustrates `ssr` environment is technically an optional mechanism.
 graph TD
 
     subgraph "<strong>rsc environment</strong>"
-        A["React virtual dom tree"] --> |"<code>renderToReadableStream</code><br/>[@hiogawa/vite-rsc/rsc]<br />(re-export of react-server-dom/server.edge)<br />"| B1["RSC Stream"];
+        A["React virtual dom tree"] --> |"<code>renderToReadableStream</code><br/>[react-server-dom-xxx/server]"| B1["RSC Stream"];
     end
 
     B1 --> |"just pass stream object inside the same runtime or server IPC"| B2
     B1 --> |"e.g. client-side fetch or inject payload along side SSR"| B3
 
     subgraph "<strong>ssr environment</strong>"
-        B2["RSC Stream"] --> |"<code>createFromReadableStream</code><br/>[@hiogawa/vite-rsc/ssr]<br />(re-export of react-server-dom/client.edge)<br />"| C1["React virtual dom tree"];
+        B2["RSC Stream"] --> |"<code>createFromReadableStream</code><br/>[react-server-dom-xxx/client]"| C1["React virtual dom tree"];
         C1 --> |"[react-dom/server]<br/>SSR"| E["HTML String/Stream"];
     end
 
     subgraph "<strong>client environment</strong>"
-        B3["RSC Stream"] --> |"<code>createFromReadableStream</code><br/>[@hiogawa/vite-rsc/browser]<br />(re-export of react-server-dom/client.browser)<br />"| C2["React virtual dom tree"];
+        B3["RSC Stream"] --> |"<code>createFromReadableStream</code><br/>[react-server-dom-xxx/client]"| C2["React virtual dom tree"];
         C2 --> |"[react-dom/client]<br/>CSR: mount, hydration"| D["DOM Elements"];
     end
 
@@ -71,11 +71,11 @@ graph TD
 
     subgraph "<strong>rsc environment</strong>"
         A["React virtual dom tree"] -->
-        |"<code>renderToReadableStream</code><br/>[@hiogawa/vite-rsc/rsc]<br />(re-export of react-server-dom/server.edge)<br />"
+        |"<code>renderToReadableStream</code><br/>[react-server-dom-xxx/server]"
         | B1["RSC Stream"];
 
         B1["RSC Stream"] -->
-        |"<code>createFromReadableStream</code><br/>[@hiogawa/vite-rsc/rsc]<br />(re-export of react-server-dom/client.edge)<br />"
+        |"<code>createFromReadableStream</code><br/>[react-server-dom-xxx/client]"
         | A["React virtual dom tree"];
     end
 

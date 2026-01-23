@@ -352,6 +352,20 @@ function parseModelString(response, obj, key, value): any {
 | `ReactFlightReplyClient.js` | react-client | Client→Server serialization   |
 | `ReactFlightReplyServer.js` | react-server | Client→Server deserialization |
 
+```
+packages/react-server/
+├── ReactFlightServer.js
+│   └─▸ createRequest → renderToReadableStream
+└── ReactFlightReplyServer.js
+    └─▸ createResponse → decodeReply
+
+packages/react-client/
+├── ReactFlightClient.js
+│   └─▸ createResponse → createFromReadableStream
+└── ReactFlightReplyClient.js
+    └─▸ processReply → encodeReply
+```
+
 ## Code Reuse Analysis
 
 ### No Shared Serialization Module

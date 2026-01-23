@@ -12,6 +12,9 @@ The fundamental RSC flow most developers know:
 
 **TODO: diagram — basic RSC flow (from diagrams.md "basic flow")**
 
+TODO:
+- color code block / box to highlight environment difference
+
 **Code:**
 
 ```tsx
@@ -135,26 +138,39 @@ const result = await serverAction(...args);
 
 ## 1.3 Note: React RSC Package Structure
 
+TODO: stich two boxes together where internal packages supports main server/client exports?
+
 The RSC APIs live in `react-server-dom-*` packages (webpack, turbopack, parcel, etc.):
 
 ```
-react-server-dom-webpack/
-├── server.edge.js      → renderToReadableStream (RSC → Stream)
-├── server.node.js
-├── client.edge.js      → createFromReadableStream (Stream → React)
-├── client.browser.js   → encodeReply (args → FormData/JSON)
-└── client.node.js
+react-server-dom-xxx/
+├── server.edge.js, server.node.js
+│   ├─▸ renderToReadableStream
+│   ├─▸ decodeReply
+│   └─▸ createTemporaryReferenceSet
+│
+└── client.edge.js, client.node.js, client.browser.js
+    ├─▸ createFromReadableStream
+    ├─▸ encodeReply
+    └─▸ createTemporaryReferenceSet
 ```
 
-These are thin wrappers around the core packages:
+These are wrappers around the "internal" packages, which implements core logic:
+
+https://github.com/facebook/react
 
 ```
 packages/react-server/
-└── ReactFlightServer.js       → Core serialization logic
+├── ReactFlightServer.js
+│   └─▸ createRequest → renderToReadableStream
+└── ReactFlightReplyServer.js
+    └─▸ createResponse → decodeReply
 
 packages/react-client/
-├── ReactFlightClient.js       → Core deserialization logic
-└── ReactFlightReplyClient.js  → encodeReply implementation
+├── ReactFlightClient.js
+│   └─▸ createResponse → createFromReadableStream
+└── ReactFlightReplyClient.js
+    └─▸ processReply → encodeReply
 ```
 
 **Key insight**: `client` here means "consumer of RSC stream", not "browser". You can use `client.edge.js` on the server to deserialize RSC payloads!
