@@ -293,12 +293,18 @@ Here's something less obvious: **you can also `createFromReadableStream` on the 
 **Code:**
 
 ```tsx
-// Both on server!
-const stream = renderToReadableStream(<ServerComponent />);
-const restored = await createFromReadableStream(stream);
+// == "React Server" environment ==
+import { renderToReadableStream } from "react-server-dom-xxx/server";
+import { createFromReadableStream } from "react-server-dom-xxx/client";
+
+const reactNode = <ServerComponent />;
+
+const rscStream = renderToReadableStream(reactNode);
+
+const reactNodeRestored = await createFromReadableStream(rscStream);
 ```
 
-**Why this matters**: You can save the RSC payload somewhere (cache, disk, etc.) and restore it later without re-running Server Components.
+**Why this matters**: You can save the RSC payload somewhere (cache, disk, etc.) and restore it later without re-running Server Components. The restored `reactNode` can be composed like any `reactNode` as a part of server component.
 
 ---
 
@@ -309,9 +315,29 @@ const restored = await createFromReadableStream(stream);
 **Code:**
 
 ```tsx
-const args = [{ message: "hello", children: <DynamicChild /> }];
+import { encodeReply, createTemporaryReferenceSet } from "react-server-dom-xxx/client";
+
+const args = [
+  {
+    greet: "hi",
+    children: <DynamicChild />,
+  },
+];
 const tempRefs = createTemporaryReferenceSet();
 const encoded = await encodeReply(args, { temporaryReferences: tempRefs });
+
+// TODO: can we do createFromReadableStream here?
+// (would require whole encodeReply -> decodeReply -> renderToReadableStream?)
+
+// TODO: or create useActionState like example in 1.2. Server Function Payload Encoding
+//  and remove 2.2?
+```
+
+```js
+{
+  greet: "hi",
+  children: "$T",
+}
 ```
 
 **Data transformation:**
@@ -354,21 +380,152 @@ export const CachedParent = __cache_wrapper(function ({ children }) {
 })
 ```
 
-Now combine the two twists:
-
 ```tsx
-function CachedParent({ children, message }) {
+
+function CachedParent({ message }) {
   "use cache";
   return (
     <>
-      <span>static: {Date.now()}</span>
-      <span>message: {message}</span>
+      <span>static: {new Date().toISOString()}</span>
       {children}
     </>
   );
 }
 
-<CachedParent message="hello">
+function DynamicChild() {
+  return <span>dynamic: {new Date().toISOString()}</span>
+}
+
+// rendering Static shell + dynamic child
+<CachedParent>
+  <DynamicChild />
+</CachedParent>
+
+// ⬇️ "use cache" transform (higher order function wrapper)
+const CacheParent_wrapped = __cache_wrapper__(CachedParent)
+<CacheParent_wrapped>
+  <DynamicChild />
+</CacheParent_wrapped>
+
+// ⬇️ executing function component
+CacheParent_wrapped({ children: <DynamicChild /> })
+
+
+```
+
+```tsx
+import {
+  createTemporaryReferenceSet,
+  decodeReply,
+  renderToReadableStream,
+} from "react-server-dom-xxx/server";
+import {
+  createTemporaryReferenceSet as createClientTemporaryReferenceSet,
+  createFromReadableStream,
+  encodeReply,
+} from "react-server-dom-xxx/client";
+
+// originalFn = CacheParent
+async function __cache_wrapper__(originalFn) {
+  const cache = new Map<string, ReadableStream>();
+
+  // 0.
+  // args = [{ children: <DynamicChild /> }]
+  return (...args) => {
+    // 1. Encode `args` (i.e. props) as cache key.
+    // React element (children value) will be replaced
+    // as temporary reference placeholder.
+    const clientTempRefs = createClientTemporaryReferenceSet();
+    const encodedArgs = await encodeReply(args, { temporaryReferences: clientTempRefs });
+
+    // Check cache
+    if (!cache.has(encodedArgs)) {
+      // CACHE MISS -> execute `originalFn (= CachedParent)` and serialize result as `stream`
+
+      // 2. Decode back arguments with temp refs as placeholder.
+      const serverTempRefs = createTemporaryReferenceSet();
+      const decodedArgs = await decodeReply(encodedArgs, { temporaryReferences: serverTempRefs });
+
+      // 3. Execute `originalFn` with temp refs
+      const result = originalFn(...decodedArgs);
+
+      // 4. Serialize result and fill cache
+      const stream = renderToReadableStream(result, { temporaryReferences: serverTempRefs });
+      cache.set(encodedArgs, stream);
+    }
+
+    // 5. both CACHE HIT and MISS cases restore RSC `stream` (static shell)
+    // with temp refs placeholder replaced with latest `args` (dynamic child)
+    const stream = cache.get(encodedArgs);
+    return createFromReadableStream(stream, { temporaryReferences: clientTempRefs });
+  };
+}
+```
+
+```js
+// <CacheParent_wrapped><DynamicChild /></CacheParent_wrapped>
+{
+  '$$typeof': Symbol(react.transitional.element),
+  type: [Function: CachedParent],
+  key: null,
+  ref: null,
+  props: {
+    children: {
+      '$$typeof': Symbol(react.transitional.element),
+      type: [Function: DynamicChild],
+      key: null,
+      ref: null,
+      props: {}
+    }
+  }
+}
+
+// 0. `CacheParent_wrapped` receives latest props
+// args =>
+[{ children: <DynamicChild />  }]
+
+// 1
+// Serialize arguments (i.e. props) as cache key.
+// React element (children value) will be replaced
+// as temporary reference placeholder.
+// encodeReply(args, { tempRefs }) =>
+[{"children":"$T"}]
+
+// 2
+// decodeReply(encodedArgs, { tempRefs }) =>
+// (the proxy fakes as `reactNode`)
+[ { children: TemporaryReferneceProxy } ]
+
+// 3. execute `CachedParent`
+<>
+  <span>static: {"2026-01-24T08:14:14.537Z"}</span>
+  {TemporaryReferneceProxy}
+</>
+
+// 4. serialize `CachedParent` result as RSC stream and cache it
+0:[["$","span",null,{"children":["static: ","2026-01-24T08:14:14.537Z"]}],"$T0:0:children"]
+
+// 5. restore `stream` with replacing temp ref placeholder `$T` with latest `args` (dynamic child)
+<>
+  <span>static: {"2026-01-24T08:14:14.537Z"}</span>
+  <DynamicChild />
+</>
+```
+
+Now combine the two twists:
+
+```tsx
+function CachedParent({ message }) {
+  "use cache";
+  return (
+    <>
+      <span>static: {Date.now()}</span>
+      {children}
+    </>
+  );
+}
+
+<CachedParent>
   <DynamicChild />
 </CachedParent>;
 ```
@@ -376,6 +533,7 @@ function CachedParent({ children, message }) {
 **The `use cache` runtime is essentially:**
 
 ```tsx
+// implemented as higher order function: cachedFn = cacheWrapper(originalFn)
 async function cachedFn(...args) {
   // 1. Create cache key (children → $T, excluded!)
   const clientTempRefs = createClientTemporaryReferenceSet();
