@@ -130,34 +130,78 @@ encodeReply(args)  →  HTTP POST  →  decodeReply(body)
 
 ```tsx
 "use client";
-import { actionSimple, actionForm } from "./server-action";
 
-actionSimple({ message: "foo" });
-// -> fetch(..., { body: encodeReply([{ message: "hello" }]) })
-//   '[ "message": "hello" ]'
-// JSON-like string
+import { actionSimple } from "./actions";
+actionSimple({ greet: "hi" });
+
+import { actionForm } from "./actions";
+const formData = new FormData();
+formData.set("greet", "hi");
+actionForm(formData);
+```
+
+```tsx
+"use client";
+import { actionSimple, actionForm } from "./actions";
+
+actionSimple({ message: "hello" });
+// → encodeReply([{ message: "hello" }])
+// → '[{"message":"hello"}]'
 
 const formData = new FormData();
 formData.set("message", "hello");
 actionForm(formData);
-// -> fetch(..., { body: encodeReply([formData]) })
-// FormData encoded inside FormData
-// FormData { "0": "$K1", "1_message": "hello" }
+// → encodeReply([formData])
+// → FormData { "0": "$K1", "1_message": "hello" }
+```
+
+```
+        ↓ encodeReply        ↓ HTTP POST        ↓ decodeReply
 ```
 
 ```tsx
 "use server";
 
-async function actionSimple(data: { message: string }) {
-  console.log(data.message);
+async function actionSimple(data) {
+  console.log(data.greet); // "hi"
 }
 
-async function actionForm(formData: FormData) {
-  console.log(formData.get("message"));
+async function actionForm(formData) {
+  console.log(formData.get("greet")); // "hi"
+}
+```
+
+```js
+[{ greet: "hi" }];
+```
+
+```js
+FormData {
+  "0": "$K1",
+  "1_greet": "hi"
 }
 ```
 
 At framework level.
+
+```tsx
+// == "React Client" environment (browser) ==
+import { encodeReply } from "react-server-dom-xxx/client";
+
+const body = await encodeReply(args);
+const response = await fetch("/...endpoint...", {
+  method: "POST",
+  body,
+});
+```
+
+```tsx
+// == "React Server" environment ==
+import { decodeReply } from "react-server-dom-xxx/server";
+
+const args = await decodeReply(request.body);
+// ...invoke server action with `args` ...
+```
 
 ```tsx
 // == "React Client" environment (browser) ==
