@@ -396,7 +396,7 @@ function DynamicChild() {
   return <span>dynamic: {new Date().toISOString()}</span>
 }
 
-// rendering Static shell + dynamic child
+// Composing static shell and dynamic child
 <CachedParent>
   <DynamicChild />
 </CachedParent>
@@ -407,7 +407,7 @@ const CacheParent_wrapped = __cache_wrapper__(CachedParent)
   <DynamicChild />
 </CacheParent_wrapped>
 
-// ⬇️ executing function component
+// ⬇️ Rendering means executing function
 CacheParent_wrapped({ children: <DynamicChild /> })
 
 
@@ -425,28 +425,21 @@ import {
   encodeReply,
 } from "react-server-dom-xxx/client";
 
-// originalFn = CacheParent
 async function __cache_wrapper__(originalFn) {
   const cache = new Map<string, ReadableStream>();
 
-  // 0.
-  // args = [{ children: <DynamicChild /> }]
   return (...args) => {
-    // 1. Encode `args` (i.e. props) as cache key.
-    // React element (children value) will be replaced
-    // as temporary reference placeholder.
+    // 1. Encode `args` as cache key.
     const clientTempRefs = createClientTemporaryReferenceSet();
     const encodedArgs = await encodeReply(args, { temporaryReferences: clientTempRefs });
 
     // Check cache
     if (!cache.has(encodedArgs)) {
-      // CACHE MISS -> execute `originalFn (= CachedParent)` and serialize result as `stream`
-
-      // 2. Decode back arguments with temp refs as placeholder.
+      // 2. Decode arguments back
       const serverTempRefs = createTemporaryReferenceSet();
       const decodedArgs = await decodeReply(encodedArgs, { temporaryReferences: serverTempRefs });
 
-      // 3. Execute `originalFn` with temp refs
+      // 3. Execute `originalFn`
       const result = originalFn(...decodedArgs);
 
       // 4. Serialize result and fill cache
@@ -454,10 +447,10 @@ async function __cache_wrapper__(originalFn) {
       cache.set(encodedArgs, stream);
     }
 
-    // 5. both CACHE HIT and MISS cases restore RSC `stream` (static shell)
-    // with temp refs placeholder replaced with latest `args` (dynamic child)
+    // 5. restore RSC stream
     const stream = cache.get(encodedArgs);
-    return createFromReadableStream(stream, { temporaryReferences: clientTempRefs });
+    const finalResult = createFromReadableStream(stream, { temporaryReferences: clientTempRefs });
+    return finalResult;
   };
 }
 ```
@@ -482,34 +475,48 @@ async function __cache_wrapper__(originalFn) {
 
 // 0. `CacheParent_wrapped` receives latest props
 // args =>
+
+
 [{ children: <DynamicChild />  }]
+
 
 // 1
 // Serialize arguments (i.e. props) as cache key.
 // React element (children value) will be replaced
 // as temporary reference placeholder.
 // encodeReply(args, { tempRefs }) =>
+
+
 [{"children":"$T"}]
+
 
 // 2
 // decodeReply(encodedArgs, { tempRefs }) =>
 // (the proxy fakes as `reactNode`)
-[ { children: TemporaryReferneceProxy } ]
+
+
+[{ children: TemporaryReferenceProxy }]
+
 
 // 3. execute `CachedParent`
+
 <>
   <span>static: {"2026-01-24T08:14:14.537Z"}</span>
-  {TemporaryReferneceProxy}
+  {TemporaryReferenceProxy}
 </>
 
 // 4. serialize `CachedParent` result as RSC stream and cache it
+
 0:[["$","span",null,{"children":["static: ","2026-01-24T08:14:14.537Z"]}],"$T0:0:children"]
 
 // 5. restore `stream` with replacing temp ref placeholder `$T` with latest `args` (dynamic child)
+
 <>
   <span>static: {"2026-01-24T08:14:14.537Z"}</span>
   <DynamicChild />
 </>
+
+
 ```
 
 Now combine the two twists:
