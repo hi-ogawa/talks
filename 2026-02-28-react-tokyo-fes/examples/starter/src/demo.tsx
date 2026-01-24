@@ -70,7 +70,7 @@ async function demo2() {
     console.log();
   }
 
-  await demoReply({ foo: "bar", count: 42 });
+  await demoReply([{ foo: "bar", count: 42 }]);
 
   // FormData itself is encded as FormData
   const formData = new FormData();

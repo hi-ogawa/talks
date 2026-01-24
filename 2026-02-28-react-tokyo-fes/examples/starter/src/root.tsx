@@ -40,6 +40,17 @@ function App(props: { url: URL }) {
           <button>Server Counter: {getServerCounter()}</button>
         </form>
       </div>
+      <div className="card">
+        <form
+          action={async (formData) => {
+            "use server";
+            console.log(formData);
+          }}
+        >
+          <input name="test" />
+          <button>Test</button>
+        </form>
+      </div>
       <div className="card">Request URL: {props.url?.href}</div>
       <ul className="read-the-docs">
         <li>

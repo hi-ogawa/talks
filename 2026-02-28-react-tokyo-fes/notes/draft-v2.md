@@ -13,6 +13,7 @@ The fundamental RSC flow most developers know:
 **TODO: diagram — basic RSC flow (from diagrams.md "basic flow")**
 
 TODO:
+
 - color code block / box to highlight environment difference
 
 **Code:**
@@ -110,7 +111,7 @@ const htmlStream = await renderToReadableStream(reactNode);
 
 ---
 
-## 1.2 Server Action Flow (encodeReply/decodeReply)
+## 1.2 Server Action (encodeReply/decodeReply)
 
 **TODO: add Server Action flow — encodeReply (client) → decodeReply (server)**
 
@@ -124,14 +125,62 @@ encodeReply(args)  →  HTTP POST  →  decodeReply(body)
  FormData/JSON                      original args
 ```
 
-```tsx
-// Client: encode arguments for server
-const encoded = await encodeReply([arg1, arg2]);
-// → FormData or JSON string
+- formData encoded to formData
+- non binary data encoded to string
 
-// Server: decode and execute
-const args = await decodeReply(requestBody);
-const result = await serverAction(...args);
+```tsx
+"use client";
+import { actionSimple, actionForm } from "./server-action";
+
+actionSimple({ message: "foo" });
+// -> fetch(..., { body: encodeReply([{ message: "hello" }]) })
+//   '[ "message": "hello" ]'
+// JSON-like string
+
+const formData = new FormData();
+formData.set("message", "hello");
+actionForm(formData);
+// -> fetch(..., { body: encodeReply([formData]) })
+// FormData encoded inside FormData
+// FormData { "0": "$K1", "1_message": "hello" }
+```
+
+```tsx
+"use server";
+
+async function actionSimple(data: { message: string }) {
+  console.log(data.message);
+}
+
+async function actionForm(formData: FormData) {
+  console.log(formData.get("message"));
+}
+```
+
+At framework level.
+
+```tsx
+// == "React Client" environment (browser) ==
+import { encodeReply, createFromReadableStream } from "react-server-dom-xxx/client";
+
+createFromReadableStream(..., {
+  callServer: async (id, args) => {
+    const body = await encodeReply(args);
+    const response = await fetch("/...server action endpoint...", {
+      method: "POST",
+      body,
+    })
+    ...
+  }
+})
+```
+
+```tsx
+// == "React Server" environment ==
+import { decodeReply } from "react-server-dom-xxx/server";
+
+const args = await decodeReply(request.body);
+// ...invoke server action with `arg`
 ```
 
 ---

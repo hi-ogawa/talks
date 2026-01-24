@@ -82,6 +82,7 @@ Access menu items directly with `Alt + underlined letter`:
 3. All objects **fully contained** within the rectangle get selected
 
 **Other methods:**
+
 - **Shift + Click** — Add/remove individual items to selection
 - **Ctrl + A** — Select all objects on slide (ensure you're not focused in a text box)
 
@@ -101,6 +102,7 @@ Now the frame is "baked in" — visible but not selectable. Marquee selection wo
 **Alternative (for image frames):** Slide → Change background → Choose image
 
 Sources:
+
 - [How to lock content to avoid moving/deleting - SlidesMania](https://slidesmania.com/how-to-add-content-on-the-master-to-avoid-moving-or-deleting-it-by-mistake-in-google-slides/)
 - [How to Select Multiple Objects - Bricks](https://www.thebricks.com/resources/how-to-select-multiple-objects-in-google-slides)
 
