@@ -1,10 +1,29 @@
 # 1. Learning RSC API
 
+## 1.0. React RSC Package Structure
+
+`react-server-dom-xxx` packages are React's RSC runtime — the low-level APIs that power Server Components. The `xxx` suffix varies by bundler: `webpack` for Next.js, `turbopack`, `parcel`, etc. Frameworks abstract these away, but they're what make `"use server"` and `"use cache"` work under the hood.
+
+This poster explores these APIs directly. We'll see how each one works in isolation (Part 1), then how they combine to implement `use cache` (Part 2).
+
+```
+react-server-dom-xxx/
+├── server.edge.js, server.node.js
+│   ├─▸ renderToReadableStream
+│   ├─▸ decodeReply
+│   └─▸ createTemporaryReferenceSet
+│
+└── client.edge.js, client.node.js, client.browser.js
+    ├─▸ createFromReadableStream
+    ├─▸ encodeReply
+    └─▸ createTemporaryReferenceSet
+```
+
+**Key insight**: `client` here means "consumer of RSC stream", not "browser". You can use `client.edge.js` on the server to deserialize RSC payloads!
+
 ## 1.1. Server Component Rendering
 
-RSC introduces a new rendering model where Server Components are executed on the server and serialized into a streaming format called "RSC Payload." This payload can be sent anywhere — to the browser for CSR, or to another server process for SSR. The key APIs are `renderToReadableStream` (serialize) and `createFromReadableStream` (deserialize).
-
-Note: "client" in `react-server-dom-xxx/client` doesn't mean "browser" — it means "consumer of RSC stream." You can use the client API on the server to deserialize RSC payloads. This becomes important for `use cache`.
+React server component is a new rendering model where components are executed on the server aheads of time serializing into a streaming format. This serialized data can be sent anywhere and then restored on the browser for CSR, or on the same server for SSR. The key APIs are `renderToReadableStream` and `createFromReadableStream`. "client" in `react-server-dom-xxx/client` doesn't mean "browser", but it means "consumer of RSC stream", which includes SSR.
 
 ```tsx
 import { renderToReadableStream } from "react-server-dom-xxx/server";
@@ -64,7 +83,7 @@ const htmlStream = await renderToReadableStream(reactNode);
 
 ## 1.2. Server Function Handling
 
-Server Actions (functions marked with `"use server"`) need to receive arguments from the browser. React provides `encodeReply` and `decodeReply` to serialize function arguments over HTTP. Plain objects become JSON strings; FormData stays as FormData. The framework handles the HTTP transport — React only handles serialization.
+Server functions need to receive arguments from the browser. React provides `encodeReply` and `decodeReply` to serialize function arguments over HTTP. Plain objects become JSON strings; FormData stays as FormData. The framework handles the HTTP transport — React only handles serialization.
 
 This encode/decode pair mirrors the render/restore pair from 1.1. Both are round-trip serialization mechanisms built into React's RSC runtime.
 
