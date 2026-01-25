@@ -19,6 +19,29 @@ TODO:
 **Code:**
 
 ```tsx
+import { renderToReadableStream } from "react-server-dom-xxx/server";
+
+function ServerComponent() {
+  return <div>{Math.random()}</div>;
+}
+
+const reactNode = <ServerComponent />;
+
+const rscStream = renderToReadableStream(reactNode);
+```
+
+```tsx
+import { createFromReadableStream } from "react-server-dom-xxx/client";
+const reactNode = await createFromReadableStream(rscStream);
+
+import { createRoot, hydrateRoot } from "react-dom/client";
+hydrateRoot(document, reactNode);
+
+import { renderToReadableStream } from "react-dom/server";
+const htmlStream = await renderToReadableStream(reactNode);
+```
+
+```tsx
 // == "React Server" environment ==
 import { renderToReadableStream } from "react-server-dom-xxx/server";
 
@@ -33,6 +56,7 @@ const rscStream = renderToReadableStream(reactNode);
 
 ```tsx
 // == CSR / SSR (aka "React Client" environment) ==
+
 import { createFromReadableStream } from "react-server-dom-xxx/client";
 
 const reactNode = await createFromReadableStream(rscStream);
@@ -48,6 +72,9 @@ const htmlStream = await renderToReadableStream(reactNode);
 
 ```js
 // == ReactNode tree on react-server environment ==
+
+
+
 {
   '$$typeof': Symbol(react.transitional.element),
   type: [AsyncFunction: ServerComponent],
@@ -56,15 +83,28 @@ const htmlStream = await renderToReadableStream(reactNode);
   props: {}
 }
 
+
+
 // ==== RSC stream ====
 // `ServerComponent` function is executed
+
+
+
+
 0:["$","div",null,{"children":["$","span",null,{"children":0.8033}]}]
+
+
 
 
 // ==== ReactNode tree for CSR / SSR ====
 // equivalent to <div>{0.8033}</div>
 // same react node is shared between SSR and CSR (hydration)
 // thus no hydration mismatch is guaranteed.
+
+<div>{0.8033}</div>
+
+
+// equivalent to <div>{0.8033}</div>
 {
   '$$typeof': Symbol(react.transitional.element),
   type: 'div',
@@ -80,6 +120,8 @@ const htmlStream = await renderToReadableStream(reactNode);
     }
   }
 }
+
+
 ```
 
 **Data transformation:**
@@ -136,7 +178,7 @@ actionSimple({ greet: "hi" });
 
 import { actionForm } from "./actions";
 const formData = new FormData();
-formData.set("greet", "hi");
+formData.set("greet", "hey");
 actionForm(formData);
 ```
 
@@ -167,7 +209,7 @@ async function actionSimple(data) {
 }
 
 async function actionForm(formData) {
-  console.log(formData.get("greet")); // "hi"
+  console.log(formData.get("greet")); // "hey"
 }
 ```
 
@@ -176,16 +218,20 @@ async function actionForm(formData) {
 ```
 
 ```js
+
 FormData {
   "0": "$K1",
-  "1_greet": "hi"
+  "1_greet": "hey"
 }
+
+
 ```
 
 At framework level.
 
 ```tsx
 // == "React Client" environment (browser) ==
+
 import { encodeReply } from "react-server-dom-xxx/client";
 
 const body = await encodeReply(args);
@@ -193,6 +239,11 @@ const response = await fetch("/...endpoint...", {
   method: "POST",
   body,
 });
+
+import { decodeReply } from "react-server-dom-xxx/server";
+
+const args = await decodeReply(request.body);
+// ...invoke server action with `args` ...
 ```
 
 ```tsx
