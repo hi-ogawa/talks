@@ -1,6 +1,10 @@
-1. Learning RSC API
+# 1. Learning RSC API
 
-1.1. Server Component Rendering
+## 1.1. Server Component Rendering
+
+RSC introduces a new rendering model where Server Components are executed on the server and serialized into a streaming format called "RSC Payload." This payload can be sent anywhere — to the browser for CSR, or to another server process for SSR. The key APIs are `renderToReadableStream` (serialize) and `createFromReadableStream` (deserialize).
+
+Note: "client" in `react-server-dom-xxx/client` doesn't mean "browser" — it means "consumer of RSC stream." You can use the client API on the server to deserialize RSC payloads. This becomes important for `use cache`.
 
 ```tsx
 import { renderToReadableStream } from "react-server-dom-xxx/server";
@@ -58,7 +62,11 @@ const htmlStream = await renderToReadableStream(reactNode);
 }
 ```
 
-1.2. Server Function Handling
+## 1.2. Server Function Handling
+
+Server Actions (functions marked with `"use server"`) need to receive arguments from the browser. React provides `encodeReply` and `decodeReply` to serialize function arguments over HTTP. Plain objects become JSON strings; FormData stays as FormData. The framework handles the HTTP transport — React only handles serialization.
+
+This encode/decode pair mirrors the render/restore pair from 1.1. Both are round-trip serialization mechanisms built into React's RSC runtime.
 
 Example
 
@@ -113,7 +121,13 @@ const args = await decodeReply(request.body);
 // ...invoke server action with `args` ...
 ```
 
-2. Implementing “use cache”
+# 2. Implementing "use cache"
+
+Here's the key insight: you can call `createFromReadableStream` on the server, not just in the browser. This means you can serialize a React tree, store it somewhere (memory, disk, Redis), and restore it later without re-executing the Server Components. The serialized payload acts as a cache.
+
+But what about dynamic children passed to a cached component? React solves this with "temporary references." When encoding, React elements are replaced with `$T` placeholders and stored in a WeakMap — excluded from the cache key and cache value. On restore, the placeholders are filled with the latest children from the WeakMap.
+
+`use cache` is simply these four APIs stitched together: `encodeReply` creates cache keys (with $T holes), `decodeReply` restores args for execution, `renderToReadableStream` serializes results (with $T holes), and `createFromReadableStream` restores from cache (filling $T holes). The `temporaryReferences` WeakMap is the glue.
 
 Example
 
@@ -207,3 +221,16 @@ finalResult = <>
   <DynamicChild />
 </>
 ```
+
+## Takeaway
+
+`use cache` isn't magic — it's four RSC APIs working together:
+
+| API                        | Role in `use cache`                |
+| -------------------------- | ---------------------------------- |
+| `encodeReply`              | Create cache key (with $T holes)   |
+| `decodeReply`              | Restore args for execution         |
+| `renderToReadableStream`   | Serialize result (with $T holes)   |
+| `createFromReadableStream` | Restore from cache (fill $T holes) |
+
+`use cache` is a React feature, not just Next.js. The same RSC APIs work in any framework. Demo implementation uses `@vitejs/plugin-rsc` — no Next.js required. What Next.js adds on top: `fetch()` caching integration, `revalidateTag()`/`revalidatePath()`, and build-time cache persistence. The core mechanism (4 APIs + temporaryReferences) is pure React.
