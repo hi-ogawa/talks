@@ -1,5 +1,36 @@
 # RSC `use cache` Deep Dive
 
+## Background: Novelty of This Content
+
+Research conducted 2026-01-26 to verify if this poster's content is publicly documented elsewhere.
+
+**What EXISTS publicly:**
+
+- [Next.js "Composable Caching" blog](https://nextjs.org/blog/composable-caching) - explains "donut pattern" conceptually, mentions "reference placeholders" but doesn't explain the mechanism
+- [Frontend Masters React Flight Protocol](https://frontendmasters.com/courses/intermediate-react-v6/react-flight-protocol/) - notes the protocol is "not well-documented, mostly based on reverse engineering"
+- Various `use cache` tutorials - all stay at usage level, not internals
+- React source code (`ReactFlightReplyServer.js`, `ReactFlightServer.js`) - implementation exists but undocumented
+
+**What this poster explains (NOT found in public documentation):**
+
+1. **`$T` marker mechanism** - how React elements become placeholders
+2. **`temporaryReferences` API** - the WeakMap/Proxy system
+3. **Why `encodeReply` (not `renderToReadableStream`) for cache key** - critical design choice
+4. **The 4 RSC APIs stitched together** - the complete runtime picture
+5. **The Proxy placeholder behavior** - throws on access, only passes through
+6. **The 5-step flow** - complete round-trip within RSC environment
+
+**Conclusion:**
+
+The Next.js blog says "non-serializable items like JSX are replaced with reference placeholders" but never explains HOW. This poster fills that gap with implementation-level documentation derived from source code analysis of:
+- React's `react-server-dom-*` packages
+- Next.js `use-cache-wrapper.ts`
+- `@vitejs/plugin-rsc` implementation
+
+This appears to be **genuinely novel technical documentation** in the public sphere.
+
+---
+
 > Research notes for poster text writing. Synthesized from:
 > - `react-internal.md` - React source analysis
 > - `examples/starter/src/demo.tsx` - Demo code

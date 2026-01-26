@@ -170,8 +170,18 @@ Final content is in draft-v3.md
 
 - [x] Finalize bulk texts
 - [ ] Translate texts to Japanese
-  - referene technical terms https://github.com/reactjs/ja.react.dev
+  - reference technical terms https://github.com/reactjs/ja.react.dev
   - `~/code/others/ja.react.dev`
+  - Japanese RSC articles (preferred - up-to-date, knowledgeable):
+    - https://zenn.dev/akfm (akfm - keeps up with latest React/Next.js)
+    - https://zenn.dev/akfm/books/nextjs-basic-principle (Next.js book)
+    - https://zenn.dev/uhyo/articles/react-server-components-multi-stage (uhyo - 多段階計算)
+  - Japanese (secondary):
+    - https://postd.cc/understanding-react-server-components/ (翻訳記事)
+  - English foundational:
+    - https://react.dev/blog/2020/12/21/data-fetching-with-react-server-components (Dan Abramov - original announcement)
+    - https://www.joshwcomeau.com/react/server-components/ (Josh W. Comeau - canonical explainer)
+    - https://www.patterns.dev/react/react-server-components/ (patterns.dev)
 - [x] Visual tweak:
   - align boxes neatly
 - [x] Prepare QR code to aggregated resource repo.
