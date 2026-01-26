@@ -190,7 +190,21 @@ Final content is in draft-v3.md
   - https://github.com/voidzero-dev/community-design-resources/tree/main/brand-assets/vite
   - https://www.qrcode-monkey.com/
 - [x] Extract image?
-  - no need.
+  - ~~no need.~~ Actually needed. See below.
+
+## Extracting Images from Google Slides
+
+Google Slides doesn't have a direct "export images" feature. The workaround:
+
+1. **Download as PowerPoint**: File → Download → Microsoft PowerPoint (.pptx)
+2. **Extract and copy images**:
+   ```bash
+   cd data
+   unzip -o "React Tokyo Fes 2026 Poster _use cache_.pptx" -d extracted
+   ls extracted/ppt/media/
+   ```
+
+Images are preserved at original quality (PNG/JPG as imported).
 - [ ] final submission
   - move to designated google drive
 
