@@ -269,6 +269,6 @@ finalResult = <>
 
 The runtime mechanism of `use cache` is framework-independent. React provides all four RSC APIs in `react-server-dom-xxx` packages, including the `temporaryReferences` mechanism. Any framework can implement `use cache` using these primitives — this demo uses Vite with `@vitejs/plugin-rsc`.
 
-What frameworks like Next.js add on top: build-time transforms, cache storage backends, and revalidation APIs (`revalidateTag`, etc.). But the core runtime is pure React.
+Frameworks like Next.js add build-time transforms, cache storage backends, and revalidation APIs (`revalidateTag`, etc.) on top. But the core runtime is pure React.
 
 You can find full demo code and resources in the repository https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache. Check it out from the QR code on the right.
