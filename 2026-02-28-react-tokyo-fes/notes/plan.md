@@ -163,3 +163,13 @@ Compared to common monitors:
 ├─────────────┼──────────────────┼─────────────────────────────────┤
 │ 32" monitor │ ~71cm × 40cm │ A0 is ~1.2× wider, ~3× taller │
 └─────────────┴──────────────────┴─────────────────────────────────┘
+
+## Final TODOs
+
+- Finalize bulk texts
+- Translate texts to Japanese
+- Visual tweak:
+  - align boxes neatly
+- Prepare QR code to aggregated resource repo.
+  - actual demo setup and repo can be done after poster submission
+- Extract image?
