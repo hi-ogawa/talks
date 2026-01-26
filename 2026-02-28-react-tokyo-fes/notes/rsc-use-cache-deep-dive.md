@@ -414,6 +414,27 @@ This is why `use cache` uses `encodeReply` (not `renderToReadableStream`) for ca
 
 ## 2.2 Takeaway
 
-`use cache` is a React feature, not just Next.js. The four RSC APIs work in any `react-server-dom-xxx` package — this demo uses `@vitejs/plugin-rsc`.
+### Understanding
 
-What frameworks add: cache backends, revalidation APIs, build-time optimization. The core mechanism (4 APIs + `temporaryReferences`) is pure React.
+The poster's main message: `use cache` runtime is framework-independent.
+
+- React provides all 4 RSC APIs in `react-server-dom-xxx` packages
+- The `temporaryReferences` mechanism is built into these APIs
+- Any bundler/framework can implement `use cache` using these primitives
+- This demo uses `@vitejs/plugin-rsc` — no Next.js required
+
+What frameworks like Next.js add on top:
+- Build-time transforms (hoisting `"use cache"` functions)
+- Cache storage backends (memory, disk, Redis)
+- Revalidation APIs (`revalidateTag`, `revalidatePath`)
+- `fetch()` caching integration
+
+But the core runtime — 4 APIs + `temporaryReferences` — is pure React.
+
+### Poster text
+
+The runtime mechanism of `use cache` is framework-independent. React provides all four RSC APIs in `react-server-dom-xxx` packages, including the `temporaryReferences` mechanism. Any framework can implement `use cache` using these primitives — this demo uses Vite with `@vitejs/plugin-rsc`.
+
+What frameworks like Next.js add on top: build-time transforms, cache storage backends, and revalidation APIs (`revalidateTag`, etc.). But the core runtime is pure React.
+
+You can find full demo code and resources in the repository https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache. Check it out from the QR code on the right.

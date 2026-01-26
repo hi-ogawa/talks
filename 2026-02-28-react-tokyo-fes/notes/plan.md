@@ -168,7 +168,7 @@ Compared to common monitors:
 
 Final content is in draft-v3.md
 
-- [ ] Finalize bulk texts
+- [x] Finalize bulk texts
 - [ ] Translate texts to Japanese
 - [x] Visual tweak:
   - align boxes neatly
