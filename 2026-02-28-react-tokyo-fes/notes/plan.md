@@ -169,7 +169,7 @@ Compared to common monitors:
 Final content is in draft-v3.md
 
 - [x] Finalize bulk texts
-- [ ] Translate texts to Japanese
+- [x] Translate texts to Japanese
   - reference technical terms https://github.com/reactjs/ja.react.dev
   - `~/code/others/ja.react.dev`
   - Japanese RSC articles (preferred - up-to-date, knowledgeable):
