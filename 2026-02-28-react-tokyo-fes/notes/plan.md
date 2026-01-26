@@ -166,9 +166,11 @@ Compared to common monitors:
 
 ## Final TODOs
 
-- [x] Finalize bulk texts
+Final content is in draft-v3.md
+
+- [ ] Finalize bulk texts
 - [ ] Translate texts to Japanese
-- [ ] Visual tweak:
+- [x] Visual tweak:
   - align boxes neatly
 - [x] Prepare QR code to aggregated resource repo.
   - actual demo setup and repo can be done after poster submission
@@ -178,6 +180,7 @@ Compared to common monitors:
 - [x] Extract image?
   - no need.
 - [ ] final submission
+  - move to designated google drive
 
 ## Follow up
 
