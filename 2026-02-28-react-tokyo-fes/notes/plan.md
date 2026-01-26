@@ -170,7 +170,8 @@ Final content is in draft-v3.md
 
 - [x] Finalize bulk texts
 - [ ] Translate texts to Japanese
-  - referene https://github.com/reactjs/ja.react.dev
+  - referene technical terms https://github.com/reactjs/ja.react.dev
+  - `~/code/others/ja.react.dev`
 - [x] Visual tweak:
   - align boxes neatly
 - [x] Prepare QR code to aggregated resource repo.
