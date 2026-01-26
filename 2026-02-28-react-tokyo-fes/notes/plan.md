@@ -166,10 +166,25 @@ Compared to common monitors:
 
 ## Final TODOs
 
-- Finalize bulk texts
-- Translate texts to Japanese
-- Visual tweak:
+- [x] Finalize bulk texts
+- [ ] Translate texts to Japanese
+- [ ] Visual tweak:
   - align boxes neatly
-- Prepare QR code to aggregated resource repo.
+- [x] Prepare QR code to aggregated resource repo.
   - actual demo setup and repo can be done after poster submission
-- Extract image?
+  - https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache
+  - https://github.com/voidzero-dev/community-design-resources/tree/main/brand-assets/vite
+  - https://www.qrcode-monkey.com/
+- [x] Extract image?
+  - no need.
+- [ ] final submission
+
+## Follow up
+
+Collect resources in https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache
+
+- [ ] demo
+- [ ] markdown version (english)
+- [ ] full poster
+  - japanese version
+  - english version

@@ -251,4 +251,5 @@ finalResult = <>
 
 TODO: The runtime mechanism of `use cache` is made by beautiful combinations of four fundamental RSC APIs, which is available from `react-server-dom-*` pacakges. `use cache` is a React feature, not just Next.js. The same RSC APIs work in any framework. Demo implementation uses `@vitejs/plugin-rsc` — no Next.js required. What Next.js adds on top: `fetch()` caching integration, `revalidateTag()`/`revalidatePath()`, and build-time cache persistence. The core mechanism (4 APIs + temporaryReferences) is pure React.
 
-TODO: QR code to reference (demo repo, etc..)
+QR code to full reference repo (demo, markdown version of poster, relevant resources, etc..)
+https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache
