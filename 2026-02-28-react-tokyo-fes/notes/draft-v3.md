@@ -146,7 +146,7 @@ const args = await decodeReply(request.body);
 
 # 2. Implementing "use cache"
 
-## 2.1.
+## 2.1. Donut Pattern and Temporary References
 
 TODO: you can call `createFromReadableStream` on the server, not just in "React client" environment (CSR / SSR). This means you can serialize a React tree, store it somewhere (memory, disk, Redis), and restore it later without re-executing the Server Components. The serialized payload acts as a cache.
 

@@ -312,19 +312,103 @@ React Server Components is a rendering model where components execute on the ser
 
 ## 1.2 Server Function Handling
 
-`encodeReply` serializes function arguments. `decodeReply` deserializes them on the server. Plain objects become JSON; FormData stays as FormData.
-
-This encode/decode pair mirrors the render/restore pair from 1.1 — both are round-trip serialization in React's RSC runtime.
+`encodeReply` serializes function arguments on browser. `decodeReply` deserializes them on the server. Plain objects become JSON-like strings; FormData and binary data is encoded as FormData. The framework handles the HTTP transport and re-rendering mechanism while React runtime only handles serialization.
 
 ---
 
-## 2.1 Implementing `use cache`
+2. Implementing `use cache`
 
-`use cache` combines all four RSC APIs with `temporaryReferences`.
+## 2.1. Donut Pattern and Temporary References
 
-React elements in props (like `children`) become `$T` placeholders during serialization — excluded from cache key and value. On restore, `$T` is replaced with the original element from a lookup map.
+### Understanding
 
-This enables "static shell + dynamic children": cached output stays frozen, but passed-in React elements stay fresh.
+**The Donut Pattern**
+
+`use cache` enables caching a component's output while keeping passed-in children dynamic. Like a donut: the outer shell is cached (static), but the hole in the middle stays fresh (dynamic children).
+
+```jsx
+<CachedParent>      // ← static shell (cached)
+  <DynamicChild />  // ← dynamic hole (fresh every render)
+</CachedParent>
+```
+
+**The Problem**
+
+If we simply serialize the entire React tree for caching, `<DynamicChild />` becomes part of the cache. Next render, we get stale children.
+
+**The Solution: temporaryReferences**
+
+When serializing with `encodeReply`, React elements in props are replaced with `$T` markers and stored in a separate map (not in the serialized output). This excludes them from the cache key and cache value.
+
+On deserialization, `$T` markers are replaced with the original elements from the map — giving you fresh children every time.
+
+**How $T works (the round-trip)**
+
+1. **encodeReply** (client-side temp refs):
+   - Sees `<DynamicChild />` in args
+   - Stores: `clientTempRefs.set(<DynamicChild />, "$0:0:children")`
+   - Outputs: `$T` in serialized string
+
+2. **decodeReply** (server-side temp refs):
+   - Sees `$T` in input
+   - Creates opaque Proxy placeholder
+   - Stores: `serverTempRefs.set(Proxy, "$0:0:children")`
+   - Returns Proxy as `children` prop
+
+3. **Function executes**:
+   - Receives Proxy as `children`
+   - Proxy passes through (can't inspect or call it — throws on access)
+   - Result contains Proxy in the tree
+
+4. **renderToReadableStream**:
+   - Sees Proxy with `$$typeof: TEMPORARY_REFERENCE_TAG`
+   - Looks up: `serverTempRefs.get(Proxy)` → `"$0:0:children"`
+   - Outputs: `$T0:0:children` in stream
+
+5. **createFromReadableStream**:
+   - Sees `$T0:0:children` in stream
+   - Looks up: `clientTempRefs.get("$0:0:children")` → `<DynamicChild />`
+   - Returns original element in restored tree
+
+**The Proxy is intentionally restrictive**
+
+The server-side Proxy placeholder throws on any access:
+- `proxy.foo` → throws "cannot dot into"
+- `proxy()` → throws "cannot call"
+- `proxy.x = 1` → throws "cannot assign"
+
+Only `$$typeof` returns the tag (so React recognizes it). This ensures dynamic content passes through without server-side evaluation.
+
+**Why encodeReply, not renderToReadableStream, for cache key?**
+
+From `use-cache-runtime.tsx` comment:
+> Using `renderToReadableStream` for argument serialization would serialize React elements (e.g. children props), which causes them to be included as a cache key.
+
+`encodeReply` with `temporaryReferences` replaces React elements with `$T` — excluding them from cache key. `renderToReadableStream` would serialize them fully.
+
+### Poster text
+
+The entire `use cache` flow happens within the RSC environment — a self-loop using all four APIs.
+
+**The Donut Pattern**
+
+`use cache` enables caching a component while keeping children dynamic — like a donut with a static shell and fresh hole.
+
+The challenge: if we serialize children into the cache, they become stale. The solution is `temporaryReferences`.
+
+**How temporaryReferences works**
+
+When serializing arguments with `encodeReply`, React elements become `$T` placeholders — stored in a separate map, excluded from the serialized output. `decodeReply` turns `$T` into an opaque Proxy that passes through without evaluation. When serializing the result with `renderToReadableStream`, the Proxy becomes `$T` again. Finally, `createFromReadableStream` replaces `$T` with the original fresh element from the map.
+
+This is why `use cache` uses `encodeReply` (not `renderToReadableStream`) for cache keys — only `encodeReply` with `temporaryReferences` excludes React elements.
+
+**The 5-step flow** (all within RSC environment)
+
+1. `encodeReply(args)` → cache key (`children` becomes `$T`)
+2. `decodeReply` → args with Proxy placeholder
+3. Execute function (Proxy passes through)
+4. `renderToReadableStream(result)` → cache value (Proxy becomes `$T`)
+5. `createFromReadableStream` → restore, replacing `$T` with fresh children
 
 ---
 
