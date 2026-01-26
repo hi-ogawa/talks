@@ -205,7 +205,9 @@ Google Slides doesn't have a direct "export images" feature. The workaround:
    ```
 
 Images are preserved at original quality (PNG/JPG as imported).
-- [ ] final submission
+- [x] final submission
+  - use AI to annotate images with `image-<section>-<subsection>-<index>-<title>.<ext>` format
+    by comparing with original `draft-v3.md` code blocks
   - move to designated google drive
 
 ### Japanese translation review
