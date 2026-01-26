@@ -194,6 +194,38 @@ Final content is in draft-v3.md
 - [ ] final submission
   - move to designated google drive
 
+### Japanese translation review
+
+| Term                       | ja.react.dev                | uhyo/POSTD          | Recommendation                             |
+| -------------------------- | --------------------------- | ------------------- | ------------------------------------------ |
+| ビルディングブロック       | ❌                          | ❌                  | → 「基盤」or「構成要素」                   |
+| セマンティクス             | ✅                          | ❌                  | ✅ OK                                      |
+| トランスフォーム           | ✅ (JSX トランスフォーム)   | ❌                  | ✅ OK                                      |
+| モジュールローディング     | ❌                          | ❌                  | → 「モジュールインポート」?                  |
+| サフィックス               | ✅                          | ❌                  | ✅ OK                                      |
+| コンシューマ               | ❌                          | ❌                  | → 「利用側」or「クライアント」 -> コンシューマ             |
+| React ツリー               | ✅                          | ❌                  | ✅ OK                                      |
+| ハイドレーションミスマッチ | ✅ (ハイドレーション不一致) | ✅ ハイドレーション | ✅ OK                                      |
+| プレーンオブジェクト       | ❌                          | ❌                  | → 「標準のJSオブジェクト」?                  |
+| 新鮮な穴                   | ❌                          | ❌                  | → 「動的な子」           |
+| プレースホルダー           | ✅                          | ✅                  | ✅ OK                                      |
+| React 要素                 | ✅ (React ノード も)        | ❌                  | → React ノード                             |
+| 不透明な Proxy             | ❌                          | ❌                  | → Keep as-is (technical) -> drop 不透明                  |
+| 再検証                     | ✅ (データの再検証)         | ❌                  | ✅ OK                                      |
+| コアのランタイム           | ✅ ランタイム               | ✅ ランタイム       | → 「コアランタイム」or「ランタイムの中核」-> コアランタイム |
+
+Additional terms from blogs:
+
+- シリアライズ / デシリアライズ ✅ (POSTD)
+- ペイロード ✅ (POSTD)
+- ストリーミング ✅ (POSTD)
+- バンドラ ✅ (POSTD)
+- 多段階計算 (uhyo's framing)
+
+#### emdash
+
+fix emdash paragraph.
+
 ## Follow up
 
 Collect resources in https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache

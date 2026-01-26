@@ -23,6 +23,7 @@ Research conducted 2026-01-26 to verify if this poster's content is publicly doc
 **Conclusion:**
 
 The Next.js blog says "non-serializable items like JSX are replaced with reference placeholders" but never explains HOW. This poster fills that gap with implementation-level documentation derived from source code analysis of:
+
 - React's `react-server-dom-*` packages
 - Next.js `use-cache-wrapper.ts`
 - `@vitejs/plugin-rsc` implementation
@@ -32,6 +33,7 @@ This appears to be **genuinely novel technical documentation** in the public sph
 ---
 
 > Research notes for poster text writing. Synthesized from:
+>
 > - `react-internal.md` - React source analysis
 > - `examples/starter/src/demo.tsx` - Demo code
 > - `@vitejs/plugin-rsc` - Vite RSC implementation
@@ -45,12 +47,12 @@ This appears to be **genuinely novel technical documentation** in the public sph
 
 All APIs come from `react-server-dom-xxx` packages (webpack, turbopack, parcel, etc.).
 
-| API | Export Path | Direction | Purpose |
-|-----|-------------|-----------|---------|
-| `renderToReadableStream` | `/server` | React tree → Stream | Serialize React tree to RSC payload |
-| `createFromReadableStream` | `/client` | Stream → React tree | Deserialize RSC payload back to React tree |
-| `encodeReply` | `/client` | JS values → String/FormData | Serialize function arguments |
-| `decodeReply` | `/server` | String/FormData → JS values | Deserialize function arguments |
+| API                        | Export Path | Direction                   | Purpose                                    |
+| -------------------------- | ----------- | --------------------------- | ------------------------------------------ |
+| `renderToReadableStream`   | `/server`   | React tree → Stream         | Serialize React tree to RSC payload        |
+| `createFromReadableStream` | `/client`   | Stream → React tree         | Deserialize RSC payload back to React tree |
+| `encodeReply`              | `/client`   | JS values → String/FormData | Serialize function arguments               |
+| `decodeReply`              | `/server`   | String/FormData → JS values | Deserialize function arguments             |
 
 **Key point**: "client" in `/client` doesn't mean "browser". It means "consumer of RSC stream", which includes SSR on the server.
 
@@ -72,6 +74,7 @@ All APIs come from `react-server-dom-xxx` packages (webpack, turbopack, parcel, 
 ```
 
 The RSC stream format is row-based:
+
 ```
 0:["$","div",null,{"children":["$","span",null,{"children":0.8033}]}]
 ```
@@ -92,6 +95,7 @@ The RSC stream format is row-based:
 ```
 
 `encodeReply` output format:
+
 - Plain objects → JSON string: `[{"message":"hello"}]`
 - Contains FormData/Blob/etc → FormData with JSON in field `"0"`
 
@@ -102,6 +106,7 @@ This is the key to `use cache`. It allows React elements to "punch through" seri
 ### The Problem
 
 When caching `<CachedParent><DynamicChild /></CachedParent>`:
+
 - `children` prop contains `<DynamicChild />` (a React element)
 - If serialized normally, `<DynamicChild />` becomes part of cache key/value
 - Dynamic content would be frozen in cache
@@ -111,10 +116,12 @@ When caching `<CachedParent><DynamicChild /></CachedParent>`:
 `temporaryReferences` creates a bidirectional mapping that excludes React elements from serialization.
 
 **Client-side** (`createClientTemporaryReferenceSet`):
+
 - Simple Map: `element → "$0:0:children"`
 - When `encodeReply` sees a React element, it stores in map and outputs `$T`
 
 **Server-side** (`createTemporaryReferenceSet`):
+
 - WeakMap with Proxy: `Proxy → "$0:0:children"`
 - When `decodeReply` sees `$T`, it creates an opaque Proxy placeholder
 - The Proxy throws on any access (can only pass through as props)
@@ -133,12 +140,12 @@ const reference = Object.defineProperties(
 const wrapper = new Proxy(reference, proxyHandlers);
 ```
 
-| Access | Result |
-|--------|--------|
+| Access     | Result                            |
+| ---------- | --------------------------------- |
 | `$$typeof` | Returns `TEMPORARY_REFERENCE_TAG` |
-| `fn()` | **Throws** "cannot call" |
-| `fn.foo` | **Throws** "cannot dot into" |
-| `fn.x = 1` | **Throws** "cannot assign" |
+| `fn()`     | **Throws** "cannot call"          |
+| `fn.foo`   | **Throws** "cannot dot into"      |
+| `fn.x = 1` | **Throws** "cannot assign"        |
 
 The Proxy is a **black box** - you can only pass it through. This ensures dynamic content punches through without server-side evaluation.
 
@@ -185,6 +192,7 @@ async function cachedFn(...args: any[]): Promise<unknown> {
 ### Why `encodeReply` for Cache Key?
 
 From the source comment:
+
 > Using `renderToReadableStream` for argument serialization would serialize React elements (e.g. children props), which causes them to be included as a cache key. `encodeReply` with `temporaryReferences` replaces React elements with `$T` markers, excluding them from the cache key.
 
 ## Data Transformation Example
@@ -193,47 +201,57 @@ From the source comment:
 // Original call
 <CachedParent message="hello">
   <DynamicChild />
-</CachedParent>
+</CachedParent>;
 
 // args to cached function
-args = [{ message: "hello", children: <DynamicChild /> }]
+args = [{ message: "hello", children: <DynamicChild /> }];
 ```
 
 **Step 1: encodeReply (cache key)**
+
 ```
 encodedArgs = [{"message":"hello","children":"$T"}]
 clientTempRefs = { <DynamicChild /> → "$0:0:children" }
 ```
 
 **Step 2: decodeReply**
+
 ```
 decodedArgs = [{ message: "hello", children: (Proxy) }]
 serverTempRefs = { (Proxy) → "$0:0:children" }
 ```
 
 **Step 3: Execute function**
+
 ```jsx
-result = <>
-  <span>static: 2026-01-24T08:14:14.537Z</span>
-  <span>message: hello</span>
-  {(Proxy)}  // passes through untouched
-</>
+result = (
+  <>
+    <span>static: 2026-01-24T08:14:14.537Z</span>
+    <span>message: hello</span>
+    {Proxy} // passes through untouched
+  </>
+);
 ```
 
 **Step 4: renderToReadableStream (cache value)**
+
 ```
 0:[["$","span",null,{"children":["static: ","2026-01-24T08:14:14.537Z"]}],["$","span",null,{"children":["message: ","hello"]}],"$T0:0:children"]
 ```
+
 - Static timestamp is baked in
 - Proxy becomes `$T0:0:children`
 
 **Step 5: createFromReadableStream**
+
 ```jsx
-finalResult = <>
-  <span>static: 2026-01-24T08:14:14.537Z</span>  // from cache
-  <span>message: hello</span>                    // from cache
-  <DynamicChild />                               // restored from clientTempRefs
-</>
+finalResult = (
+  <>
+    <span>static: 2026-01-24T08:14:14.537Z</span> // from cache
+    <span>message: hello</span> // from cache
+    <DynamicChild /> // restored from clientTempRefs
+  </>
+);
 ```
 
 ## Key Insights for Poster
@@ -261,6 +279,7 @@ react-server-dom-xxx/
 ```
 
 Note: The `client` and `server` temporary reference implementations are different:
+
 - Client: Simple Map storage
 - Server: Proxy-based with error throwing on access
 
@@ -277,10 +296,12 @@ Note: The `client` and `server` temporary reference implementations are differen
 **Why per-bundler?**
 
 `"use client"` and `"use server"` are RSC semantics defined by React. Bundlers implement these semantics through:
+
 1. **Transforms** — rewriting directives into module boundaries
 2. **Module loading** — resolving references at runtime
 
 The module loading part is bundler-specific:
+
 - Webpack: `__webpack_require__`, chunk loading
 - Vite: dynamic import via `__vite_rsc_require__`
 - Parcel: its own resolution
@@ -322,11 +343,13 @@ Part 1 covers these APIs individually. Part 2 shows how they combine to implemen
 ### Understanding
 
 React Server Components is a rendering model where components execute on the server ahead of time, serializing into a streaming format. This serialized stream can then be sent anywhere and restored:
+
 - Browser for CSR (hydration)
 - Server for SSR (HTML generation)
 - Or stored and restored later (caching)
 
 The two APIs:
+
 - `renderToReadableStream` — serialize React tree → RSC stream
 - `createFromReadableStream` — deserialize RSC stream → React tree
 
@@ -358,8 +381,10 @@ React Server Components is a rendering model where components execute on the ser
 `use cache` enables caching a component's output while keeping passed-in children dynamic. Like a donut: the outer shell is cached (static), but the hole in the middle stays fresh (dynamic children).
 
 ```jsx
-<CachedParent>      // ← static shell (cached)
-  <DynamicChild />  // ← dynamic hole (fresh every render)
+<CachedParent>
+  {" "}
+  // ← static shell (cached)
+  <DynamicChild /> // ← dynamic hole (fresh every render)
 </CachedParent>
 ```
 
@@ -404,6 +429,7 @@ On deserialization, `$T` markers are replaced with the original elements from th
 **The Proxy is intentionally restrictive**
 
 The server-side Proxy placeholder throws on any access:
+
 - `proxy.foo` → throws "cannot dot into"
 - `proxy()` → throws "cannot call"
 - `proxy.x = 1` → throws "cannot assign"
@@ -413,6 +439,7 @@ Only `$$typeof` returns the tag (so React recognizes it). This ensures dynamic c
 **Why encodeReply, not renderToReadableStream, for cache key?**
 
 From `use-cache-runtime.tsx` comment:
+
 > Using `renderToReadableStream` for argument serialization would serialize React elements (e.g. children props), which causes them to be included as a cache key.
 
 `encodeReply` with `temporaryReferences` replaces React elements with `$T` — excluding them from cache key. `renderToReadableStream` would serialize them fully.
@@ -455,6 +482,7 @@ The poster's main message: `use cache` runtime is framework-independent.
 - This demo uses `@vitejs/plugin-rsc` — no Next.js required
 
 What frameworks like Next.js add on top:
+
 - Build-time transforms (hoisting `"use cache"` functions)
 - Cache storage backends (memory, disk, Redis)
 - Revalidation APIs (`revalidateTag`, `revalidatePath`)

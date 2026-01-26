@@ -4,9 +4,9 @@ Title: フレームワーク非依存な"use cache"の仕組みとViteでの実�
 
 ## 1.0. React RSC パッケージ構成
 
-`react-server-dom-xxx` パッケージは、RSC の基本機能を提供するランタイム API 群であり、RSC フレームワークを構築するためのビルディングブロックです。
+`react-server-dom-xxx` パッケージは、RSC の基本機能を提供するランタイム API 群であり、RSC フレームワークを構築するための基盤です。
 
-`"use client"` / `"use server"` は React が定義する RSC のセマンティクスであり、バンドラがトランスフォームとモジュールローディングを通じて実装します。`xxx` サフィックス（`webpack`、`parcel` など）は、バンドラ固有のモジュールローディング機構を反映しています。フレームワークはこれらを抽象化します。
+`"use client"` / `"use server"` は React が定義する RSC のセマンティクスであり、バンドラがトランスフォームとモジュールインポートを通じて実装します。`xxx` サフィックス（`webpack`、`parcel` など）は、バンドラ固有のモジュールインポート機構を反映しています。フレームワークはこれらを抽象化します。
 
 Part 1 ではこれらの API を個別に解説し、Part 2 では `use cache` を実装するためにどう組み合わせるかを示します。
 
@@ -93,7 +93,7 @@ const htmlStream = await renderToReadableStream(reactNode);
 
 ## 1.2. サーバ関数の引数処理
 
-`encodeReply` はブラウザ上で関数の引数をシリアライズします。`decodeReply` はサーバ上でそれらをデシリアライズします。プレーンオブジェクトは JSON 形式の文字列に、FormData やバイナリデータは FormData としてエンコードされます。HTTP 通信と再レンダリングの仕組みはフレームワークが担当し、React ランタイムはシリアライズのみを担当します。
+`encodeReply` はブラウザ上で関数の引数をシリアライズします。`decodeReply` はサーバ上でそれらをデシリアライズします。標準の JS オブジェクトは JSON 形式の文字列に、FormData やバイナリデータは FormData としてエンコードされます。HTTP 通信と再レンダリングの仕組みはフレームワークが担当し、React ランタイムはシリアライズのみを担当します。
 
 Example
 
@@ -156,11 +156,11 @@ const args = await decodeReply(request.body);
 
 **ドーナツパターン**
 
-`use cache` は、コンポーネントをキャッシュしながら children を動的に保つことを可能にします — 静的なシェルと新鮮な穴を持つドーナツのように。課題は、children をキャッシュにシリアライズすると古くなってしまうことです。解決策は `temporaryReferences` です。
+`use cache` は、コンポーネントをキャッシュしながら `children` を動的に保つことを可能にします — 静的なシェルと動的な子を持つドーナツのように。課題は、`children` をキャッシュにシリアライズすると古くなってしまうことです。解決策は `temporaryReferences` です。
 
 **temporaryReferences の仕組み**
 
-`encodeReply` で引数をシリアライズする際、React 要素は `$T` プレースホルダーになり、別のマップに保存されてシリアライズ出力から除外されます。`decodeReply` は `$T` を不透明な Proxy に変換し、評価されずにそのまま通過します。`renderToReadableStream` で結果をシリアライズする際、Proxy は再び `$T` になります。最後に `createFromReadableStream` が `$T` をマップから元の新鮮な要素に置き換えます。これが `use cache` がキャッシュキーに `encodeReply`（`renderToReadableStream` ではなく）を使う理由です — `temporaryReferences` 付きの `encodeReply` だけが React 要素を除外できます。
+`encodeReply` で引数をシリアライズする際、React ノードは `$T` プレースホルダーになり、別のマップに保存されてシリアライズ出力から除外されます。`decodeReply` は `$T` を Proxy に変換し、評価されずにそのまま通過します。`renderToReadableStream` で結果をシリアライズする際、Proxy は再び `$T` になります。最後に `createFromReadableStream` が `$T` をマップから元のノードに置き換えます。これが `use cache` がキャッシュキーに `encodeReply`（`renderToReadableStream` ではなく）を使う理由です — `temporaryReferences` 付きの `encodeReply` だけが React ノードを除外できます。
 
 **5 ステップのフロー**（すべて RSC 環境内）
 
@@ -168,7 +168,7 @@ const args = await decodeReply(request.body);
 2. `decodeReply` → Proxy プレースホルダー付きの引数
 3. 関数を実行（Proxy はそのまま通過）
 4. `renderToReadableStream(result)` → キャッシュ値（Proxy は `$T` になる）
-5. `createFromReadableStream` → 復元、`$T` を新鮮な children に置換
+5. `createFromReadableStream` → 復元、`$T` を最新の children に置換
 
 Example
 
@@ -269,6 +269,6 @@ finalResult = <>
 
 `use cache` のランタイム機構はフレームワーク非依存です。React は `react-server-dom-xxx` パッケージで 4 つの RSC API すべてと `temporaryReferences` 機構を提供しています。どのフレームワークでもこれらのプリミティブを使って `use cache` を実装できます — このデモでは Vite と `@vitejs/plugin-rsc` を使用しています。
 
-Next.js などのフレームワークが追加するもの：ビルド時トランスフォーム、キャッシュストレージバックエンド、再検証 API（`revalidateTag` など）。しかしコアのランタイムは純粋な React です。
+Next.js などのフレームワークが追加するもの：ビルド時トランスフォーム、キャッシュストレージバックエンド、再検証 API（`revalidateTag` など）。しかしコアランタイムは純粋な React です。
 
 完全なデモコードとリソースはリポジトリ https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache にあります。右の QR コードからアクセスしてください。
