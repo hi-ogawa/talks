@@ -129,7 +129,7 @@ FormData {
 }
 ```
 
-Framework integration
+フレームワークでの実装例
 
 ```tsx
 // == "React Client" 環境（ブラウザ）==
@@ -265,10 +265,10 @@ finalResult = <>
 // キャッシュヒット時は 'encodeReply' と 'createFromReadableStream' のみ実行され、キャッシュされた 'stream'（静的シェル）と最新の 'clientTempRefs $T'（動的な子）から戻り値が生成される
 ```
 
-## 2.2 まとめ
+## 2.2 まとめ Viteでの実装
 
 `use cache` のランタイム機構はフレームワーク非依存です。React は `react-server-dom-xxx` パッケージで 4 つの RSC API すべてと `temporaryReferences` 機構を提供しています。どのフレームワークでもこれらのプリミティブを使って `use cache` を実装できます。このデモでは Vite と `@vitejs/plugin-rsc` を使用しています。
 
-Next.js などのフレームワークは、ビルド時トランスフォーム、キャッシュストレージバックエンド、再検証 API（`revalidateTag` など）を追加しています。しかしコアランタイムは純粋な React です。
+Next.js などのフレームワークは、ビルド時トランスフォーム、キャッシュストレージバックエンド、再検証 API（`revalidateTag` など）を追加しています。しかしコアランタイムはReact自体の機能です。
 
 完全なデモコードとリソースはリポジトリ https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache にあります。右の QR コードからアクセスしてください。
