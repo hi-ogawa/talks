@@ -4,9 +4,11 @@ Title: フレームワーク非依存な"use cache"の仕組みとViteでの実�
 
 ## 1.0. React RSC Package Structure
 
-TODO: `react-server-dom-xxx` packages are React's RSC runtime — the low-level APIs that power Server Components. The `xxx` suffix varies by bundler: `webpack` for Next.js, `turbopack`, `parcel`, etc. Frameworks abstract these away, but they're what make `"use client"`, `"use server"` and `"use cache"` work under the hood.
+`react-server-dom-xxx` packages provide runtime APIs for fundamental RSC features — the building blocks for RSC frameworks.
 
-This poster explores these APIs directly. We'll see how each one works in isolation (Part 1), then how they combine to implement `use cache` (Part 2).
+`"use client"` / `"use server"` are RSC semantics that bundlers implement via transforms and module loading. The `xxx` suffix (`webpack`, `parcel`, etc.) reflects the bundler-specific module loading. Frameworks abstract this away.
+
+Part 1 covers these APIs individually. Part 2 shows how they combine to implement `use cache`.
 
 ```js
 
@@ -25,11 +27,12 @@ react-server-dom-xxx/ (webpack, turbopack, parcel, ...)
 
 ```
 
-**Key insight**: `client` here means "consumer of RSC stream", not "browser". You can use `client.edge.js` on the server to deserialize RSC payloads!
-
 ## 1.1. Server Component Rendering
 
-TODO: React server component is a new rendering model where components are executed on the server aheads of time serializing into a streaming format. This serialized data can be sent anywhere and then restored on the browser for CSR, or on the same server for SSR. The key APIs are `renderToReadableStream` and `createFromReadableStream`. "client" in `react-server-dom-xxx/client` doesn't mean "browser", but it means "consumer of RSC stream", which includes SSR.
+React Server Components is a rendering model where components execute on the server ahead of time, serializing into a streaming format. Server API (`renderToReadableStream`) serializes a React tree into a stream. Client API (`createFromReadableStream`) deserializes it back into a React tree. ("client" here means consumer of RSC stream, including SSR.) From there:
+
+- CSR (Client-Side Rendering): the React tree is mounted or hydrated to the DOM in the browser via `react-dom/client`
+- SSR (Server-Side Rendering): the React tree is rendered to an HTML text stream on the server via `react-dom/server`
 
 ```tsx
 import { renderToReadableStream } from "react-server-dom-xxx/server";
@@ -57,7 +60,7 @@ const htmlStream = await renderToReadableStream(reactNode);
 ```
 
 ```js
-//
+// ReactNode tree on “React Server” environment
 {
   '$$typeof': Symbol(react.transitional.element),
   type: [AsyncFunction: ServerComponent],
@@ -66,9 +69,10 @@ const htmlStream = await renderToReadableStream(reactNode);
   props: {}
 }
 
-//
+// Execute `ServerComponent` function
 0:["$","div",null,{"children":["$","span",null,{"children":0.8033}]}]
 
+// Same react node is used both for SSR and CSR (hydration), so no hydration mismatch.
 // equivalent to <div>{0.8033}</div>
 {
   '$$typeof': Symbol(react.transitional.element),
@@ -89,9 +93,7 @@ const htmlStream = await renderToReadableStream(reactNode);
 
 ## 1.2. Server Function Handling
 
-TODO: Server functions need to receive arguments from the browser. React provides `encodeReply` and `decodeReply` to serialize function arguments over HTTP. Plain objects become JSON strings; FormData stays as FormData. The framework handles the HTTP transport — React only handles serialization.
-
-This encode/decode pair mirrors the render/restore pair from 1.1. Both are round-trip serialization mechanisms built into React's RSC runtime.
+`encodeReply` serializes function arguments on browser. `decodeReply` deserializes them on the server. Plain objects become JSON-like strings; FormData and binary data is encoded as FormData. The framework handles the HTTP transport and re-rendering mechanism while React runtime only handles serialization.
 
 Example
 
@@ -150,11 +152,23 @@ const args = await decodeReply(request.body);
 
 ## 2.1. Donut Pattern and Temporary References
 
-TODO: you can call `createFromReadableStream` on the server, not just in "React client" environment (CSR / SSR). This means you can serialize a React tree, store it somewhere (memory, disk, Redis), and restore it later without re-executing the Server Components. The serialized payload acts as a cache.
+The entire `use cache` flow happens within the RSC environment — a self-loop using all four APIs.
 
-But what about dynamic children passed to a cached component? React solves this with "temporary references". By encoding "arguments" with `encodeReply`, React elements are replaced with `$T` placeholders and stored in a "temporary references" map — excluded from the cache key and cache value. On restore, the placeholders are filled with the latest children from the "temporary reference" map.
+**The Donut Pattern**
 
-`use cache` is simply these four APIs stitched together: `encodeReply` creates cache keys (with $T holes), `decodeReply` restores args for execution, `renderToReadableStream` serializes results (with $T holes), and `createFromReadableStream` restores from cache (filling $T holes). The `temporaryReferences` mapping is the glue.
+`use cache` enables caching a component while keeping children dynamic — like a donut with a static shell and fresh hole. The challenge: if we serialize children into the cache, they become stale. The solution is `temporaryReferences`.
+
+**How temporaryReferences works**
+
+When serializing arguments with `encodeReply`, React elements become `$T` placeholders — stored in a separate map, excluded from the serialized output. `decodeReply` turns `$T` into an opaque Proxy that passes through without evaluation. When serializing the result with `renderToReadableStream`, the Proxy becomes `$T` again. Finally, `createFromReadableStream` replaces `$T` with the original fresh element from the map. This is why `use cache` uses `encodeReply` (not `renderToReadableStream`) for cache keys — only `encodeReply` with `temporaryReferences` excludes React elements.
+
+**The 5-step flow** (all within RSC environment)
+
+1. `encodeReply(args)` → cache key (`children` becomes `$T`)
+2. `decodeReply` → args with Proxy placeholder
+3. Execute function (Proxy passes through)
+4. `renderToReadableStream(result)` → cache value (Proxy becomes `$T`)
+5. `createFromReadableStream` → restore, replacing `$T` with fresh children
 
 Example
 
@@ -247,11 +261,14 @@ finalResult = <>
   <span>static: {"2026-01-24T08:14:14.537Z"}</span>
   <DynamicChild />
 </>
+
+// On cache hit, it runs only ‘encodeReply’ and ‘createFromReadableStream’, which produces a return value by restoring a cached ‘stream’ (static shell) with latest ‘clientTempRefs $T’ (dynamic child).
 ```
 
-## 2.2 Take away and Vite Implementation
+## 2.2 Takeaway
 
-TODO: The runtime mechanism of `use cache` is made by beautiful combinations of four fundamental RSC APIs, which is available from `react-server-dom-*` pacakges. `use cache` is a React feature, not just Next.js. The same RSC APIs work in any framework. Demo implementation uses `@vitejs/plugin-rsc` — no Next.js required. What Next.js adds on top: `fetch()` caching integration, `revalidateTag()`/`revalidatePath()`, and build-time cache persistence. The core mechanism (4 APIs + temporaryReferences) is pure React.
+The runtime mechanism of `use cache` is framework-independent. React provides all four RSC APIs in `react-server-dom-xxx` packages, including the `temporaryReferences` mechanism. Any framework can implement `use cache` using these primitives — this demo uses Vite with `@vitejs/plugin-rsc`.
 
-QR code to full reference repo (demo, markdown version of poster, relevant resources, etc..)
-https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache
+What frameworks like Next.js add on top: build-time transforms, cache storage backends, and revalidation APIs (`revalidateTag`, etc.). But the core runtime is pure React.
+
+You can find full demo code and resources in the repository https://github.com/hi-ogawa/react-tokyo-fes-2026-use-cache. Check it out from the QR code on the right.
