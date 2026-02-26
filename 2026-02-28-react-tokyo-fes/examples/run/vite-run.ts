@@ -10,6 +10,9 @@ async function main() {
     return;
   }
 
+  // use production build to see cleaner structure without React's debug metadata
+  process.env.NODE_ENV ??= "production";
+
   const server = await createServer({
     plugins: [
       rsc({

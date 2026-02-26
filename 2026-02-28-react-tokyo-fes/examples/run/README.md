@@ -4,9 +4,6 @@
 
 ```sh
 pnpm -C examples/run vite-run src/demo-1-1.tsx
-
-# run with production to see clean structure React's debug metadata
-NODE_ENV=production pnpm -C examples/run vite-run src/demo-1-1.tsx
 ```
 
 ## Examples
@@ -14,7 +11,7 @@ NODE_ENV=production pnpm -C examples/run vite-run src/demo-1-1.tsx
 ### Demo 1.1
 
 ```sh
-$ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-1-1.tsx
+$ pnpm -C examples/run -s vite-run src/demo-1-1.tsx
 [vite] connected.
 1️⃣  <ServerComponent /> (React node on react server environment)
 {
@@ -52,7 +49,7 @@ $ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-1-1.tsx
 #### Simple
 
 ```sh
-$ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-1-2.tsx simple
+$ pnpm -C examples/run -s vite-run src/demo-1-2.tsx simple
 [vite] connected.
 1️⃣  args (server function arguments)
 [ { greet: 'hi' } ]
@@ -67,7 +64,7 @@ $ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-1-2.tsx simple
 #### Form
 
 ```sh
-$ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-1-2.tsx form
+$ pnpm -C examples/run -s vite-run src/demo-1-2.tsx form
 [vite] connected.
 1️⃣  args (server function arguments)
 FormData {}
@@ -82,6 +79,8 @@ FormData entries: [ [ 'greet', 'hey' ] ]
 
 ### Demo 2.1
 
+TODO:
+
 ```sh
-$ NODE_ENV=production pnpm -C examples/run -s vite-run src/demo-2-1.tsx
+$ pnpm -C examples/run -s vite-run src/demo-2-1.tsx
 ```
