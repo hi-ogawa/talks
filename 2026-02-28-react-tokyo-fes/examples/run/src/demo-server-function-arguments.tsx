@@ -4,35 +4,15 @@ import {
   decodeReply,
   encodeReply,
 } from "@vitejs/plugin-rsc/rsc";
-
-const SECTION_LINE = "=".repeat(56);
-
-const ANSI = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  cyan: "\x1b[36m",
-} as const;
-
-function style(text: string, ...codes: string[]) {
-  return `${codes.join("")}${text}${ANSI.reset}`;
-}
-
-function logSection(step: string, title: string, purpose: string) {
-  console.log(style(SECTION_LINE, ANSI.dim));
-  console.log(style(`${step}: ${title}`, ANSI.bold, ANSI.cyan));
-  console.log(style(`Purpose: ${purpose}`, ANSI.dim));
-  console.log(style(SECTION_LINE, ANSI.dim));
-}
-
-function formDataEntries(fd: FormData) {
-  return Array.from(fd.entries());
-}
+import { logSection } from "./utils";
 
 export async function main(args: string[]) {
   async function demoReply(args: any) {
     logSection("Step 1/3", "Server Function Arguments", "input before encoding");
     console.dir(args, { depth: null });
+    if (args instanceof FormData) {
+      console.log("FormData entries:", formDataEntries(args));
+    }
     console.log();
 
     const encoderReferences = createClientTemporaryReferenceSet();
@@ -60,4 +40,8 @@ export async function main(args: string[]) {
     formData.set("greet", "hey");
     await demoReply(formData);
   }
+}
+
+function formDataEntries(fd: FormData) {
+  return Array.from(fd.entries());
 }

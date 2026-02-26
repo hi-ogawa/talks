@@ -89,6 +89,7 @@ Step 1/3: Server Function Arguments
 Purpose: input before encoding
 ========================================================
 FormData {}
+FormData entries: [ [ 'greet', 'hey' ] ]
 
 ========================================================
 Step 2/3: encodeReply Result

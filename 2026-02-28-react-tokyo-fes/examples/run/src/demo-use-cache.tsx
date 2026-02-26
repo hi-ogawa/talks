@@ -6,37 +6,7 @@ import {
   encodeReply,
   renderToReadableStream,
 } from "@vitejs/plugin-rsc/rsc";
-
-const SECTION_LINE = "=".repeat(56);
-
-const ANSI = {
-  reset: "\x1b[0m",
-  bold: "\x1b[1m",
-  dim: "\x1b[2m",
-  cyan: "\x1b[36m",
-  magenta: "\x1b[35m",
-  green: "\x1b[32m",
-  yellow: "\x1b[33m",
-} as const;
-
-function style(text: string, ...codes: string[]) {
-  return `${codes.join("")}${text}${ANSI.reset}`;
-}
-
-function logSection(step: string, title: string, purpose: string) {
-  console.log(style(SECTION_LINE, ANSI.dim));
-  console.log(style(`${step}: ${title}`, ANSI.bold, ANSI.cyan));
-  console.log(style(`Purpose: ${purpose}`, ANSI.dim));
-  console.log(style(SECTION_LINE, ANSI.dim));
-}
-
-function logNote(note: string) {
-  console.log(style(`Note: ${note}`, ANSI.yellow));
-}
-
-function stringToStream(text: string) {
-  return new Blob([text]).stream() as ReadableStream<Uint8Array>;
-}
+import { ANSI, logNote, logSection, stringToStream, stringToString, style } from "./utils";
 
 async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode) {
   const cache = new Map<string, string>();
@@ -114,16 +84,4 @@ export async function main() {
 
   console.log(style("Run #2 (same args shape)", ANSI.bold));
   await CachedParent_wrapped({ children: <DynamicChild /> });
-}
-
-async function stringToString(stream: ReadableStream<Uint8Array>) {
-  let result = "";
-  await stream.pipeThrough(new TextDecoderStream() as any).pipeTo(
-    new WritableStream({
-      write(chunk) {
-        result += chunk;
-      },
-    }),
-  );
-  return result;
 }
