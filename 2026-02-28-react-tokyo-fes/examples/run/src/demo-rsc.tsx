@@ -29,11 +29,11 @@ export async function main() {
 
   const rscStream = renderToReadableStream(rootNode);
   const [rscStream1, rscStream2] = rscStream.tee();
-  logSection("Step 2/3", "RSC Stream Payload");
+  logSection("Step 2/3", "RSC Stream Payload (renderToReadableStream)");
   logLhs("rscStream", await stringToString(rscStream1));
   console.log();
 
   const rootNodeClient = await createFromReadableStream(rscStream2);
-  logSection("Step 3/3", "Client React Node");
+  logSection("Step 3/3", "React Node on Client (createFromReadableStream)");
   logLhs("reactNode", rootNodeClient);
 }

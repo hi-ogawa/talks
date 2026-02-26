@@ -14,7 +14,7 @@ $ pnpm -C examples/run vite-run src/demo-rsc.tsx
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
 ========================================================
-Step 1/3: React node on "react-server" environment
+Step 1/3: Server Component Node
 ========================================================
 reactNode =
   {
@@ -26,14 +26,14 @@ reactNode =
   }
 
 ========================================================
-Step 2/3: RSC Stream Payload (TODO: mention renderToReadableStream)
+Step 2/3: RSC Stream Payload (renderToReadableStream)
 ========================================================
 rscStream =
   0:["$","div",null,{"children":["$","span",null,{"children":0.8340104797874847}]}]
 
 
 ========================================================
-Step 3/3: React node on client (TODO: mention createFromReadableStream)
+Step 3/3: React Node on Client (createFromReadableStream)
 ========================================================
 reactNode =
   {
@@ -110,7 +110,7 @@ $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 [vite] connected.
 Run #1
 ========================================================
-Step 1/5: Encode Args as Cache Key (TODO: mention encodeReply)
+Step 1/5: Encode Args as Cache Key (encodeReply + temporaryReferences)
 ========================================================
 args =
   [
@@ -131,10 +131,11 @@ encodedArgs =
 cache = miss
 
 ========================================================
-Step 2/5: Decode Arguments  (TODO: mention decodeReply with temporary referenes. also note `[Function (anonymous)]` which corresdponds to $T)
+Step 2/5: Decode Arguments (decodeReply + temporaryReferences)
 ========================================================
 decodedArgs =
   [ { children: [Function (anonymous)] } ]
+Note: [Function (anonymous)] is a temporary reference proxy for encoded $T.
 
 ========================================================
 Step 3/5: Execute Original Function
@@ -160,13 +161,15 @@ result =
   }
 
 ========================================================
-Step 4/5: Serialize Result and Cache (TODO: renderToReadableStream + temporary reference `[Function (anonymous)]` back to $T)
+Step 4/5: Serialize Result and Cache (renderToReadableStream + temporaryReferences)
 ========================================================
 stream =
   0:[["$","span",null,{"children":["static: ","2026-02-26T10:28:01.637Z"]}],"$T0:0:children"]
+Note: static timestamp is baked into the cached RSC payload.
+Note: temporary reference proxy is encoded back to $T in the payload.
 
 ========================================================
-Step 5/5: Deserialize Cached RSC Stream  (TODO: createFromReadableStream + $T swapped back to latest DynamicChild)
+Step 5/5: Deserialize Cached RSC Stream (createFromReadableStream + temporaryReferences)
 ========================================================
 finalResult =
   [
@@ -185,10 +188,11 @@ finalResult =
       props: {}
     }
   ]
+Note: $T in payload is restored to the latest <DynamicChild /> reference.
 
 Run #2 (same args shape)
 ========================================================
-Step 1/5: Encode Args as Cache Key
+Step 1/5: Encode Args as Cache Key (encodeReply)
 ========================================================
 args =
   [
@@ -209,7 +213,7 @@ encodedArgs =
 cache = hit (skip Steps 2-4)
 
 ========================================================
-Step 5/5: Deserialize Cached RSC Stream
+Step 5/5: Deserialize Cached RSC Stream (createFromReadableStream)
 ========================================================
 finalResult =
   [
@@ -228,4 +232,5 @@ finalResult =
       props: {}
     }
   ]
+Note: $T in payload is restored to the latest <DynamicChild /> reference.
 ```
