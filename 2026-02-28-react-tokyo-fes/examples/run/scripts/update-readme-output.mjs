@@ -15,7 +15,8 @@ const snapshots = [
   },
   {
     id: "demo-1-2-simple",
-    displayCommand: "pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple",
+    displayCommand:
+      "pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple",
     command: ["pnpm", "-s", "vite-run", "src/demo-server-function-arguments.tsx", "simple"],
   },
   {

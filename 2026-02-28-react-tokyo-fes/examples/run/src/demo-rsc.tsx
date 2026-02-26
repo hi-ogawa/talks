@@ -1,17 +1,5 @@
 import { createFromReadableStream, renderToReadableStream } from "@vitejs/plugin-rsc/rsc";
-import { inspect } from "node:util";
-import { logSection, stringToString } from "./utils";
-
-function logLhs(name: string, value: unknown) {
-  console.log(`${name} =`);
-  const text = typeof value === "string" ? value : inspect(value, { depth: null, colors: true });
-  console.log(
-    text
-      .split("\n")
-      .map((line) => `  ${line}`)
-      .join("\n"),
-  );
-}
+import { logLhs, logSection, stringToString } from "./utils";
 
 export async function main() {
   async function ServerComponent() {

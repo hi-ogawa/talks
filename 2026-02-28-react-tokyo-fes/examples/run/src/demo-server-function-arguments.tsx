@@ -4,19 +4,7 @@ import {
   decodeReply,
   encodeReply,
 } from "@vitejs/plugin-rsc/rsc";
-import { inspect } from "node:util";
-import { logSection } from "./utils";
-
-function logLhs(name: string, value: unknown) {
-  console.log(`${name} =`);
-  const text = typeof value === "string" ? value : inspect(value, { depth: null, colors: true });
-  console.log(
-    text
-      .split("\n")
-      .map((line) => `  ${line}`)
-      .join("\n"),
-  );
-}
+import { logLhs, logSection } from "./utils";
 
 export async function main(args: string[]) {
   async function demoReply(args: any) {
