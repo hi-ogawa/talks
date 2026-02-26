@@ -6,57 +6,75 @@ import {
   encodeReply,
   renderToReadableStream,
 } from "@vitejs/plugin-rsc/rsc";
-import { ANSI, logNote, logSection, stringToStream, stringToString, style } from "./utils";
+import { inspect } from "node:util";
+import { ANSI, stringToStream, stringToString, style } from "./utils";
+
+const SECTION_LINE = "=".repeat(56);
+
+function logStep(step: string, title: string) {
+  console.log(style(SECTION_LINE, ANSI.dim));
+  console.log(style(`${step}: ${title}`, ANSI.bold, ANSI.cyan));
+  console.log(style(SECTION_LINE, ANSI.dim));
+}
+
+function logLhs(name: string, value: unknown) {
+  console.log(style(`${name} =`, ANSI.bold));
+  const text = typeof value === "string" ? value : inspect(value, { depth: null, colors: true });
+  console.log(
+    text
+      .split("\n")
+      .map((line) => `  ${line}`)
+      .join("\n"),
+  );
+}
 
 async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode) {
   const cache = new Map<string, string>();
 
   return async (...args: any[]) => {
-    logSection("Step 1/5", "Encode Args as Cache Key", "encodeReply(args)");
+    logStep("Step 1/5", "Encode Args as Cache Key");
+    logLhs("args", args);
+    console.log();
     const clientTempRefs = createClientTemporaryReferenceSet();
     const encodedArgs = await encodeReply(args, { temporaryReferences: clientTempRefs });
     if (typeof encodedArgs !== "string") {
       throw new Error("Expected encodedArgs to be a string in this simplified demo.");
     }
-    console.log(encodedArgs);
+    logLhs("encodedArgs", encodedArgs);
     console.log();
 
     if (!cache.has(encodedArgs)) {
-      console.log(style("Cache: miss", ANSI.bold, ANSI.green));
+      console.log(style("cache = miss", ANSI.bold, ANSI.green));
       console.log();
 
-      logSection("Step 2/5", "Decode Arguments", "decodeReply(encodedArgs)");
+      logStep("Step 2/5", "Decode Arguments");
       const serverTempRefs = createTemporaryReferenceSet();
       const decodedArgs = await decodeReply(encodedArgs, { temporaryReferences: serverTempRefs });
-      console.dir(decodedArgs, { depth: null });
-      logNote("[Function (anonymous)] is a temporary reference proxy for encoded $T.");
+      logLhs("decodedArgs", decodedArgs);
       console.log();
 
-      logSection("Step 3/5", "Execute Original Function", "originalFn(...decodedArgs)");
+      logStep("Step 3/5", "Execute Original Function");
       const result = originalFn(...(decodedArgs as any[]));
-      console.dir(result, { depth: null });
+      logLhs("result", result);
       console.log();
 
-      logSection("Step 4/5", "Serialize Result and Cache", "renderToReadableStream(result)");
+      logStep("Step 4/5", "Serialize Result and Cache");
       const stream = renderToReadableStream(result, { temporaryReferences: serverTempRefs });
       const payload = await stringToString(stream);
       cache.set(encodedArgs, payload);
-      console.log(payload.trim());
-      logNote("static timestamp is baked into the cached RSC payload.");
-      logNote("temporary reference proxy is encoded back to $T in the payload.");
+      logLhs("stream", payload.trim());
       console.log();
     } else {
-      console.log(style("Cache: hit (skip Steps 2-4)", ANSI.bold, ANSI.magenta));
+      console.log(style("cache = hit (skip Steps 2-4)", ANSI.bold, ANSI.magenta));
       console.log();
     }
 
-    logSection("Step 5/5", "Deserialize Cached RSC Stream", "createFromReadableStream(stream)");
+    logStep("Step 5/5", "Deserialize Cached RSC Stream");
     const payload = cache.get(encodedArgs)!;
     const finalResult = await createFromReadableStream(stringToStream(payload), {
       temporaryReferences: clientTempRefs,
     });
-    console.dir(finalResult, { depth: null });
-    logNote("$T in payload is restored to the latest <DynamicChild /> reference.");
+    logLhs("finalResult", finalResult);
     console.log();
 
     return finalResult;

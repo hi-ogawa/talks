@@ -113,100 +113,121 @@ $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 Run #1
 ========================================================
 Step 1/5: Encode Args as Cache Key
-Purpose: encodeReply(args)
 ========================================================
-[{"children":"$T"}]
+args =
+  [
+    {
+      children: {
+        '$$typeof': Symbol(react.transitional.element),
+        type: [Function: DynamicChild],
+        key: null,
+        ref: null,
+        props: {}
+      }
+    }
+  ]
 
-Cache: miss
+encodedArgs =
+  [{"children":"$T"}]
+
+cache = miss
 
 ========================================================
 Step 2/5: Decode Arguments
-Purpose: decodeReply(encodedArgs)
 ========================================================
-[ { children: [Function (anonymous)] } ]
-Note: [Function (anonymous)] is a temporary reference proxy for encoded $T.
+decodedArgs =
+  [ { children: [Function (anonymous)] } ]
 
 ========================================================
 Step 3/5: Execute Original Function
-Purpose: originalFn(...decodedArgs)
 ========================================================
-{
-  '$$typeof': Symbol(react.transitional.element),
-  type: Symbol(react.fragment),
-  key: null,
-  ref: null,
-  props: {
-    children: [
-      {
-        '$$typeof': Symbol(react.transitional.element),
-        type: 'span',
-        key: null,
-        ref: null,
-        props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
-      },
-      [Function (anonymous)]
-    ]
+result =
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: Symbol(react.fragment),
+    key: null,
+    ref: null,
+    props: {
+      children: [
+        {
+          '$$typeof': Symbol(react.transitional.element),
+          type: 'span',
+          key: null,
+          ref: null,
+          props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+        },
+        [Function (anonymous)]
+      ]
+    }
   }
-}
 
 ========================================================
 Step 4/5: Serialize Result and Cache
-Purpose: renderToReadableStream(result)
 ========================================================
-0:[["$","span",null,{"children":["static: ","2026-02-26T10:12:38.227Z"]}],"$T0:0:children"]
-Note: static timestamp is baked into the cached RSC payload.
-Note: temporary reference proxy is encoded back to $T in the payload.
+stream =
+  0:[["$","span",null,{"children":["static: ","2026-02-26T10:28:01.637Z"]}],"$T0:0:children"]
 
 ========================================================
 Step 5/5: Deserialize Cached RSC Stream
-Purpose: createFromReadableStream(stream)
 ========================================================
-[
-  {
-    '$$typeof': Symbol(react.transitional.element),
-    type: 'span',
-    key: null,
-    ref: null,
-    props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
-  },
-  {
-    '$$typeof': Symbol(react.transitional.element),
-    type: [Function: DynamicChild],
-    key: null,
-    ref: null,
-    props: {}
-  }
-]
-Note: $T in payload is restored to the latest <DynamicChild /> reference.
+finalResult =
+  [
+    {
+      '$$typeof': Symbol(react.transitional.element),
+      type: 'span',
+      key: null,
+      ref: null,
+      props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+    },
+    {
+      '$$typeof': Symbol(react.transitional.element),
+      type: [Function: DynamicChild],
+      key: null,
+      ref: null,
+      props: {}
+    }
+  ]
 
 Run #2 (same args shape)
 ========================================================
 Step 1/5: Encode Args as Cache Key
-Purpose: encodeReply(args)
 ========================================================
-[{"children":"$T"}]
+args =
+  [
+    {
+      children: {
+        '$$typeof': Symbol(react.transitional.element),
+        type: [Function: DynamicChild],
+        key: null,
+        ref: null,
+        props: {}
+      }
+    }
+  ]
 
-Cache: hit (skip Steps 2-4)
+encodedArgs =
+  [{"children":"$T"}]
+
+cache = hit (skip Steps 2-4)
 
 ========================================================
 Step 5/5: Deserialize Cached RSC Stream
-Purpose: createFromReadableStream(stream)
 ========================================================
-[
-  {
-    '$$typeof': Symbol(react.transitional.element),
-    type: 'span',
-    key: null,
-    ref: null,
-    props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
-  },
-  {
-    '$$typeof': Symbol(react.transitional.element),
-    type: [Function: DynamicChild],
-    key: null,
-    ref: null,
-    props: {}
-  }
-]
-Note: $T in payload is restored to the latest <DynamicChild /> reference.
+finalResult =
+  [
+    {
+      '$$typeof': Symbol(react.transitional.element),
+      type: 'span',
+      key: null,
+      ref: null,
+      props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+    },
+    {
+      '$$typeof': Symbol(react.transitional.element),
+      type: [Function: DynamicChild],
+      key: null,
+      ref: null,
+      props: {}
+    }
+  ]
 ```
