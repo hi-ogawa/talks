@@ -13,7 +13,10 @@ $ pnpm -C examples/run vite-run src/demo-rsc.tsx
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
-1️⃣  <ServerComponent /> (React node on react server environment)
+========================================================
+Step 1/3: Server Component Node
+Purpose: React element on server environment
+========================================================
 {
   '$$typeof': Symbol(react.transitional.element),
   type: [AsyncFunction: ServerComponent],
@@ -22,11 +25,17 @@ $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
   props: {}
 }
 
-2️⃣  RSC stream (renderToReadableStream result)
+========================================================
+Step 2/3: RSC Stream Payload
+Purpose: renderToReadableStream output
+========================================================
 0:["$","div",null,{"children":["$","span",null,{"children":0.8340104797874847}]}]
 
 
-3️⃣  React node on client environment (createFromReadableStream result)
+========================================================
+Step 3/3: Client React Node
+Purpose: createFromReadableStream output
+========================================================
 {
   '$$typeof': Symbol(react.transitional.element),
   type: 'div',
@@ -51,13 +60,22 @@ $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
-1️⃣  args (server function arguments)
+========================================================
+Step 1/3: Server Function Arguments
+Purpose: input before encoding
+========================================================
 [ { greet: 'hi' } ]
 
-2️⃣  encodeReply result (encoded arguments)
+========================================================
+Step 2/3: encodeReply Result
+Purpose: encoded arguments payload
+========================================================
 [{"greet":"hi"}]
 
-3️⃣  decodeReply result (decoded arguments)
+========================================================
+Step 3/3: decodeReply Result
+Purpose: decoded arguments payload
+========================================================
 [ { greet: 'hi' } ]
 ```
 
@@ -66,21 +84,128 @@ $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
-1️⃣  args (server function arguments)
+========================================================
+Step 1/3: Server Function Arguments
+Purpose: input before encoding
+========================================================
 FormData {}
 
-2️⃣  encodeReply result (encoded arguments)
+========================================================
+Step 2/3: encodeReply Result
+Purpose: encoded arguments payload
+========================================================
 FormData { '0': '"$K1"', '1_greet': 'hey' }
 
-3️⃣  decodeReply result (decoded arguments)
+========================================================
+Step 3/3: decodeReply Result
+Purpose: decoded arguments payload
+========================================================
 FormData {}
 FormData entries: [ [ 'greet', 'hey' ] ]
 ```
 
 ### Demo 2.1
 
-TODO:
-
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
+[vite] connected.
+Run #1
+========================================================
+Step 1/5: Encode Args as Cache Key
+Purpose: encodeReply(args)
+========================================================
+[{"children":"$T"}]
+
+Cache: miss
+
+========================================================
+Step 2/5: Decode Arguments
+Purpose: decodeReply(encodedArgs)
+========================================================
+[ { children: [Function (anonymous)] } ]
+Note: [Function (anonymous)] is a temporary reference proxy for encoded $T.
+
+========================================================
+Step 3/5: Execute Original Function
+Purpose: originalFn(...decodedArgs)
+========================================================
+{
+  '$$typeof': Symbol(react.transitional.element),
+  type: Symbol(react.fragment),
+  key: null,
+  ref: null,
+  props: {
+    children: [
+      {
+        '$$typeof': Symbol(react.transitional.element),
+        type: 'span',
+        key: null,
+        ref: null,
+        props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
+      },
+      [Function (anonymous)]
+    ]
+  }
+}
+
+========================================================
+Step 4/5: Serialize Result and Cache
+Purpose: renderToReadableStream(result)
+========================================================
+0:[["$","span",null,{"children":["static: ","2026-02-26T10:12:38.227Z"]}],"$T0:0:children"]
+Note: static timestamp is baked into the cached RSC payload.
+Note: temporary reference proxy is encoded back to $T in the payload.
+
+========================================================
+Step 5/5: Deserialize Cached RSC Stream
+Purpose: createFromReadableStream(stream)
+========================================================
+[
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: 'span',
+    key: null,
+    ref: null,
+    props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
+  },
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: [Function: DynamicChild],
+    key: null,
+    ref: null,
+    props: {}
+  }
+]
+Note: $T in payload is restored to the latest <DynamicChild /> reference.
+
+Run #2 (same args shape)
+========================================================
+Step 1/5: Encode Args as Cache Key
+Purpose: encodeReply(args)
+========================================================
+[{"children":"$T"}]
+
+Cache: hit (skip Steps 2-4)
+
+========================================================
+Step 5/5: Deserialize Cached RSC Stream
+Purpose: createFromReadableStream(stream)
+========================================================
+[
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: 'span',
+    key: null,
+    ref: null,
+    props: { children: [ 'static: ', '2026-02-26T10:12:38.227Z' ] }
+  },
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: [Function: DynamicChild],
+    key: null,
+    ref: null,
+    props: {}
+  }
+]
+Note: $T in payload is restored to the latest <DynamicChild /> reference.
 ```

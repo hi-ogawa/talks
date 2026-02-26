@@ -7,8 +7,93 @@ import {
   renderToReadableStream,
 } from "@vitejs/plugin-rsc/rsc";
 
+const SECTION_LINE = "=".repeat(56);
+
+const ANSI = {
+  reset: "\x1b[0m",
+  bold: "\x1b[1m",
+  dim: "\x1b[2m",
+  cyan: "\x1b[36m",
+  magenta: "\x1b[35m",
+  green: "\x1b[32m",
+  yellow: "\x1b[33m",
+} as const;
+
+function style(text: string, ...codes: string[]) {
+  return `${codes.join("")}${text}${ANSI.reset}`;
+}
+
+function logSection(step: string, title: string, purpose: string) {
+  console.log(style(SECTION_LINE, ANSI.dim));
+  console.log(style(`${step}: ${title}`, ANSI.bold, ANSI.cyan));
+  console.log(style(`Purpose: ${purpose}`, ANSI.dim));
+  console.log(style(SECTION_LINE, ANSI.dim));
+}
+
+function logNote(note: string) {
+  console.log(style(`Note: ${note}`, ANSI.yellow));
+}
+
+function stringToStream(text: string) {
+  return new Blob([text]).stream() as ReadableStream<Uint8Array>;
+}
+
+async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode) {
+  const cache = new Map<string, string>();
+
+  return async (...args: any[]) => {
+    logSection("Step 1/5", "Encode Args as Cache Key", "encodeReply(args)");
+    const clientTempRefs = createClientTemporaryReferenceSet();
+    const encodedArgs = await encodeReply(args, { temporaryReferences: clientTempRefs });
+    if (typeof encodedArgs !== "string") {
+      throw new Error("Expected encodedArgs to be a string in this simplified demo.");
+    }
+    console.log(encodedArgs);
+    console.log();
+
+    if (!cache.has(encodedArgs)) {
+      console.log(style("Cache: miss", ANSI.bold, ANSI.green));
+      console.log();
+
+      logSection("Step 2/5", "Decode Arguments", "decodeReply(encodedArgs)");
+      const serverTempRefs = createTemporaryReferenceSet();
+      const decodedArgs = await decodeReply(encodedArgs, { temporaryReferences: serverTempRefs });
+      console.dir(decodedArgs, { depth: null });
+      logNote("[Function (anonymous)] is a temporary reference proxy for encoded $T.");
+      console.log();
+
+      logSection("Step 3/5", "Execute Original Function", "originalFn(...decodedArgs)");
+      const result = originalFn(...(decodedArgs as any[]));
+      console.dir(result, { depth: null });
+      console.log();
+
+      logSection("Step 4/5", "Serialize Result and Cache", "renderToReadableStream(result)");
+      const stream = renderToReadableStream(result, { temporaryReferences: serverTempRefs });
+      const payload = await stringToString(stream);
+      cache.set(encodedArgs, payload);
+      console.log(payload.trim());
+      logNote("static timestamp is baked into the cached RSC payload.");
+      logNote("temporary reference proxy is encoded back to $T in the payload.");
+      console.log();
+    } else {
+      console.log(style("Cache: hit (skip Steps 2-4)", ANSI.bold, ANSI.magenta));
+      console.log();
+    }
+
+    logSection("Step 5/5", "Deserialize Cached RSC Stream", "createFromReadableStream(stream)");
+    const payload = cache.get(encodedArgs)!;
+    const finalResult = await createFromReadableStream(stringToStream(payload), {
+      temporaryReferences: clientTempRefs,
+    });
+    console.dir(finalResult, { depth: null });
+    logNote("$T in payload is restored to the latest <DynamicChild /> reference.");
+    console.log();
+
+    return finalResult;
+  };
+}
+
 export async function main() {
-  // "use cache" component: static shell + dynamic children
   function CachedParent({ children }: { children: React.ReactNode }) {
     return (
       <>
@@ -18,60 +103,17 @@ export async function main() {
     );
   }
 
-  // Dynamic child component
   function DynamicChild() {
     return <span>dynamic: {new Date().toISOString()}</span>;
   }
 
-  console.log("==== 1. Original args (i.e. CachedParent's props) ====");
-  const args = [{ children: <DynamicChild /> }];
-  console.dir({ args }, { depth: null });
-  console.log();
+  const CachedParent_wrapped = await __cache_wrapper__(CachedParent);
 
-  // Step 1: Encode args (i.e. CachedParent's props)
-  const clientTempRefs = createClientTemporaryReferenceSet();
-  const encodedArgs = await encodeReply(args, { temporaryReferences: clientTempRefs });
-  console.log("==== 2. encodeReply ====");
-  console.log({ encodedArgs });
-  // console.log({ clientTempRefs });
-  // console.log("→ children becomes $T");
-  console.log();
+  console.log(style("Run #1", ANSI.bold));
+  await CachedParent_wrapped({ children: <DynamicChild /> });
 
-  // Step 2: Decode args (on cache miss, to execute fn)
-  const serverTempRefs = createTemporaryReferenceSet();
-  const decodedArgs: any[] = await decodeReply(encodedArgs, {
-    temporaryReferences: serverTempRefs,
-  });
-  console.log("==== 3. decodeReply ====");
-  console.dir({ decodedArgs }, { depth: null });
-  console.log(
-    "→ [Function (anonymous)] is a temporary reference proxy which corresponds to encoded $T marker",
-  );
-  console.log();
-
-  // Step 3: Execute the original function (this is the "fn" in use-cache-runtime)
-  const result = CachedParent(decodedArgs[0] as any);
-  console.log("==== 4. execute CachedParent(decoded) ====");
-  console.dir({ result }, { depth: null });
-  console.log();
-
-  // Step 4: Serialize result (for cache value)
-  const stream = renderToReadableStream(result, { temporaryReferences: serverTempRefs });
-  const [stream1, stream2] = stream.tee();
-  const rscPayload = await stringToString(stream1);
-  console.log("==== 5. renderToReadableStream (cache value) ====");
-  console.log({ stream: rscPayload.trim() });
-  console.log("→ CachedParent's Date.now() is executed and baked in the stream");
-  console.log("→ temporary reference proxy '[Function (anonymous)]' is encoded back to $T");
-  console.log();
-
-  // Step 5: Revive from cache (on cache hit)
-  const finalResult = await createFromReadableStream(stream2, {
-    temporaryReferences: clientTempRefs,
-  });
-  console.log("==== 6. createFromReadableStream (revived) ====");
-  console.dir({ finalResult }, { depth: null });
-  console.log("→ $T inside stream is swapped back to <DynamicChild />");
+  console.log(style("Run #2 (same args shape)", ANSI.bold));
+  await CachedParent_wrapped({ children: <DynamicChild /> });
 }
 
 async function stringToString(stream: ReadableStream<Uint8Array>) {
