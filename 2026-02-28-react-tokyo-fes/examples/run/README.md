@@ -18,6 +18,8 @@ The output blocks are generated between `<!-- demo:...:start -->` and `<!-- demo
 
 ### Demo 1.1
 
+- Code: [src/demo-rsc.tsx](./src/demo-rsc.tsx)
+
 <!-- demo:demo-1-1:start -->
 
 ```sh
@@ -66,6 +68,8 @@ reactNode =
 <!-- demo:demo-1-1:end -->
 
 ### Demo 1.2
+
+- Code: [src/demo-server-function-arguments.tsx](./src/demo-server-function-arguments.tsx)
 
 #### Simple
 
@@ -124,6 +128,8 @@ args =
 <!-- demo:demo-1-2-form:end -->
 
 ### Demo 2.1
+
+- Code: [src/demo-use-cache.tsx](./src/demo-use-cache.tsx)
 
 <!-- demo:demo-2-1:start -->
 
