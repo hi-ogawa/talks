@@ -3,7 +3,7 @@
 ## How to run
 
 ```sh
-pnpm -C examples/run vite-run src/demo-1-1.tsx
+$ pnpm -C examples/run vite-run src/demo-rsc.tsx
 ```
 
 ## Examples
@@ -11,7 +11,7 @@ pnpm -C examples/run vite-run src/demo-1-1.tsx
 ### Demo 1.1
 
 ```sh
-$ pnpm -C examples/run -s vite-run src/demo-1-1.tsx
+$ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
 1️⃣  <ServerComponent /> (React node on react server environment)
 {
@@ -49,7 +49,7 @@ $ pnpm -C examples/run -s vite-run src/demo-1-1.tsx
 #### Simple
 
 ```sh
-$ pnpm -C examples/run -s vite-run src/demo-1-2.tsx simple
+$ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
 1️⃣  args (server function arguments)
 [ { greet: 'hi' } ]
@@ -64,7 +64,7 @@ $ pnpm -C examples/run -s vite-run src/demo-1-2.tsx simple
 #### Form
 
 ```sh
-$ pnpm -C examples/run -s vite-run src/demo-1-2.tsx form
+$ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
 1️⃣  args (server function arguments)
 FormData {}
@@ -82,5 +82,5 @@ FormData entries: [ [ 'greet', 'hey' ] ]
 TODO:
 
 ```sh
-$ pnpm -C examples/run -s vite-run src/demo-2-1.tsx
+$ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 ```
