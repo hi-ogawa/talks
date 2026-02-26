@@ -6,10 +6,19 @@
 $ pnpm -C examples/run vite-run src/demo-rsc.tsx
 ```
 
+## Update README snapshots
+
+```sh
+$ pnpm -C examples/run update-readme
+```
+
+The output blocks are generated between `<!-- demo:...:start -->` and `<!-- demo:...:end -->` markers.
+
 ## Examples
 
 ### Demo 1.1
 
+<!-- demo:demo-1-1:start -->
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
@@ -29,8 +38,8 @@ reactNode =
 Step 2/3: RSC Stream Payload (renderToReadableStream)
 ========================================================
 rscStream =
-  0:["$","div",null,{"children":["$","span",null,{"children":0.8340104797874847}]}]
-
+  0:["$","div",null,{"children":["$","span",null,{"children":0.9726395234009365}]}]
+  
 
 ========================================================
 Step 3/3: React Node on Client (createFromReadableStream)
@@ -47,16 +56,18 @@ reactNode =
         type: 'span',
         key: null,
         ref: null,
-        props: { children: 0.8340104797874847 }
+        props: { children: 0.9726395234009365 }
       }
     }
   }
 ```
+<!-- demo:demo-1-1:end -->
 
 ### Demo 1.2
 
 #### Simple
 
+<!-- demo:demo-1-2-simple:start -->
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
@@ -67,20 +78,22 @@ args =
   [ { greet: 'hi' } ]
 
 ========================================================
-Step 2/3: `encodeReply` Result
+Step 2/3: encodeReply Result
 ========================================================
 body =
   [{"greet":"hi"}]
 
 ========================================================
-Step 3/3: `decodeReply` Result
+Step 3/3: decodeReply Result
 ========================================================
 args =
   [ { greet: 'hi' } ]
 ```
+<!-- demo:demo-1-2-simple:end -->
 
 #### Form
 
+<!-- demo:demo-1-2-form:start -->
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
@@ -91,26 +104,28 @@ args =
   { greet: 'hey' }
 
 ========================================================
-Step 2/3: `encodeReply` Result
+Step 2/3: encodeReply Result
 ========================================================
 body =
   FormData { '0': '"$K1"', '1_greet': 'hey' }
 
 ========================================================
-Step 3/3: `decodeReply` Result
+Step 3/3: decodeReply Result
 ========================================================
 args =
   { greet: 'hey' }
 ```
+<!-- demo:demo-1-2-form:end -->
 
 ### Demo 2.1
 
+<!-- demo:demo-2-1:start -->
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 [vite] connected.
 Run #1
 ========================================================
-Step 1/5: Encode Args as Cache Key (encodeReply + temporaryReferences)
+Step 1/5: Encode Args as Cache Key (encodeReply)
 ========================================================
 args =
   [
@@ -127,14 +142,46 @@ args =
 
 encodedArgs =
   [{"children":"$T"}]
+clientTempRefs =
+  Map(3) {
+    '$0' => [
+      {
+        children: {
+          '$$typeof': Symbol(react.transitional.element),
+          type: [Function: DynamicChild],
+          key: null,
+          ref: null,
+          props: {}
+        }
+      }
+    ],
+    '$0:0' => {
+      children: {
+        '$$typeof': Symbol(react.transitional.element),
+        type: [Function: DynamicChild],
+        key: null,
+        ref: null,
+        props: {}
+      }
+    },
+    '$0:0:children' => {
+      '$$typeof': Symbol(react.transitional.element),
+      type: [Function: DynamicChild],
+      key: null,
+      ref: null,
+      props: {}
+    }
+  }
 
 cache = miss
 
 ========================================================
-Step 2/5: Decode Arguments (decodeReply + temporaryReferences)
+Step 2/5: Decode Arguments (decodeReply)
 ========================================================
 decodedArgs =
   [ { children: [Function (anonymous)] } ]
+serverTempRefs =
+  WeakMap { <items unknown> }
 Note: [Function (anonymous)] is a temporary reference proxy for encoded $T.
 
 ========================================================
@@ -153,7 +200,7 @@ result =
           type: 'span',
           key: null,
           ref: null,
-          props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+          props: { children: [ 'static: ', '2026-02-26T10:50:43.781Z' ] }
         },
         [Function (anonymous)]
       ]
@@ -161,15 +208,15 @@ result =
   }
 
 ========================================================
-Step 4/5: Serialize Result and Cache (renderToReadableStream + temporaryReferences)
+Step 4/5: Serialize Result and Cache (renderToReadableStream)
 ========================================================
 stream =
-  0:[["$","span",null,{"children":["static: ","2026-02-26T10:28:01.637Z"]}],"$T0:0:children"]
+  0:[["$","span",null,{"children":["static: ","2026-02-26T10:50:43.781Z"]}],"$T0:0:children"]
 Note: static timestamp is baked into the cached RSC payload.
 Note: temporary reference proxy is encoded back to $T in the payload.
 
 ========================================================
-Step 5/5: Deserialize Cached RSC Stream (createFromReadableStream + temporaryReferences)
+Step 5/5: Deserialize Cached RSC Stream (createFromReadableStream)
 ========================================================
 finalResult =
   [
@@ -178,7 +225,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+      props: { children: [ 'static: ', '2026-02-26T10:50:43.781Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),
@@ -209,6 +256,36 @@ args =
 
 encodedArgs =
   [{"children":"$T"}]
+clientTempRefs =
+  Map(3) {
+    '$0' => [
+      {
+        children: {
+          '$$typeof': Symbol(react.transitional.element),
+          type: [Function: DynamicChild],
+          key: null,
+          ref: null,
+          props: {}
+        }
+      }
+    ],
+    '$0:0' => {
+      children: {
+        '$$typeof': Symbol(react.transitional.element),
+        type: [Function: DynamicChild],
+        key: null,
+        ref: null,
+        props: {}
+      }
+    },
+    '$0:0:children' => {
+      '$$typeof': Symbol(react.transitional.element),
+      type: [Function: DynamicChild],
+      key: null,
+      ref: null,
+      props: {}
+    }
+  }
 
 cache = hit (skip Steps 2-4)
 
@@ -222,7 +299,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-26T10:28:01.637Z' ] }
+      props: { children: [ 'static: ', '2026-02-26T10:50:43.781Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),
@@ -234,3 +311,4 @@ finalResult =
   ]
 Note: $T in payload is restored to the latest <DynamicChild /> reference.
 ```
+<!-- demo:demo-2-1:end -->

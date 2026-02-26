@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "vite-run": "node vite-run.ts",
+    "update-readme": "node scripts/update-readme-output.mjs",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
