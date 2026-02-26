@@ -4,31 +4,43 @@ import {
   decodeReply,
   encodeReply,
 } from "@vitejs/plugin-rsc/rsc";
+import { inspect } from "node:util";
 import { logSection } from "./utils";
+
+function logLhs(name: string, value: unknown) {
+  console.log(`${name} =`);
+  const text = typeof value === "string" ? value : inspect(value, { depth: null, colors: true });
+  console.log(
+    text
+      .split("\n")
+      .map((line) => `  ${line}`)
+      .join("\n"),
+  );
+}
 
 export async function main(args: string[]) {
   async function demoReply(args: any) {
-    logSection("Step 1/3", "Server Function Arguments", "input before encoding");
+    logSection("Step 1/3", "Server Function Arguments");
     if (args instanceof FormData) {
-      console.log("FormData", formDataEntries(args));
+      logLhs("args", formDataEntries(args));
     } else {
-      console.dir(args, { depth: null });
+      logLhs("args", args);
     }
     console.log();
 
     const encoderReferences = createClientTemporaryReferenceSet();
-    const encoded = await encodeReply(args, { temporaryReferences: encoderReferences });
-    logSection("Step 2/3", "encodeReply Result", "encoded arguments payload");
-    console.log(encoded);
+    const body = await encodeReply(args, { temporaryReferences: encoderReferences });
+    logSection("Step 2/3", "encodeReply Result");
+    logLhs("body", body);
     console.log();
 
     const decoderReferences = createTemporaryReferenceSet();
-    const decoded = await decodeReply(encoded, { temporaryReferences: decoderReferences });
-    logSection("Step 3/3", "decodeReply Result", "decoded arguments payload");
+    const decoded = await decodeReply(body, { temporaryReferences: decoderReferences });
+    logSection("Step 3/3", "decodeReply Result");
     if (decoded instanceof FormData) {
-      console.log("FormData", formDataEntries(decoded));
+      logLhs("args", formDataEntries(decoded));
     } else {
-       console.dir(decoded, { depth: null });
+      logLhs("args", decoded);
     }
     console.log();
   }
@@ -45,5 +57,5 @@ export async function main(args: string[]) {
 }
 
 function formDataEntries(fd: FormData) {
-  return Object.fromEntries(Array.from(fd.entries()))
+  return Object.fromEntries(Array.from(fd.entries()));
 }

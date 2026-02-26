@@ -14,43 +14,43 @@ $ pnpm -C examples/run vite-run src/demo-rsc.tsx
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
 ========================================================
-Step 1/3: Server Component Node
-Purpose: React element on server environment
+Step 1/3: React node on "react-server" environment
 ========================================================
-{
-  '$$typeof': Symbol(react.transitional.element),
-  type: [AsyncFunction: ServerComponent],
-  key: null,
-  ref: null,
-  props: {}
-}
+reactNode =
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: [AsyncFunction: ServerComponent],
+    key: null,
+    ref: null,
+    props: {}
+  }
 
 ========================================================
-Step 2/3: RSC Stream Payload
-Purpose: renderToReadableStream output
+Step 2/3: RSC Stream Payload (TODO: mention renderToReadableStream)
 ========================================================
-0:["$","div",null,{"children":["$","span",null,{"children":0.8340104797874847}]}]
+rscStream =
+  0:["$","div",null,{"children":["$","span",null,{"children":0.8340104797874847}]}]
 
 
 ========================================================
-Step 3/3: Client React Node
-Purpose: createFromReadableStream output
+Step 3/3: React node on client (TODO: mention createFromReadableStream)
 ========================================================
-{
-  '$$typeof': Symbol(react.transitional.element),
-  type: 'div',
-  key: null,
-  ref: null,
-  props: {
-    children: {
-      '$$typeof': Symbol(react.transitional.element),
-      type: 'span',
-      key: null,
-      ref: null,
-      props: { children: 0.8340104797874847 }
+reactNode =
+  {
+    '$$typeof': Symbol(react.transitional.element),
+    type: 'div',
+    key: null,
+    ref: null,
+    props: {
+      children: {
+        '$$typeof': Symbol(react.transitional.element),
+        type: 'span',
+        key: null,
+        ref: null,
+        props: { children: 0.8340104797874847 }
+      }
     }
   }
-}
 ```
 
 ### Demo 1.2
@@ -62,21 +62,21 @@ $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
 ========================================================
 Step 1/3: Server Function Arguments
-Purpose: input before encoding
 ========================================================
-[ { greet: 'hi' } ]
+args =
+  [ { greet: 'hi' } ]
 
 ========================================================
-Step 2/3: encodeReply Result
-Purpose: encoded arguments payload
+Step 2/3: `encodeReply` Result
 ========================================================
-[{"greet":"hi"}]
+body =
+  [{"greet":"hi"}]
 
 ========================================================
-Step 3/3: decodeReply Result
-Purpose: decoded arguments payload
+Step 3/3: `decodeReply` Result
 ========================================================
-[ { greet: 'hi' } ]
+args =
+  [ { greet: 'hi' } ]
 ```
 
 #### Form
@@ -86,23 +86,21 @@ $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
 ========================================================
 Step 1/3: Server Function Arguments
-Purpose: input before encoding
 ========================================================
-FormData {}
-FormData entries: [ [ 'greet', 'hey' ] ]
+args =
+  { greet: 'hey' }
 
 ========================================================
-Step 2/3: encodeReply Result
-Purpose: encoded arguments payload
+Step 2/3: `encodeReply` Result
 ========================================================
-FormData { '0': '"$K1"', '1_greet': 'hey' }
+body =
+  FormData { '0': '"$K1"', '1_greet': 'hey' }
 
 ========================================================
-Step 3/3: decodeReply Result
-Purpose: decoded arguments payload
+Step 3/3: `decodeReply` Result
 ========================================================
-FormData {}
-FormData entries: [ [ 'greet', 'hey' ] ]
+args =
+  { greet: 'hey' }
 ```
 
 ### Demo 2.1
@@ -112,7 +110,7 @@ $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 [vite] connected.
 Run #1
 ========================================================
-Step 1/5: Encode Args as Cache Key
+Step 1/5: Encode Args as Cache Key (TODO: mention encodeReply)
 ========================================================
 args =
   [
@@ -133,7 +131,7 @@ encodedArgs =
 cache = miss
 
 ========================================================
-Step 2/5: Decode Arguments
+Step 2/5: Decode Arguments  (TODO: mention decodeReply with temporary referenes. also note `[Function (anonymous)]` which corresdponds to $T)
 ========================================================
 decodedArgs =
   [ { children: [Function (anonymous)] } ]
@@ -162,13 +160,13 @@ result =
   }
 
 ========================================================
-Step 4/5: Serialize Result and Cache
+Step 4/5: Serialize Result and Cache (TODO: renderToReadableStream + temporary reference `[Function (anonymous)]` back to $T)
 ========================================================
 stream =
   0:[["$","span",null,{"children":["static: ","2026-02-26T10:28:01.637Z"]}],"$T0:0:children"]
 
 ========================================================
-Step 5/5: Deserialize Cached RSC Stream
+Step 5/5: Deserialize Cached RSC Stream  (TODO: createFromReadableStream + $T swapped back to latest DynamicChild)
 ========================================================
 finalResult =
   [

@@ -1,5 +1,17 @@
 import { createFromReadableStream, renderToReadableStream } from "@vitejs/plugin-rsc/rsc";
+import { inspect } from "node:util";
 import { logSection, stringToString } from "./utils";
+
+function logLhs(name: string, value: unknown) {
+  console.log(`${name} =`);
+  const text = typeof value === "string" ? value : inspect(value, { depth: null, colors: true });
+  console.log(
+    text
+      .split("\n")
+      .map((line) => `  ${line}`)
+      .join("\n"),
+  );
+}
 
 export async function main() {
   async function ServerComponent() {
@@ -11,17 +23,17 @@ export async function main() {
   }
 
   const rootNode = <ServerComponent />;
-  logSection("Step 1/3", "Server Component Node", "React element on server environment");
-  console.dir(rootNode);
+  logSection("Step 1/3", "Server Component Node");
+  logLhs("reactNode", rootNode);
   console.log();
 
   const rscStream = renderToReadableStream(rootNode);
   const [rscStream1, rscStream2] = rscStream.tee();
-  logSection("Step 2/3", "RSC Stream Payload", "renderToReadableStream output");
-  console.log(await stringToString(rscStream1));
+  logSection("Step 2/3", "RSC Stream Payload");
+  logLhs("rscStream", await stringToString(rscStream1));
   console.log();
 
   const rootNodeClient = await createFromReadableStream(rscStream2);
-  logSection("Step 3/3", "Client React Node", "createFromReadableStream output");
-  console.dir(rootNodeClient, { depth: null });
+  logSection("Step 3/3", "Client React Node");
+  logLhs("reactNode", rootNodeClient);
 }

@@ -14,10 +14,9 @@ export function style(text: string, ...codes: string[]) {
   return `${codes.join("")}${text}${ANSI.reset}`;
 }
 
-export function logSection(step: string, title: string, purpose: string) {
+export function logSection(step: string, title: string) {
   console.log(style(SECTION_LINE, ANSI.dim));
   console.log(style(`${step}: ${title}`, ANSI.bold, ANSI.cyan));
-  console.log(style(`Purpose: ${purpose}`, ANSI.dim));
   console.log(style(SECTION_LINE, ANSI.dim));
 }
 
