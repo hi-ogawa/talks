@@ -9,9 +9,10 @@ import { logSection } from "./utils";
 export async function main(args: string[]) {
   async function demoReply(args: any) {
     logSection("Step 1/3", "Server Function Arguments", "input before encoding");
-    console.dir(args, { depth: null });
     if (args instanceof FormData) {
-      console.log("FormData entries:", formDataEntries(args));
+      console.log("FormData", formDataEntries(args));
+    } else {
+      console.dir(args, { depth: null });
     }
     console.log();
 
@@ -24,9 +25,10 @@ export async function main(args: string[]) {
     const decoderReferences = createTemporaryReferenceSet();
     const decoded = await decodeReply(encoded, { temporaryReferences: decoderReferences });
     logSection("Step 3/3", "decodeReply Result", "decoded arguments payload");
-    console.dir(decoded, { depth: null });
     if (decoded instanceof FormData) {
-      console.log("FormData entries:", formDataEntries(decoded));
+      console.log("FormData", formDataEntries(decoded));
+    } else {
+       console.dir(decoded, { depth: null });
     }
     console.log();
   }
@@ -43,5 +45,5 @@ export async function main(args: string[]) {
 }
 
 function formDataEntries(fd: FormData) {
-  return Array.from(fd.entries());
+  return Object.fromEntries(Array.from(fd.entries()))
 }
