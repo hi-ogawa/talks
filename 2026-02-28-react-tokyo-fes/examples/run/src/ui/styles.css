@@ -1,0 +1,48 @@
+html,
+body,
+#app {
+  margin: 0;
+  height: 100%;
+}
+
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+}
+
+.header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+.select {
+  min-width: 280px;
+}
+
+.panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+
+.pane {
+  min-height: 0;
+}
+
+.pane-left {
+  border-right: 1px solid #ddd;
+}
+
+.pane pre {
+  margin: 0;
+  padding: 12px;
+  overflow: auto;
+  height: 100%;
+}

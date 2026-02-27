@@ -13,11 +13,13 @@
     "preview": "vite preview --config vite.ui.config.ts"
   },
   "dependencies": {
-    "react": "^19.2.3"
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@types/node": "^25.0.10",
     "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-rsc": "latest",
     "vite": "^7.3.1"
   }

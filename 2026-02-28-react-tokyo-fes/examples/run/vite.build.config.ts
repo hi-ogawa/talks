@@ -1,11 +1,6 @@
 import { defineConfig } from "vite";
 import rsc from "@vitejs/plugin-rsc";
 
-// TODO:
-// - polyfill node:util
-// - UI for selecting and running demos
-// - immutable hash output of rsc build
-
 export default defineConfig({
   plugins: [
     rsc({
