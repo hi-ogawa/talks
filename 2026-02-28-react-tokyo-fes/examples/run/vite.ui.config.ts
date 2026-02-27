@@ -5,10 +5,10 @@ import { fileURLToPath, URL } from "node:url";
 // - [x] integrate dist/rsc/index.js
 // - [ ] polyfill node:util
 //   - [x] minimal
-//   - [ ] style with ANSI
 //   - [ ] full match with node:util for our output
 //     - temporary references map, FormData, etc.
 //     - color output
+// - [ ] style ANSI log output
 // - [x] code highlight
 // - [ ] mobile layout
 // - [x] split server-function-arguments demo source file
