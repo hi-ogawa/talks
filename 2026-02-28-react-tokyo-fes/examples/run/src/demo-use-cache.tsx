@@ -9,6 +9,29 @@ import {
 import { styleText } from "node:util";
 import { logLhs, logNote, logSection, stringToStream, stringToString } from "./utils";
 
+export async function main() {
+  function CachedParent({ children }: { children: React.ReactNode }) {
+    return (
+      <>
+        <span>static: {new Date().toISOString()}</span>
+        {children}
+      </>
+    );
+  }
+
+  function DynamicChild() {
+    return <span>dynamic: {new Date().toISOString()}</span>;
+  }
+
+  const CachedParent_wrapped = await __cache_wrapper__(CachedParent);
+
+  console.log(styleText("bold", "Run #1"));
+  await CachedParent_wrapped({ children: <DynamicChild /> });
+
+  console.log(styleText("bold", "Run #2 (same args shape)"));
+  await CachedParent_wrapped({ children: <DynamicChild /> });
+}
+
 async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode) {
   const cache = new Map<string, string>();
 
@@ -66,27 +89,4 @@ async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode
 
     return finalResult;
   };
-}
-
-export async function main() {
-  function CachedParent({ children }: { children: React.ReactNode }) {
-    return (
-      <>
-        <span>static: {new Date().toISOString()}</span>
-        {children}
-      </>
-    );
-  }
-
-  function DynamicChild() {
-    return <span>dynamic: {new Date().toISOString()}</span>;
-  }
-
-  const CachedParent_wrapped = await __cache_wrapper__(CachedParent);
-
-  console.log(styleText("bold", "Run #1"));
-  await CachedParent_wrapped({ children: <DynamicChild /> });
-
-  console.log(styleText("bold", "Run #2 (same args shape)"));
-  await CachedParent_wrapped({ children: <DynamicChild /> });
 }

@@ -1,5 +1,13 @@
 import { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
+// @ts-ignore
+import Prism from "prismjs";
+import "prismjs/components/prism-clike";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-tsx";
+import "prismjs/themes/prism.css";
 import demoRscSource from "../demo-rsc.tsx?raw";
 import demoServerFunctionArgumentsSource from "../demo-server-function-arguments.tsx?raw";
 import demoUseCacheSource from "../demo-use-cache.tsx?raw";
@@ -107,6 +115,17 @@ function App() {
     return demo;
   }, [selectedId]);
 
+  const highlightedCode = useMemo(() => {
+    try {
+      return Prism.highlight(selectedDemo.source, Prism.languages.tsx, "tsx");
+    } catch {
+      return selectedDemo.source
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+  }, [selectedDemo.source]);
+
   return (
     <div className="app">
       <header className="header">
@@ -147,7 +166,9 @@ function App() {
       </header>
       <main className="panes">
         <section className="pane pane-left">
-          <pre>{selectedDemo.source}</pre>
+          <pre>
+            <code className="language-tsx" dangerouslySetInnerHTML={{ __html: highlightedCode }} />
+          </pre>
         </section>
         <section className="pane">
           <pre>{logText}</pre>

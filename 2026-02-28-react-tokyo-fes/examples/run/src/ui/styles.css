@@ -10,8 +10,9 @@ body,
   display: grid;
   grid-template-rows: auto 1fr;
   font-family:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
     monospace;
+  font-size: 13px;
 }
 
 .header {
@@ -45,4 +46,15 @@ body,
   padding: 12px;
   overflow: auto;
   height: 100%;
+  font-family:
+    "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+}
+
+.pane pre[class*="language-"],
+.pane code[class*="language-"] {
+  font-family:
+    "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  font-size: 13px;
 }
