@@ -75,13 +75,10 @@ function formatValue(value: unknown) {
 async function runDemo(selectedDemo: DemoOption) {
   const lines: string[] = [];
   const consoleLog = console.log;
-  const consoleDir = console.dir;
 
   console.log = (...args: unknown[]) => {
+    consoleLog(...args);
     lines.push(args.map((arg) => formatValue(arg)).join(" "));
-  };
-  console.dir = (value: unknown) => {
-    lines.push(formatValue(value));
   };
 
   try {
@@ -92,7 +89,6 @@ async function runDemo(selectedDemo: DemoOption) {
     await mod.main(selectedDemo.args);
   } finally {
     console.log = consoleLog;
-    console.dir = consoleDir;
   }
 
   return lines.join("\n");
