@@ -13,6 +13,7 @@
     "preview": "vite preview --config vite.ui.config.ts"
   },
   "dependencies": {
+    "ansi_up": "^6.0.6",
     "prismjs": "^1.30.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"

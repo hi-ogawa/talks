@@ -6,9 +6,9 @@ import { fileURLToPath, URL } from "node:url";
 // - [ ] polyfill node:util
 //   - [x] minimal
 //   - [ ] full match with node:util for our output
-//     - temporary references map, FormData, etc.
-//     - color output
-// - [ ] style ANSI log output
+//     - [ ] temporary references map, FormData, etc.
+//     - [ ] color output
+// - [x] style ANSI log output
 // - [x] code highlight
 // - [ ] mobile layout
 // - [x] split server-function-arguments demo source file

@@ -10,6 +10,9 @@ importers:
 
   examples/run:
     dependencies:
+      ansi_up:
+        specifier: ^6.0.6
+        version: 6.0.6
       prismjs:
         specifier: ^1.30.0
         version: 1.30.0
@@ -518,6 +521,9 @@ packages:
     peerDependenciesMeta:
       react-server-dom-webpack:
         optional: true
+
+  ansi_up@6.0.6:
+    resolution: {integrity: sha512-yIa1x3Ecf8jWP4UWEunNjqNX6gzE4vg2gGz+xqRGY+TBSucnYp6RRdPV4brmtg6bQ1ljD48mZ5iGSEj7QEpRKA==}
 
   baseline-browser-mapping@2.9.17:
     resolution: {integrity: sha512-agD0MgJFUP/4nvjqzIB29zRPUuCF7Ge6mEv9s8dHrtYD7QWXRcx75rOADE/d5ah1NI+0vkDl0yorDd5U852IQQ==}
@@ -1132,6 +1138,8 @@ snapshots:
       turbo-stream: 3.1.0
       vite: 7.3.1(@types/node@25.0.10)
       vitefu: 1.1.1(vite@7.3.1(@types/node@25.0.10))
+
+  ansi_up@6.0.6: {}
 
   baseline-browser-mapping@2.9.17: {}
 

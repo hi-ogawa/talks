@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 // @ts-ignore
 import Prism from "prismjs";
+import { AnsiUp } from "ansi_up";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/components/prism-jsx";
@@ -55,6 +56,10 @@ const demos: DemoOption[] = [
   },
 ];
 
+const DEFAULT_DEMO_ID = "demo-use-cache";
+
+const ansiUp = new AnsiUp();
+
 function formatValue(value: unknown) {
   if (typeof value === "string") {
     return value;
@@ -103,7 +108,7 @@ async function runDemo(selectedDemo: DemoOption) {
 }
 
 function App() {
-  const [selectedId, setSelectedId] = useState(demos[0].id);
+  const [selectedId, setSelectedId] = useState(DEFAULT_DEMO_ID);
   const [logText, setLogText] = useState("");
   const [isRunning, setIsRunning] = useState(false);
 
@@ -125,6 +130,8 @@ function App() {
         .replaceAll(">", "&gt;");
     }
   }, [selectedDemo.source]);
+
+  const highlightedLog = useMemo(() => ansiUp.ansi_to_html(logText), [logText]);
 
   return (
     <div className="app">
@@ -171,7 +178,7 @@ function App() {
           </pre>
         </section>
         <section className="pane">
-          <pre>{logText}</pre>
+          <pre className="ansi-log" dangerouslySetInnerHTML={{ __html: highlightedLog }} />
         </section>
       </main>
     </div>
