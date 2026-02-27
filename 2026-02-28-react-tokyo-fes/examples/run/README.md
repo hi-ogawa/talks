@@ -21,6 +21,7 @@ The output blocks are generated between `<!-- demo:...:start -->` and `<!-- demo
 - Code: [src/demo-rsc.tsx](./src/demo-rsc.tsx)
 
 <!-- demo:demo-1-1:start -->
+
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
@@ -41,7 +42,7 @@ Step 2/3: RSC Stream Payload (renderToReadableStream)
 ========================================================
 rscStream =
   0:["$","div",null,{"children":["$","span",null,{"children":0.9710497056287729}]}]
-  
+
 
 ========================================================
 Step 3/3: React Node on Client (createFromReadableStream)
@@ -63,6 +64,7 @@ reactNode =
     }
   }
 ```
+
 <!-- demo:demo-1-1:end -->
 
 ### Demo 1.2
@@ -72,6 +74,7 @@ reactNode =
 #### Simple
 
 <!-- demo:demo-1-2-simple:start -->
+
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
@@ -93,11 +96,13 @@ Step 3/3: decodeReply Result
 args =
   [ { greet: 'hi' } ]
 ```
+
 <!-- demo:demo-1-2-simple:end -->
 
 #### Form
 
 <!-- demo:demo-1-2-form:start -->
+
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
@@ -119,6 +124,7 @@ Step 3/3: decodeReply Result
 args =
   { greet: 'hey' }
 ```
+
 <!-- demo:demo-1-2-form:end -->
 
 ### Demo 2.1
@@ -126,6 +132,7 @@ args =
 - Code: [src/demo-use-cache.tsx](./src/demo-use-cache.tsx)
 
 <!-- demo:demo-2-1:start -->
+
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 [vite] connected.
@@ -317,4 +324,5 @@ finalResult =
   ]
 Note: $T in payload is restored to the latest <DynamicChild /> reference.
 ```
+
 <!-- demo:demo-2-1:end -->

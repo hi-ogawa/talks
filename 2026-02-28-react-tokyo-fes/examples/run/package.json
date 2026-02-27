@@ -7,6 +7,7 @@
   "scripts": {
     "vite-run": "node vite-run.ts",
     "update-readme": "node scripts/update-readme-output.mjs",
+    "build-demo": "vite build --config vite.build.config.ts",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
