@@ -7,21 +7,13 @@ import {
   renderToReadableStream,
 } from "@vitejs/plugin-rsc/rsc";
 import { styleText } from "node:util";
-import { logLhs, logNote, stringToStream, stringToString } from "./utils";
-
-const SECTION_LINE = "=".repeat(56);
-
-function logStep(step: string, title: string) {
-  console.log(styleText("dim", SECTION_LINE));
-  console.log(styleText(["bold", "cyan"], `${step}: ${title}`));
-  console.log(styleText("dim", SECTION_LINE));
-}
+import { logLhs, logNote, logSection, stringToStream, stringToString } from "./utils";
 
 async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode) {
   const cache = new Map<string, string>();
 
   return async (...args: any[]) => {
-    logStep("Step 1/5", "Encode Args as Cache Key (encodeReply)");
+    logSection("Step 1/5", "Encode Args as Cache Key (encodeReply)");
     logLhs("args", args, { styled: true });
     console.log();
     const clientTempRefs = createClientTemporaryReferenceSet();
@@ -37,7 +29,7 @@ async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode
       console.log(styleText(["bold", "green"], "cache = miss"));
       console.log();
 
-      logStep("Step 2/5", "Decode Arguments (decodeReply)");
+      logSection("Step 2/5", "Decode Arguments (decodeReply)");
       const serverTempRefs = createTemporaryReferenceSet();
       const decodedArgs = await decodeReply(encodedArgs, { temporaryReferences: serverTempRefs });
       logLhs("decodedArgs", decodedArgs, { styled: true });
@@ -45,12 +37,12 @@ async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode
       logNote("[Function (anonymous)] is a temporary reference proxy for encoded $T.");
       console.log();
 
-      logStep("Step 3/5", "Execute Original Function");
+      logSection("Step 3/5", "Execute Original Function");
       const result = originalFn(...(decodedArgs as any[]));
       logLhs("result", result, { styled: true });
       console.log();
 
-      logStep("Step 4/5", "Serialize Result and Cache (renderToReadableStream)");
+      logSection("Step 4/5", "Serialize Result and Cache (renderToReadableStream)");
       const stream = renderToReadableStream(result, { temporaryReferences: serverTempRefs });
       const payload = await stringToString(stream);
       cache.set(encodedArgs, payload);
@@ -63,7 +55,7 @@ async function __cache_wrapper__(originalFn: (...args: any[]) => React.ReactNode
       console.log();
     }
 
-    logStep("Step 5/5", "Deserialize Cached RSC Stream (createFromReadableStream)");
+    logSection("Step 5/5", "Deserialize Cached RSC Stream (createFromReadableStream)");
     const payload = cache.get(encodedArgs)!;
     const finalResult = await createFromReadableStream(stringToStream(payload), {
       temporaryReferences: clientTempRefs,

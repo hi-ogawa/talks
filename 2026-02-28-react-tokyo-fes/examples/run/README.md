@@ -21,7 +21,6 @@ The output blocks are generated between `<!-- demo:...:start -->` and `<!-- demo
 - Code: [src/demo-rsc.tsx](./src/demo-rsc.tsx)
 
 <!-- demo:demo-1-1:start -->
-
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-rsc.tsx
 [vite] connected.
@@ -41,8 +40,8 @@ reactNode =
 Step 2/3: RSC Stream Payload (renderToReadableStream)
 ========================================================
 rscStream =
-  0:["$","div",null,{"children":["$","span",null,{"children":0.3224009628962353}]}]
-
+  0:["$","div",null,{"children":["$","span",null,{"children":0.9710497056287729}]}]
+  
 
 ========================================================
 Step 3/3: React Node on Client (createFromReadableStream)
@@ -59,12 +58,11 @@ reactNode =
         type: 'span',
         key: null,
         ref: null,
-        props: { children: 0.3224009628962353 }
+        props: { children: 0.9710497056287729 }
       }
     }
   }
 ```
-
 <!-- demo:demo-1-1:end -->
 
 ### Demo 1.2
@@ -74,7 +72,6 @@ reactNode =
 #### Simple
 
 <!-- demo:demo-1-2-simple:start -->
-
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx simple
 [vite] connected.
@@ -96,13 +93,11 @@ Step 3/3: decodeReply Result
 args =
   [ { greet: 'hi' } ]
 ```
-
 <!-- demo:demo-1-2-simple:end -->
 
 #### Form
 
 <!-- demo:demo-1-2-form:start -->
-
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 [vite] connected.
@@ -124,7 +119,6 @@ Step 3/3: decodeReply Result
 args =
   { greet: 'hey' }
 ```
-
 <!-- demo:demo-1-2-form:end -->
 
 ### Demo 2.1
@@ -132,7 +126,6 @@ args =
 - Code: [src/demo-use-cache.tsx](./src/demo-use-cache.tsx)
 
 <!-- demo:demo-2-1:start -->
-
 ```sh
 $ pnpm -C examples/run -s vite-run src/demo-use-cache.tsx
 [vite] connected.
@@ -213,7 +206,7 @@ result =
           type: 'span',
           key: null,
           ref: null,
-          props: { children: [ 'static: ', '2026-02-26T10:58:04.470Z' ] }
+          props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
         },
         [Function (anonymous)]
       ]
@@ -224,7 +217,7 @@ result =
 Step 4/5: Serialize Result and Cache (renderToReadableStream)
 ========================================================
 stream =
-  0:[["$","span",null,{"children":["static: ","2026-02-26T10:58:04.470Z"]}],"$T0:0:children"]
+  0:[["$","span",null,{"children":["static: ","2026-02-27T02:18:44.272Z"]}],"$T0:0:children"]
 Note: static timestamp is baked into the cached RSC payload.
 Note: temporary reference proxy is encoded back to $T in the payload.
 
@@ -238,7 +231,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-26T10:58:04.470Z' ] }
+      props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),
@@ -312,7 +305,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-26T10:58:04.470Z' ] }
+      props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),
@@ -324,5 +317,4 @@ finalResult =
   ]
 Note: $T in payload is restored to the latest <DynamicChild /> reference.
 ```
-
 <!-- demo:demo-2-1:end -->
