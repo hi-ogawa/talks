@@ -4,13 +4,14 @@ import rsc from "@vitejs/plugin-rsc";
 // TODO:
 // - polyfill node:util
 // - UI for selecting and running demos
+// - immutable hash output of rsc build
 
 export default defineConfig({
   plugins: [
     rsc({
       serverHandler: false,
       entries: {
-        client: "./src/client/entry.tsx",
+        client: "virtual:empty",
         rsc: "./src/entry.ts",
       },
     }),
@@ -22,11 +23,24 @@ export default defineConfig({
         delete plugin!.transform;
       },
     },
+    {
+      name: "virtual-empty",
+      resolveId(id) {
+        if (id === "virtual:empty") {
+          return "\0" + id;
+        }
+      },
+      load(id) {
+        if (id === "\0virtual:empty") {
+          return "export {}";
+        }
+      },
+    },
   ],
   environments: {
     client: {
       build: {
-        outDir: "dist/client",
+        outDir: "dist/rsc-client",
       },
     },
     rsc: {
