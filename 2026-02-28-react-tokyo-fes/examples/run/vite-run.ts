@@ -14,6 +14,7 @@ async function main() {
   process.env.NODE_ENV ??= "production";
 
   const server = await createServer({
+    configFile: false,
     plugins: [
       rsc({
         serverHandler: false,
