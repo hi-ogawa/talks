@@ -7,6 +7,7 @@
   "scripts": {
     "vite-run": "node ./vite-run.js",
     "update-readme": "node scripts/update-readme-output.mjs",
+    "update-svg": "node scripts/update-svg-snapshots.mjs",
     "build-demo": "vite build --config vite.build.config.ts",
     "dev": "vite dev --config vite.ui.config.ts",
     "build": "vite build --config vite.ui.config.ts",

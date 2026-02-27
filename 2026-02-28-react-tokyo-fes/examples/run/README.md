@@ -14,6 +14,23 @@ $ pnpm -C examples/run update-readme
 
 The output blocks are generated between `<!-- demo:...:start -->` and `<!-- demo:...:end -->` markers.
 
+## Update SVG snapshots
+
+```sh
+$ pnpm -C examples/run update-svg
+```
+
+Generated files:
+
+- [assets/demo-rsc-output.svg](./assets/demo-rsc-output.svg)
+- [assets/demo-server-function-arguments-simple-output.svg](./assets/demo-server-function-arguments-simple-output.svg)
+- [assets/demo-server-function-arguments-form-output.svg](./assets/demo-server-function-arguments-form-output.svg)
+- [assets/demo-use-cache-output.svg](./assets/demo-use-cache-output.svg)
+
+Preview (Demo 1.1):
+
+![Demo 1.1 SVG snapshot](./assets/demo-rsc-output.svg)
+
 ## Examples
 
 ### Demo 1.1
