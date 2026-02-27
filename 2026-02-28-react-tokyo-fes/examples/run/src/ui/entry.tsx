@@ -5,11 +5,15 @@ import demoServerFunctionArgumentsSource from "../demo-server-function-arguments
 import demoUseCacheSource from "../demo-use-cache.tsx?raw";
 import "./styles.css";
 
+// @ts-ignore
+import * as demo from "../../dist/rsc/index.js";
+
 type DemoOption = {
   id: string;
   label: string;
   source: string;
-  mockLog: string;
+  key: "demoRsc" | "demoServerFunctionArguments" | "demoUseCache";
+  args: string[];
 };
 
 const demos: DemoOption[] = [
@@ -17,40 +21,87 @@ const demos: DemoOption[] = [
     id: "demo-rsc",
     label: "Demo 1.1 - demo-rsc",
     source: demoRscSource,
-    mockLog: [
-      "[mock] Step 1/3 reactNode = ...",
-      "[mock] Step 2/3 rscStream = ...",
-      "[mock] Step 3/3 reactNode = ...",
-    ].join("\n"),
+    key: "demoRsc",
+    args: [],
   },
   {
     id: "demo-server-function-arguments-simple",
     label: "Demo 1.2 - server-function-arguments (simple)",
     source: demoServerFunctionArgumentsSource,
-    mockLog: [
-      "[mock] Step 1/3 args = [{ greet: 'hi' }]",
-      '[mock] Step 2/3 body = [{"greet":"hi"}]',
-      "[mock] Step 3/3 args = [{ greet: 'hi' }]",
-    ].join("\n"),
+    key: "demoServerFunctionArguments",
+    args: ["simple"],
+  },
+  {
+    id: "demo-server-function-arguments-form",
+    label: "Demo 1.2 - server-function-arguments (form)",
+    source: demoServerFunctionArgumentsSource,
+    key: "demoServerFunctionArguments",
+    args: ["form"],
   },
   {
     id: "demo-use-cache",
     label: "Demo 2.1 - demo-use-cache",
     source: demoUseCacheSource,
-    mockLog: [
-      "[mock] Run #1",
-      "[mock] Step 1/5 args = ... encodedArgs = ...",
-      "[mock] Step 2/5 decodedArgs = ...",
-      "[mock] Step 3/5 result = ...",
-      "[mock] Step 4/5 stream = ...",
-      "[mock] Step 5/5 finalResult = ...",
-    ].join("\n"),
+    key: "demoUseCache",
+    args: [],
   },
 ];
+
+function formatValue(value: unknown) {
+  if (typeof value === "string") {
+    return value;
+  }
+  if (typeof value === "number" || typeof value === "boolean" || value == null) {
+    return String(value);
+  }
+  return JSON.stringify(
+    value,
+    (_key, val) => {
+      if (typeof val === "bigint") {
+        return `${val.toString()}n`;
+      }
+      if (typeof val === "function") {
+        return `[Function ${val.name || "anonymous"}]`;
+      }
+      if (typeof val === "symbol") {
+        return String(val);
+      }
+      return val;
+    },
+    2,
+  );
+}
+
+async function runDemo(selectedDemo: DemoOption) {
+  const lines: string[] = [];
+  const consoleLog = console.log;
+  const consoleDir = console.dir;
+
+  console.log = (...args: unknown[]) => {
+    lines.push(args.map((arg) => formatValue(arg)).join(" "));
+  };
+  console.dir = (value: unknown) => {
+    lines.push(formatValue(value));
+  };
+
+  try {
+    const mod = (demo as any)[selectedDemo.key];
+    if (!mod || typeof mod.main !== "function") {
+      throw new Error(`Missing demo export: ${selectedDemo.key}`);
+    }
+    await mod.main(selectedDemo.args);
+  } finally {
+    console.log = consoleLog;
+    console.dir = consoleDir;
+  }
+
+  return lines.join("\n");
+}
 
 function App() {
   const [selectedId, setSelectedId] = useState(demos[0].id);
   const [logText, setLogText] = useState("");
+  const [isRunning, setIsRunning] = useState(false);
 
   const selectedDemo = useMemo(() => {
     const demo = demos.find((item) => item.id === selectedId);
@@ -81,12 +132,21 @@ function App() {
         </select>
         <button
           type="button"
-          onClick={() => {
-            const now = new Date().toISOString();
-            setLogText(`${selectedDemo.mockLog}\n\n[mock] ran at ${now}`);
+          disabled={isRunning}
+          onClick={async () => {
+            setIsRunning(true);
+            setLogText("");
+            try {
+              const output = await runDemo(selectedDemo);
+              setLogText(output);
+            } catch (error) {
+              setLogText(String(error));
+            } finally {
+              setIsRunning(false);
+            }
           }}
         >
-          Run
+          {isRunning ? "Running..." : "Run"}
         </button>
       </header>
       <main className="panes">
