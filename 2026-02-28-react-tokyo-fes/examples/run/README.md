@@ -41,7 +41,7 @@ reactNode =
 Step 2/3: RSC Stream Payload (renderToReadableStream)
 ========================================================
 rscStream =
-  0:["$","div",null,{"children":["$","span",null,{"children":0.9710497056287729}]}]
+  0:["$","div",null,{"children":["$","span",null,{"children":0.5822468487872805}]}]
 
 
 ========================================================
@@ -59,7 +59,7 @@ reactNode =
         type: 'span',
         key: null,
         ref: null,
-        props: { children: 0.9710497056287729 }
+        props: { children: 0.5822468487872805 }
       }
     }
   }
@@ -110,19 +110,19 @@ $ pnpm -C examples/run -s vite-run src/demo-server-function-arguments.tsx form
 Step 1/3: Server Function Arguments
 ========================================================
 args =
-  { greet: 'hey' }
+  [ FormData { greet: 'hey' } ]
 
 ========================================================
 Step 2/3: encodeReply Result
 ========================================================
 body =
-  FormData { '0': '"$K1"', '1_greet': 'hey' }
+  FormData { '0': '["$K1"]', '1_greet': 'hey' }
 
 ========================================================
 Step 3/3: decodeReply Result
 ========================================================
 args =
-  { greet: 'hey' }
+  [ FormData { greet: 'hey' } ]
 ```
 
 <!-- demo:demo-1-2-form:end -->
@@ -213,7 +213,7 @@ result =
           type: 'span',
           key: null,
           ref: null,
-          props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
+          props: { children: [ 'static: ', '2026-02-27T04:10:16.178Z' ] }
         },
         [Function (anonymous)]
       ]
@@ -224,7 +224,7 @@ result =
 Step 4/5: Serialize Result and Cache (renderToReadableStream)
 ========================================================
 stream =
-  0:[["$","span",null,{"children":["static: ","2026-02-27T02:18:44.272Z"]}],"$T0:0:children"]
+  0:[["$","span",null,{"children":["static: ","2026-02-27T04:10:16.178Z"]}],"$T0:0:children"]
 Note: static timestamp is baked into the cached RSC payload.
 Note: temporary reference proxy is encoded back to $T in the payload.
 
@@ -238,7 +238,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
+      props: { children: [ 'static: ', '2026-02-27T04:10:16.178Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),
@@ -312,7 +312,7 @@ finalResult =
       type: 'span',
       key: null,
       ref: null,
-      props: { children: [ 'static: ', '2026-02-27T02:18:44.272Z' ] }
+      props: { children: [ 'static: ', '2026-02-27T04:10:16.178Z' ] }
     },
     {
       '$$typeof': Symbol(react.transitional.element),

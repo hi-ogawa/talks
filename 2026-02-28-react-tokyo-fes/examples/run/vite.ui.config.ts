@@ -7,9 +7,11 @@ import { fileURLToPath, URL } from "node:url";
 //   - [x] minimal
 //   - [ ] style with ANSI
 //   - [ ] full match with node:util for our output
-// - [ ] code highlight
+//     - temporary references map, FormData, etc.
+//     - color output
+// - [x] code highlight
 // - [ ] mobile layout
-// - [ ] split server-function-arguments demo source file
+// - [x] split server-function-arguments demo source file
 
 export default defineConfig({
   resolve: {
