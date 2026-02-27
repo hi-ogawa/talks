@@ -39,6 +39,7 @@ body,
 
 .pane-left {
   border-right: 1px solid #ddd;
+  background: rgb(245, 242, 240);
 }
 
 .pane pre {
@@ -57,4 +58,10 @@ body,
     "Roboto Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
     monospace;
   font-size: 13px;
+}
+
+.pane-left pre,
+.pane-left pre[class*="language-"],
+.pane-left code[class*="language-"] {
+  background: rgb(245, 242, 240);
 }
