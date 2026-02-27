@@ -8,6 +8,7 @@ import { fileURLToPath, URL } from "node:url";
 //   - [ ] style with ANSI
 //   - [ ] full match with node:util for our output
 // - [ ] code highlight
+// - [ ] mobile layout
 // - [ ] split server-function-arguments demo source file
 
 export default defineConfig({
