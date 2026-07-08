@@ -1,0 +1,8 @@
+{
+  "name": "react-tokyo-fes",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {},
+  "devDependencies": {}
+}

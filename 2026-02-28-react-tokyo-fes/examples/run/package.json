@@ -1,0 +1,33 @@
+{
+  "name": "@vitejs/plugin-rsc-examples-run",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "vite-run": "node ./vite-run.js",
+    "update-readme": "node scripts/update-readme-output.mjs",
+    "update-svg": "node scripts/update-svg-snapshots.mjs",
+    "build-demo": "vite build --config vite.build.config.ts",
+    "dev": "vite dev --config vite.ui.config.ts",
+    "build": "vite build --config vite.ui.config.ts",
+    "preview": "vite preview --config vite.ui.config.ts"
+  },
+  "dependencies": {
+    "ansi_up": "^6.0.6",
+    "prismjs": "^1.30.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-rsc": "latest",
+    "ansi-to-svg": "^1.4.3",
+    "vite": "^7.3.1"
+  },
+  "stackblitz": {
+    "startCommand": "node ./vite-run.js src/demo-use-cache.tsx"
+  }
+}
